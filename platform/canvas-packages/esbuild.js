@@ -142,7 +142,7 @@ const clientConfigs = clientEntries.map(({ pkg, useSubJSXRuntime }) => ({
       name: "antd-fixup",
       setup(build) {
         build.onLoad({ filter: /FormItem\.js$/ }, async (args) => {
-          let text = await fs.promises.readFile(args.path, "utf8");
+          const text = await fs.promises.readFile(args.path, "utf8");
           return {
             contents: text.replace(
               /FormContext, FormItemStatusContext, NoStyleItemContext/,

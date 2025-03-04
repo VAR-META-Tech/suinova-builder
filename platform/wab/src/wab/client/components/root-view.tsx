@@ -66,6 +66,15 @@ import { getAccessLevelToResource } from "@/wab/shared/perms";
 import { getMaximumTierFromTeams } from "@/wab/shared/pricing/pricing-utils";
 import * as React from "react";
 import { Redirect, Route, Switch, useHistory, useLocation } from "react-router";
+import ConnectWallet from "@/wab/client/components/pages/ConnectWallet";
+import { ConnectWalletLayout } from "@/wab/client/components/connect-wallet-layout";
+import {
+  createNetworkConfig,
+  SuiClientProvider,
+  WalletProvider,
+} from "@mysten/dapp-kit";
+import { getFullnodeUrl } from "@mysten/sui/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const LazyTeamAnalytics = React.lazy(() => import("./analytics/TeamAnalytics"));
 const LazyAdminPage = React.lazy(() => import("./pages/admin/AdminPage"));
@@ -76,6 +85,13 @@ const LazyViewInitializer = React.lazy(
 interface LoggedInContainerProps {
   onRefreshUi: () => void;
 }
+
+// Config options for the networks you want to connect to
+const { networkConfig } = createNetworkConfig({
+  localnet: { url: getFullnodeUrl("localnet") },
+  mainnet: { url: getFullnodeUrl("mainnet") },
+});
+const queryClient = new QueryClient();
 
 function getStarter(
   starterSections: StarterSectionConfig[],
@@ -538,124 +554,150 @@ export function Root() {
             contents={(appCtx: /*TWZ*/ AppCtx) => {
               return providesAppCtx(appCtx)(
                 <NonAuthCtxContext.Provider value={nonAuthCtx}>
-                  <div className={"root"} onPointerDown={() => {}}>
-                    <Switch>
-                      <Route
-                        exact
-                        path={UU.login.pattern}
-                        render={() => (
-                          <>
-                            <PromoBanner />
-                            <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                              {documentTitle("Sign in")}
-                              <AuthForm
-                                mode="sign in"
-                                onLoggedIn={reloadData}
-                              />
-                            </NormalNonAuthLayout>
-                          </>
-                        )}
-                      />
-                      <Route
-                        exact
-                        path={UU.survey.pattern}
-                        render={() => (
-                          <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                            <SurveyForm />
-                          </NormalNonAuthLayout>
-                        )}
-                      />
-                      <Route
-                        exact
-                        path={UU.emailVerification.pattern}
-                        render={() =>
-                          !appCtx.selfInfo ? (
-                            <Redirect to={getLoginRouteWithContinuation()} />
-                          ) : (
-                            <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                              <EmailVerification selfInfo={appCtx.selfInfo} />
-                            </NormalNonAuthLayout>
-                          )
-                        }
-                      />
-                      <Route
-                        exact
-                        path={UU.signup.pattern}
-                        render={() => (
-                          <>
-                            <PromoBanner />
-                            <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                              {documentTitle("Sign up")}
-                              <AuthForm
-                                mode="sign up"
-                                onLoggedIn={reloadData}
-                              />
-                            </NormalNonAuthLayout>
-                          </>
-                        )}
-                      />
-                      <Route
-                        exact
-                        path={UU.sso.pattern}
-                        render={() => (
-                          <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                            {documentTitle("Log in with SSO")}
-                            <SsoLoginForm onLoggedIn={reloadData} />
-                          </NormalNonAuthLayout>
-                        )}
-                      />
-                      <Route
-                        exact
-                        path={UU.logout.pattern}
-                        render={() => {
-                          spawn(appCtx.logout());
-                          return null;
-                        }}
-                      />
-                      <Route
-                        exact
-                        path={UU.authorize.pattern}
-                        render={() => (
-                          <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                            <AppAuthPage />
-                          </NormalNonAuthLayout>
-                        )}
-                      />
-                      <Route
-                        exact
-                        path={UU.forgotPassword.pattern}
-                        render={() => (
-                          <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                            {documentTitle("Forgot password")}
-                            <ForgotPasswordForm />
-                          </NormalNonAuthLayout>
-                        )}
-                      />
-                      <Route
-                        exact
-                        path={UU.resetPassword.pattern}
-                        render={() => (
-                          <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                            {documentTitle("Reset password")}
-                            <ResetPasswordForm />
-                          </NormalNonAuthLayout>
-                        )}
-                      />
-                      <Route
-                        exact
-                        path={UU.githubCallback.pattern}
-                        render={() => (
-                          <GithubCallback nonAuthCtx={nonAuthCtx} />
-                        )}
-                      />
-                      <Route
-                        path={"/"}
-                        render={() => (
-                          <LoggedInContainer onRefreshUi={forceUpdate} />
-                        )}
-                      />
-                    </Switch>
-                  </div>
+                  <QueryClientProvider client={queryClient}>
+                    <SuiClientProvider
+                      networks={networkConfig}
+                      defaultNetwork="localnet"
+                    >
+                      <WalletProvider>
+                        <div className={"root"} onPointerDown={() => {}}>
+                          <Switch>
+                            <Route
+                              exact
+                              path={UU.login.pattern}
+                              render={() => (
+                                <>
+                                  <PromoBanner />
+                                  <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                    {documentTitle("Sign in")}
+                                    <AuthForm
+                                      mode="sign in"
+                                      onLoggedIn={reloadData}
+                                    />
+                                  </NormalNonAuthLayout>
+                                </>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.connectWallet.pattern}
+                              render={() => (
+                                <>
+                                  <PromoBanner />
+                                  <ConnectWalletLayout nonAuthCtx={nonAuthCtx}>
+                                    {documentTitle("Connect wallet")}
+                                    <ConnectWallet onLoggedIn={reloadData} />
+                                  </ConnectWalletLayout>
+                                </>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.survey.pattern}
+                              render={() => (
+                                <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                  <SurveyForm />
+                                </NormalNonAuthLayout>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.emailVerification.pattern}
+                              render={() =>
+                                !appCtx.selfInfo ? (
+                                  <Redirect
+                                    to={getLoginRouteWithContinuation()}
+                                  />
+                                ) : (
+                                  <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                    <EmailVerification
+                                      selfInfo={appCtx.selfInfo}
+                                    />
+                                  </NormalNonAuthLayout>
+                                )
+                              }
+                            />
+                            <Route
+                              exact
+                              path={UU.signup.pattern}
+                              render={() => (
+                                <>
+                                  <PromoBanner />
+                                  <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                    {documentTitle("Sign up")}
+                                    <AuthForm
+                                      mode="sign up"
+                                      onLoggedIn={reloadData}
+                                    />
+                                  </NormalNonAuthLayout>
+                                </>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.sso.pattern}
+                              render={() => (
+                                <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                  {documentTitle("Log in with SSO")}
+                                  <SsoLoginForm onLoggedIn={reloadData} />
+                                </NormalNonAuthLayout>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.logout.pattern}
+                              render={() => {
+                                spawn(appCtx.logout());
+                                return null;
+                              }}
+                            />
+                            <Route
+                              exact
+                              path={UU.authorize.pattern}
+                              render={() => (
+                                <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                  <AppAuthPage />
+                                </NormalNonAuthLayout>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.forgotPassword.pattern}
+                              render={() => (
+                                <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                  {documentTitle("Forgot password")}
+                                  <ForgotPasswordForm />
+                                </NormalNonAuthLayout>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.resetPassword.pattern}
+                              render={() => (
+                                <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                  {documentTitle("Reset password")}
+                                  <ResetPasswordForm />
+                                </NormalNonAuthLayout>
+                              )}
+                            />
+                            <Route
+                              exact
+                              path={UU.githubCallback.pattern}
+                              render={() => (
+                                <GithubCallback nonAuthCtx={nonAuthCtx} />
+                              )}
+                            />
+                            <Route
+                              path={"/"}
+                              render={() => (
+                                <LoggedInContainer onRefreshUi={forceUpdate} />
+                              )}
+                            />
+                          </Switch>
+                        </div>
+                      </WalletProvider>
+                    </SuiClientProvider>
+                  </QueryClientProvider>
                 </NonAuthCtxContext.Provider>
               );
             }}

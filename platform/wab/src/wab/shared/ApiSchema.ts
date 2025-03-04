@@ -364,6 +364,23 @@ export type LoginResponse =
       reason: string;
     };
 
+export interface LoginWithWalletRequest {
+  signature: string;
+  appInfo?: {
+    appName: string;
+    authorizationPath: string;
+  };
+}
+export type LoginWithWalletResponse =
+  | {
+      status: true;
+      user: ApiUser;
+    }
+  | {
+      status: false;
+      reason: string;
+    };
+
 export interface ForgotPasswordRequest {
   email: string;
   appName?: string;

@@ -227,6 +227,7 @@ export class RouteSet {
     teamId: string | undefined;
   }>("/admin/teams/:teamId?");
   login = new R("/login");
+  connectWallet = new R("/connect-wallet");
   logout = new R("/logout");
   signup = new R("/signup");
   sso = new R("/sso");

@@ -116,6 +116,8 @@ import {
   ListUsersResponse,
   LoginRequest,
   LoginResponse,
+  LoginWithWalletRequest,
+  LoginWithWalletResponse,
   MayTriggerPaywall,
   NewGithubRepoRequest,
   NewGithubRepoResponse,
@@ -554,6 +556,21 @@ export abstract class SharedApi {
 
   async login(data: LoginRequest): Promise<LoginResponse> {
     const res: LoginResponse = await this.post("/auth/login", data, true);
+    if (res.status) {
+      await this.refreshCsrfToken();
+      this.setUser(res.user);
+    }
+    return res;
+  }
+
+  async loginWithWallet(
+    data: LoginWithWalletRequest
+  ): Promise<LoginWithWalletResponse> {
+    const res: LoginResponse = await this.post(
+      "/auth/login-wallet",
+      data,
+      true
+    );
     if (res.status) {
       await this.refreshCsrfToken();
       this.setUser(res.user);

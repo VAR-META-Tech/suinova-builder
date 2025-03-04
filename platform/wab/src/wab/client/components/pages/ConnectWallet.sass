@@ -1,0 +1,77 @@
+@import '../../../styles/_vars.sass'
+@import '../../../styles/_mixins.sass'
+
+.ConnectWallet__Container
+  @include hcenter
+  background: linear-gradient(266.25deg, #FFF0F0 1.83%, #D3E3FA 103%)
+  height: 100vh
+  overflow: auto
+
+.ConnectWallet__Card
+  @include vstack-gap(20px)
+  align-items: center
+  margin-top: 80px
+  width: 558px
+  background-color: #FBFBFB
+  box-shadow: 0px 0px 59px 10px #FFFFFF33 inset
+  box-shadow: 4px 4px 4px 0px #9C9C9CB2
+  padding: 24px 45px 68px 45px
+  border-radius: 10px
+  margin-bottom: 60px
+
+.ConnectWallet__Title
+  font-size: 30px
+  color: #2978D1
+  font-weight: 600
+
+.ConnectWallet__Subtitle
+  font-size: 16px
+  color: #85858B
+  font-weight: 700
+
+.ConnectWallet__SubtitleHighlight
+  color: #F67A91
+
+.ConnectWallet__CardHeader 
+  @include vstack
+  align-items: center
+
+.ConnectWallet__Wallets
+  width: 100%
+  @include vstack-gap(20px)
+
+.ConnectWallet__WalletItem
+  @include hstack
+  align-items: center
+  box-shadow: 3px 3px 10px 0px #0000001F
+  padding: 14px 20px
+  border-radius: 10px
+  background-color: #FFFFFF
+  width: 100%
+  cursor: pointer
+
+.ConnectWallet__WalletItemLabel
+  flex-grow: 1
+  margin-left: 36px
+  color: #27273A
+  font-size: 22px
+
+.ConnectWallet__MoreWallet
+  color: #85858B
+  font-size: 18px
+  cursor: pointer
+
+@media (min-width: $screen-2xl)
+  .ConnectWallet__Card
+    margin-top: 151px  
+
+@media (max-width: $screen-sm)
+  .ConnectWallet__Container
+    height: 100%
+
+  .ConnectWallet__Card
+    margin-top: 0px
+    width: 100%
+    height: 100%
+    background: transparent
+    margin-bottom: 0px
