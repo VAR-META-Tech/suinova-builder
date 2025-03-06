@@ -290,6 +290,24 @@ export class User extends OrgChild<"UserId"> {
 }
 
 @Entity()
+@Index(["userId", "chainId", "walletAddress"])
+export class UserWallet extends Base<"UserWalletId"> {
+  @ManyToOne(() => User)
+  user: User | null;
+
+  @Index()
+  @Column("text")
+  userId: UserId;
+
+  @Index()
+  @Column("text")
+  chainId: string;
+
+  @Column("text")
+  walletAddress: string;
+}
+
+@Entity()
 export class Project extends Base<"ProjectId"> {
   @Column("text") name: string;
   /**
