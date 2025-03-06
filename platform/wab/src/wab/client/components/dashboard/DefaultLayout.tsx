@@ -98,7 +98,7 @@ function DefaultLayout_(
   const userMenu = (
     <Menu>
       <Menu.Item>
-        <PublicLink href={UU.settings.fill({})}>Settings</PublicLink>
+        <PublicLink href={UU.settings.fill({})}>My Profile</PublicLink>
       </Menu.Item>
       <Menu.Item
         onClick={async () => {
@@ -200,19 +200,22 @@ function DefaultLayout_(
             </NavTeamSection>
           </React.Fragment>
         ))}
-        newProjectButton={
-          props.newProjectButtonAsDropdown
-            ? {
-                wrap: (newProjectButton) => (
-                  <Dropdown trigger={["click"]} overlay={projectCreationMenu}>
-                    {newProjectButton}
-                  </Dropdown>
-                ),
-              }
-            : {
-                onClick: () => requestNewProjectCreation(),
-              }
-        }
+        newProjectButton={{
+          onClick: () => requestNewProjectCreation(),
+        }}
+        // newProjectButton={
+        //   props.newProjectButtonAsDropdown
+        //     ? {
+        //         wrap: (newProjectButton) => (
+        //           <Dropdown trigger={["click"]} overlay={projectCreationMenu}>
+        //             {newProjectButton}
+        //           </Dropdown>
+        //         ),
+        //       }
+        //     : {
+        //         onClick: () => requestNewProjectCreation(),
+        //       }
+        // }
         hideStarters={true}
         upgradeButton={
           teams.some((t) => canUpgradeTeam(appCtx, t))
@@ -238,7 +241,7 @@ function DefaultLayout_(
         }}
         userButton={{
           props: {
-            children: userInfo.firstName,
+            children: <Avatar user={userInfo} />,
             "data-test-id": "btn-dashboard-user",
           },
           wrap: (node) => (

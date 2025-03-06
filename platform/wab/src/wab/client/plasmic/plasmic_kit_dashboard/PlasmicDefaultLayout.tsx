@@ -327,29 +327,30 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                 </div>
               </Button>
             </div>
-            <NavButton
+            <Button
+              type={"clearPrimary"}
               data-plasmic-name={"userButton"}
               data-plasmic-override={overrides.userButton}
               className={classNames("__wab_instance", sty.userButton)}
               startIcon={
-                <div className={classNames(projectcss.all, sty.freeBox__hmXkw)}>
-                  {renderPlasmicSlot({
-                    defaultContents: (
-                      <img
-                        alt={""}
-                        className={classNames(
-                          projectcss.all,
-                          projectcss.img,
-                          sty.img__xzqEi
-                        )}
-                      />
-                    ),
-
-                    value: args.avatar,
-                  })}
-                </div>
+                <div></div>
+                // <div className={classNames(projectcss.all, sty.freeBox__hmXkw)}>
+                //   {renderPlasmicSlot({
+                //     defaultContents: (
+                //       <img
+                //         alt={""}
+                //         className={classNames(
+                //           projectcss.all,
+                //           projectcss.img,
+                //           sty.img__xzqEi
+                //         )}
+                //       />
+                //     ),
+                //     value: args.avatar,
+                //   })}
+                // </div>
               }
-            ></NavButton>
+            ></Button>
             {/* <NavButton
               data-plasmic-name={"upgradeButton"}
               data-plasmic-override={overrides.upgradeButton}

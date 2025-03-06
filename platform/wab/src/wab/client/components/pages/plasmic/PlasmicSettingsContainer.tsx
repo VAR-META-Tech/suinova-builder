@@ -24,19 +24,19 @@ import {
   deriveRenderOpts,
   hasVariant,
 } from "@plasmicapp/react-web";
-import TrustedHost from "../../TrustedHost"; // plasmic-import: 0O5nMBdoCe/component
-import Button from "../../widgets/Button"; // plasmic-import: SEF-sRmSoqV5c/component
-import PersonalAccessToken from "./PersonalAccessToken"; // plasmic-import: F4ZVtfq6Xg/component
+import TrustedHost from "@/wab/client/components/TrustedHost"; // plasmic-import: 0O5nMBdoCe/component
+import Button from "@/wab/client/components/widgets/Button"; // plasmic-import: SEF-sRmSoqV5c/component
+import PersonalAccessToken from "@/wab/client/components/pages/plasmic/PersonalAccessToken"; // plasmic-import: F4ZVtfq6Xg/component
 
 import "@plasmicapp/react-web/lib/plasmic.css";
 
-import plasmic_plasmic_kit_color_tokens_css from "../../../plasmic/plasmic_kit_q_4_color_tokens/plasmic_plasmic_kit_q_4_color_tokens.module.css"; // plasmic-import: 95xp9cYcv7HrNWpFWWhbcv/projectcss
-import plasmic_plasmic_kit_design_system_css from "../../../plasmic/PP__plasmickit_design_system.module.css"; // plasmic-import: tXkSR39sgCDWSitZxC5xFV/projectcss
-import projectcss from "../../../plasmic/PP__plasmickit_settings.module.css"; // plasmic-import: aaggSgVS8yYsAwQffVQB4p/projectcss
-import sty from "./PlasmicSettingsContainer.module.css"; // plasmic-import: XkSd43CUYOB/css
-
-import image3YherfIxkolNxf from "../../../plasmic/plasmic_kit_design_system/images/image3.svg"; // plasmic-import: yherfIxkolNXF/picture
-import PlussvgIcon from "../../../plasmic/plasmic_kit_icons/icons/PlasmicIcon__PlusSvg"; // plasmic-import: sQKgd2GNr/icon
+import plasmic_plasmic_kit_color_tokens_css from "@/wab/client/plasmic/plasmic_kit_q_4_color_tokens/plasmic_plasmic_kit_q_4_color_tokens.module.css"; // plasmic-import: 95xp9cYcv7HrNWpFWWhbcv/projectcss
+import plasmic_plasmic_kit_design_system_css from "@/wab/client/plasmic/PP__plasmickit_design_system.module.css"; // plasmic-import: tXkSR39sgCDWSitZxC5xFV/projectcss
+import projectcss from "@/wab/client/plasmic/PP__plasmickit_settings.module.css"; // plasmic-import: aaggSgVS8yYsAwQffVQB4p/projectcss
+import sty from "@/wab/client/components/pages/plasmic/PlasmicSettingsContainer.module.css"; // plasmic-import: XkSd43CUYOB/css
+import { Form, Input } from "antd";
+import { ReactNode } from "react";
+import CopyIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Copy";
 
 export type PlasmicSettingsContainer__VariantMembers = {
   tokenState: "loading" | "loaded" | "error";
@@ -63,6 +63,7 @@ export type PlasmicSettingsContainer__ArgsType = {
   name?: React.ReactNode;
   email?: React.ReactNode;
   role?: React.ReactNode;
+  avatar?: React.ReactNode;
 };
 
 type ArgPropType = keyof PlasmicSettingsContainer__ArgsType;
@@ -70,7 +71,8 @@ export const PlasmicSettingsContainer__ArgProps = new Array<ArgPropType>(
   "avatarImgUrl",
   "name",
   "email",
-  "role"
+  "role",
+  "avatar"
 );
 
 export type PlasmicSettingsContainer__OverridesType = {
@@ -103,6 +105,14 @@ const __wrapUserPromise =
   (async (loc, promise) => {
     return await promise;
   });
+
+function Label({ children }: { children: ReactNode }) {
+  return (
+    <div style={{ fontSize: "20px", color: "#27273A", fontWeight: 500 }}>
+      {children}
+    </div>
+  );
+}
 
 function PlasmicSettingsContainer__RenderFunc(props: {
   variants: PlasmicSettingsContainer__VariantsArgs;
@@ -156,6 +166,13 @@ function PlasmicSettingsContainer__RenderFunc(props: {
   const $state = p.useDollarState(stateSpecs, $props, $ctx);
 
   const [$queries, setDollarQueries] = React.useState({});
+
+  const [form] = Form.useForm();
+  const [username, setUsername] = React.useState("");
+  const [walletAddress, setWalletAddress] = React.useState("");
+
+  function onChange(changed, data) {}
+  async function onSubmit(data) {}
 
   return (
     <p.Stack
@@ -247,16 +264,51 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           "You can set preferred displayed name, change your profile image and view your connected wallet address"
         }
       </div>
-      <div>
-        <div>
-          <div></div>
-          <div></div>
+      <div className={sty.userInfoContent}>
+        <div className={sty.avatarSection}>
+          <div className={sty.avatar}>{args.avatar}</div>
+          <Button
+            size="stretch"
+            className={sty.updateAvatarBtn}
+            type={"primary"}
+          >
+            Update Avatar
+          </Button>
         </div>
-        <div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        <Form
+          form={form}
+          layout={"vertical"}
+          onValuesChange={onChange}
+          onFinish={onSubmit}
+          className={sty.profileForm}
+        >
+          <Form.Item label={<Label>Username</Label>} name={"source"}>
+            <Input
+              className={sty.profileInput}
+              type={"input"}
+              value={username}
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item label={<Label>Wallet Address</Label>} name={"role"}>
+            <Input
+              className={sty.profileInput}
+              type={"input"}
+              value={walletAddress}
+              placeholder="Wallet Address"
+              onChange={(e) => setWalletAddress(e.target.value)}
+              suffix={
+                <Button type={"clear"} onClick={() => {}}>
+                  <CopyIcon width={20} height={20} />
+                </Button>
+              }
+            />
+          </Form.Item>
+          <Button htmlType={"submit"} type={"primary"} size={"stretch"}>
+            Update Profile
+          </Button>
+        </Form>
       </div>
 
       <p.Stack
@@ -315,7 +367,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
             ),
           })}
         >
-          <p.Stack
+          {/* <p.Stack
             as={"div"}
             hasGap={true}
             className={classNames(projectcss.all, sty.freeBox__nPrWc, {
@@ -361,9 +413,9 @@ function PlasmicSettingsContainer__RenderFunc(props: {
                   })
                 : null}
             </div>
-          </p.Stack>
+          </p.Stack> */}
 
-          {(
+          {/* {(
             hasVariant($state, "hideChangePassword", "hideChangePassword")
               ? true
               : true
@@ -415,7 +467,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
             >
               {"Change password"}
             </Button>
-          ) : null}
+          ) : null} */}
         </div>
 
         <div

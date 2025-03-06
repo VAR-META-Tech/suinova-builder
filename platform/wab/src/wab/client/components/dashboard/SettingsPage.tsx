@@ -14,6 +14,7 @@ import { HTMLElementRefOf } from "@plasmicapp/react-web";
 import copy from "copy-to-clipboard";
 import { observer } from "mobx-react";
 import * as React from "react";
+import { Avatar } from "@/wab/client/components/studio/Avatar";
 
 interface SettingsPageProps extends DefaultSettingsPageProps {
   appCtx: AppCtx;
@@ -22,7 +23,6 @@ interface SettingsPageProps extends DefaultSettingsPageProps {
 function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
   const { appCtx, ...rest } = props;
   const user = ensure(appCtx.selfInfo, "Unexpected null selfInfo");
-  console.log("🚀 ~ user:", user);
   const tokensState = usePersonalApiTokens();
   const ops = ensure(appCtx.ops, "Unexpected null AppOps");
   const [copiedToken, setCopiedToken] = React.useState("");
@@ -83,6 +83,7 @@ function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
                     .then(() => updateHostList())
                 }
                 onNewTrustedHost={() => setShowHostModal(true)}
+                avatar={<Avatar size="extraLarge" hideTooltip user={user} />}
               ></SettingsContainer>
             </>
           ),

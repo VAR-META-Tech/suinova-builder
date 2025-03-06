@@ -24,6 +24,7 @@ interface SettingsContainerProps {
   hostsState: "loading" | "error" | ApiTrustedHost[] | undefined;
   onDeleteTrustedHost: (host: ApiTrustedHost) => void;
   onNewTrustedHost: () => void;
+  avatar: React.JSX.Element;
 }
 
 function SettingsContainer(props: SettingsContainerProps) {
@@ -87,6 +88,7 @@ function SettingsContainer(props: SettingsContainerProps) {
           avatarImgUrl: props.avatarImgUrl,
           name: props.name,
           email: props.email,
+          avatar: props.avatar,
         }}
         overrides={overrides}
         hideChangePassword={props.hideChangePassword}

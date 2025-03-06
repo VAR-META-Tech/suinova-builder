@@ -131,7 +131,7 @@ export function TopFrameChrome({
   const fullPreview = !!UU.projectFullPreview.parse(location.pathname, false);
 
   React.useEffect(() => {
-    document.title = `${project.name} - Plasmic`;
+    document.title = `${project.name} - SuiNova`;
   }, [project.name]);
 
   React.useEffect(() => {

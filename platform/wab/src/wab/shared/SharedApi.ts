@@ -566,11 +566,7 @@ export abstract class SharedApi {
   async loginWithWallet(
     data: LoginWithWalletRequest
   ): Promise<LoginWithWalletResponse> {
-    const res: LoginResponse = await this.post(
-      "/auth/login-wallet",
-      data,
-      true
-    );
+    const res: LoginResponse = await this.post("/auth/wallet/sui", data, true);
     if (res.status) {
       await this.refreshCsrfToken();
       this.setUser(res.user);

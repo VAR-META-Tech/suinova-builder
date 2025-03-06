@@ -8,7 +8,7 @@ import { Tooltip } from "antd";
 import classNames from "classnames";
 import React, { CSSProperties, ReactNode } from "react";
 
-type AvatarSize = "small";
+type AvatarSize = "small" | "extraLarge";
 
 interface RawAvatarProps {
   name?: string;
@@ -21,6 +21,7 @@ interface RawAvatarProps {
   tooltipPlacement?: Side;
   size?: AvatarSize;
   onClick?: () => void;
+  hideTooltip?: boolean;
 }
 
 function getInitials(firstName: string, lastName: string, email: string) {
@@ -40,8 +41,37 @@ export function RawAvatar({
   highlight = false,
   size,
   onClick,
+  hideTooltip = false,
 }: RawAvatarProps) {
   const showInitials = !children && !imgUrl;
+
+  if (hideTooltip) {
+    return (
+      <div
+        className={classNames(
+          {
+            Avatar: true,
+            Avatar__Small: size === "small",
+            Avatar__ExtraLarge: size === "extraLarge",
+            Avatar__Highlight: highlight,
+          },
+          className
+        )}
+        style={{
+          background: showInitials
+            ? Chroma.hsl(simpleHash(name || "???") % 360, 0.8, 0.35).hex()
+            : undefined,
+          ...style,
+        }}
+        onClick={onClick}
+      >
+        {children}
+        {imgUrl && <img src={imgUrl} className={"Avatar__Img"} />}
+        {showInitials && initials}
+      </div>
+    );
+  }
+
   return (
     <Tooltip title={name} placement={tooltipPlacement}>
       <div
@@ -49,6 +79,7 @@ export function RawAvatar({
           {
             Avatar: true,
             Avatar__Small: size === "small",
+            Avatar__ExtraLarge: size === "extraLarge",
             Avatar__Highlight: highlight,
           },
           className
@@ -76,6 +107,7 @@ interface AvatarProps {
   tooltipPlacement?: Side;
   size?: AvatarSize;
   onClick?: () => void;
+  hideTooltip?: boolean;
 }
 
 export function Avatar({
@@ -85,9 +117,11 @@ export function Avatar({
   tooltipPlacement,
   size,
   onClick,
+  hideTooltip,
 }: AvatarProps) {
   return (
     <RawAvatar
+      hideTooltip={hideTooltip}
       className={className}
       name={fullNameAndEmail(user)}
       initials={getInitials(

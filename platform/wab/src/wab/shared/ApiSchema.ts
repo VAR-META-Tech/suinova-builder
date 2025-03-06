@@ -366,6 +366,8 @@ export type LoginResponse =
 
 export interface LoginWithWalletRequest {
   signature: string;
+  address: string;
+  nonce: string;
   appInfo?: {
     appName: string;
     authorizationPath: string;

@@ -368,7 +368,7 @@
 }
 .header {
   font-weight: 700;
-  font-size: 36px;
+  font-size: 30px;
   color: #2978D1;
 }
 .uploadButton:global(.__wab_instance) {
@@ -413,7 +413,7 @@
   > :global(.__wab_slot)
   > picture
   > img {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .mainListnoProjects {
   display: none;
@@ -564,4 +564,12 @@
 }
 .img___60YkE > picture > img {
   object-fit: cover;
+}
+
+@media only screen and (max-width: 768px) {
+  .freeBox__miuC3 {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
 }

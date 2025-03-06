@@ -187,7 +187,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                     const response = await promptMoveToWorkspace(
                       appCtx,
                       null,
-                      false,
+                      true,
                       "Duplicate",
                       project.name
                     );

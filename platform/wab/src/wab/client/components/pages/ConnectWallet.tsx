@@ -17,6 +17,7 @@ import {
   useWallets,
   useConnectWallet as useConnectWalletSui,
   useSignPersonalMessage,
+  useAccounts,
 } from "@mysten/dapp-kit";
 import { notification } from "antd";
 
@@ -82,6 +83,7 @@ const useConnectWallet = ({
   const nonAuthCtx = useNonAuthCtx();
   const appCtx = useAppCtx();
   const wallets = useWallets();
+  const accounts = useAccounts();
 
   const { mutateAsync: connectWallet, isPending: isPendingConnectWallet } =
     useConnectWalletSui();
@@ -126,17 +128,23 @@ const useConnectWallet = ({
         wallet: selectedWallet,
       });
 
+      const nonce = Date.now();
+      const message = `Welcome to SuiNova! By signing this message, you'll securely authenticate your wallet. Timestamp: ${nonce}`;
       const signMessageResult = await signMessage({
-        message: new TextEncoder().encode(
-          "Please sign this to login to this App"
-        ),
+        message: new TextEncoder().encode(message),
       });
 
-      // const res = await nonAuthCtx.api.loginWithWallet({
-      //   signature: signMessageResult.signature,
-      //   appInfo,
-      // });
-      // console.log("🚀 ~ connect ~ res:", res);
+      const res = await nonAuthCtx.api.loginWithWallet({
+        signature: signMessageResult.signature,
+        address: selectedWallet.accounts[0].address,
+        nonce: nonce.toString(),
+        appInfo,
+      });
+      if (res.status) {
+        console.log("🚀 ~ connect ~ user:", res.user);
+      } else {
+        console.log("🚀 ~ connect ~ res:", res);
+      }
 
       notification.success({
         message: "Connected wallet successfully",
@@ -236,7 +244,12 @@ function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
     <div className="ConnectWallet__Container">
       <div className="ConnectWallet__Card">
         <div className="ConnectWallet__CardHeader">
-          <img className="ConnectWallet__Logo" src={AppLogo}></img>
+          <img
+            width={64}
+            height={60}
+            className="ConnectWallet__Logo"
+            src={AppLogo}
+          ></img>
           <div className="ConnectWallet__Title">Connect Wallet</div>
           <div className="ConnectWallet__Subtitle">
             Choose your wallet to sign in{" "}
@@ -249,7 +262,7 @@ function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
               className="ConnectWallet__WalletItem"
               onClick={() => connect(item)}
             >
-              <img src={item.icon} />
+              <img width={30} height={30} src={item.icon} />
               <div className="ConnectWallet__WalletItemLabel">{item.name}</div>
               {<ChevronRight />}
             </div>
