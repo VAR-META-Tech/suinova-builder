@@ -89,6 +89,7 @@ import {
   TrustedHost,
   TutorialDb,
   User,
+  UserWallet,
   Workspace,
   WorkspaceApiToken,
   WorkspaceAuthConfig,
@@ -800,6 +801,10 @@ export class DbMgr implements MigrationDbMgr {
 
   private users() {
     return this.entMgr.getRepository(User);
+  }
+
+  private userWallets() {
+    return this.entMgr.getRepository(UserWallet);
   }
 
   private featureTiers() {
@@ -1783,6 +1788,28 @@ export class DbMgr implements MigrationDbMgr {
     );
   }
 
+  async tryGetUserByWalletAddress(
+    chainId: string,
+    walletAddress: string
+  ): Promise<User | undefined> {
+    const userWallet = await getOneOrFailIfTooMany(
+      this.userWallets()
+        .createQueryBuilder("userWallets")
+        .where(`lower(userWallets.walletAddress) = lower(:walletAddress)`, {
+          walletAddress,
+        })
+        .andWhere(`lower(userWallets.chainId) = lower(:chainId)`, {
+          chainId,
+        })
+    );
+
+    if (!userWallet) {
+      return undefined;
+    }
+
+    return this.tryGetUserById(userWallet.userId);
+  }
+
   async tryGetUserByEmail(email: string) {
     const user = await getOneOrFailIfTooMany(
       this.users()
@@ -1795,6 +1822,25 @@ export class DbMgr implements MigrationDbMgr {
     }
     await this.checkUserPerms(user.id, "read", "get");
     return user;
+  }
+
+  async createUserWallet({
+    userId,
+    chainId,
+    walletAddress,
+  }: {
+    userId: UserId;
+    chainId: string;
+    walletAddress: string;
+  }): Promise<UserWallet> {
+    const userWallet = this.userWallets().create({
+      ...this.stampNew(),
+      userId,
+      chainId,
+      walletAddress,
+    });
+    await this.entMgr.save(userWallet);
+    return userWallet;
   }
 
   /**
