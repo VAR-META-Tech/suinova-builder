@@ -1,5 +1,6 @@
 import { setupCustomPassport } from "@/wab/server/auth/custom-passport-cfg";
-import { createUserFull } from "@/wab/server/auth/routes";
+import { createUserFull, createUserWithWallet } from "@/wab/server/auth/routes";
+import { SuiWalletStrategy } from "@/wab/server/auth/sui-wallet-strategy";
 import { Config } from "@/wab/server/config";
 import { DbMgr, SUPER_USER } from "@/wab/server/db/DbMgr";
 import { OauthTokenProvider, User } from "@/wab/server/entities/Entities";
@@ -30,6 +31,7 @@ import { isGoogleAuthRequiredEmailDomain } from "@/wab/shared/devflag-utils";
 import { DevFlagsType } from "@/wab/shared/devflags";
 import { accessLevelRank } from "@/wab/shared/EntUtil";
 import { getPublicUrl } from "@/wab/shared/urls";
+import { verifyPersonalMessageSignature } from "@mysten/sui/verify";
 import { Request } from "express-serve-static-core";
 import { omit } from "lodash";
 import passport, { Profile } from "passport";
@@ -89,6 +91,68 @@ export async function setupPassport(
             return false;
           }
         });
+      }
+    )
+  );
+
+  passport.use(
+    "sui-wallet",
+    new SuiWalletStrategy(
+      { passReqToCallback: true },
+      async (req, options, done) => {
+        const { address, signature, nonce } = options;
+        const mgr = superDbMgr(req);
+
+        try {
+          // Check if nonce (timestamp) is within acceptable range (5 minutes)
+          const currentTime = Date.now();
+          if (Math.abs(currentTime - nonce) > 5 * 60 * 1000) {
+            return done(null, false, { message: "Expired signature" });
+          }
+
+          // Construct the message that was signed
+          const signedMessage = new TextEncoder().encode(
+            `Welcome to SuiNova! By signing this message, you'll securely authenticate your wallet. Timestamp: ${nonce}`
+          );
+
+          // Verify the signature
+          try {
+            await verifyPersonalMessageSignature(signedMessage, signature, {
+              address,
+            });
+          } catch (e) {
+            return done(null, false, { message: "Invalid signature" });
+          }
+
+          // Look up user by wallet address
+          let user = await mgr.tryGetUserByWalletAddress("101", address);
+
+          if (!user) {
+            // Create new user with wallet address
+            const shortAddress = `${address.substring(
+              0,
+              6
+            )}...${address.substring(address.length - 4)}`;
+            user = await createUserWithWallet(mgr, {
+              chainId: "101",
+              walletAddress: address,
+              firstName: "Sui",
+              lastName: `User ${shortAddress}`,
+              email: `${address.toLowerCase()}@sui.wallet`,
+            });
+
+            if (req.analytics && req.analytics.track) {
+              req.analytics.track("Create wallet user", {
+                method: "wallet_sui",
+              });
+            }
+          }
+
+          return done(null, user);
+        } catch (error) {
+          console.error("Error during wallet login:", error);
+          return done(error);
+        }
       }
     )
   );

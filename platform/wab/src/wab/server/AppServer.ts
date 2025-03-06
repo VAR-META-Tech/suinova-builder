@@ -1291,6 +1291,11 @@ export function addMainAppServerRoutes(
     withNext(authRoutes.login)
   );
   app.post(
+    "/api/v1/auth/wallet/sui",
+    sensitiveRateLimiter,
+    withNext(authRoutes.suiWalletLogin)
+  );
+  app.post(
     "/api/v1/auth/sign-up",
     sensitiveRateLimiter,
     withNext(authRoutes.signUp)

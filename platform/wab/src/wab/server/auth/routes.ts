@@ -64,6 +64,7 @@ import util from "util";
 export function csrf(req: Request, res: Response, _next: NextFunction) {
   res.json({ csrf: res.locals._csrf });
 }
+
 export async function login(req: Request, res: Response, next: NextFunction) {
   console.log("logging in as", req.body.email);
   await new Promise<void>((resolve) =>
@@ -160,6 +161,41 @@ export async function createUserFull({
   req.analytics.track("Create Plasmic user", {
     method: password ? "password" : "oauth",
   });
+  return user;
+}
+
+export async function createUserWithWallet(
+  mgr: DbMgr,
+  {
+    chainId,
+    walletAddress,
+    firstName,
+    lastName,
+    email,
+  }: {
+    chainId: string;
+    walletAddress: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }
+) {
+  // Create user first
+  const user = await createUserFull({
+    mgr,
+    email,
+    firstName,
+    lastName,
+    req: null as any, // Passing null as request since we don't have it here
+  });
+
+  // Add wallet info
+  await mgr.createUserWallet({
+    userId: user.id,
+    chainId,
+    walletAddress,
+  });
+
   return user;
 }
 
@@ -508,6 +544,38 @@ export async function getEmailVerificationToken(req: Request, res: Response) {
       status: true,
       token: token,
     })
+  );
+}
+
+export async function suiWalletLogin(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  await new Promise<void>((resolve) =>
+    passport.authenticate("sui-wallet", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+
+      if (!user) {
+        return res.status(401).json({
+          status: false,
+          reason: info?.message || "Authentication failed",
+        });
+      }
+
+      doLogin(req, user, (err2) => {
+        if (err2) {
+          return next(err2);
+        }
+        console.log(
+          "logged in as",
+          getUser(req, { allowUnverifiedEmail: true }).email
+        );
+        res.json(ensureType<LoginResponse>({ status: true, user }));
+      });
+    })(req, res, next)
   );
 }
 
