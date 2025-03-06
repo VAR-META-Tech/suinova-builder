@@ -90,7 +90,9 @@ export type PlasmicButton__VariantsArgs = {
   size?: SingleChoiceArg<"small" | "stretch" | "wide" | "compact" | "medium">;
   disabled?: SingleBooleanChoiceArg<"disabled">;
   pointerCursor?: SingleBooleanChoiceArg<"pointerCursor">;
-  color?: SingleChoiceArg<"blue" | "green" | "red" | "purple" | "darkRed">;
+  color?: SingleChoiceArg<
+    "blue" | "green" | "red" | "purple" | "darkRed" | "white"
+  >;
 };
 type VariantPropType = keyof PlasmicButton__VariantsArgs;
 export const PlasmicButton__VariantProps = new Array<VariantPropType>(
@@ -271,6 +273,7 @@ function PlasmicButton__RenderFunc(props: {
           [sty.rootcolor_green]: hasVariant($state, "color", "green"),
           [sty.rootcolor_purple]: hasVariant($state, "color", "purple"),
           [sty.rootcolor_red]: hasVariant($state, "color", "red"),
+          [sty.rootcolor_white]: hasVariant($state, "color", "white"),
           [sty.rootdisabled]: hasVariant($state, "disabled", "disabled"),
           [sty.rootdisabled_withIcons_endIconOnHover]:
             hasVariant($state, "disabled", "disabled") &&

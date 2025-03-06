@@ -22,6 +22,7 @@ interface SettingsPageProps extends DefaultSettingsPageProps {
 function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
   const { appCtx, ...rest } = props;
   const user = ensure(appCtx.selfInfo, "Unexpected null selfInfo");
+  console.log("🚀 ~ user:", user);
   const tokensState = usePersonalApiTokens();
   const ops = ensure(appCtx.ops, "Unexpected null AppOps");
   const [copiedToken, setCopiedToken] = React.useState("");

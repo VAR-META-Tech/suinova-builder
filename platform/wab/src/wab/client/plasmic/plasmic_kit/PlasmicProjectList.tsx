@@ -210,68 +210,6 @@ function PlasmicProjectList__RenderFunc(props: {
           ),
         })}
       >
-        {(
-          hasVariant($state, "showNewProjectButton", "showNewProjectButton")
-            ? true
-            : false
-        ) ? (
-          <div
-            className={classNames(projectcss.all, sty.freeBox__b3Bi4, {
-              [sty.freeBoxshowNewProjectButton__b3Bi4R7FzF]: hasVariant(
-                $state,
-                "showNewProjectButton",
-                "showNewProjectButton"
-              ),
-            })}
-          >
-            <h1
-              data-plasmic-name={"h1"}
-              data-plasmic-override={overrides.h1}
-              className={classNames(
-                projectcss.all,
-                projectcss.h1,
-                projectcss.__wab_text,
-                sty.h1,
-                {
-                  [sty.h1showNewProjectButton]: hasVariant(
-                    $state,
-                    "showNewProjectButton",
-                    "showNewProjectButton"
-                  ),
-                }
-              )}
-            >
-              {"Projects"}
-            </h1>
-            <Button
-              data-plasmic-name={"newProjectButton"}
-              data-plasmic-override={overrides.newProjectButton}
-              className={classNames("__wab_instance", sty.newProjectButton, {
-                [sty.newProjectButtonshowNewProjectButton]: hasVariant(
-                  $state,
-                  "showNewProjectButton",
-                  "showNewProjectButton"
-                ),
-              })}
-              endIcon={
-                <ChevronDownsvgIcon
-                  className={classNames(projectcss.all, sty.svg__opS5Z)}
-                  role={"img"}
-                />
-              }
-              startIcon={
-                <PlusIcon
-                  className={classNames(projectcss.all, sty.svg__fDUq)}
-                  role={"img"}
-                />
-              }
-              type={["primary"]}
-              withIcons={["startIcon"]}
-            >
-              {"New project"}
-            </Button>
-          </div>
-        ) : null}
         <ProjectListSection
           data-plasmic-name={"tutorials"}
           data-plasmic-override={overrides.tutorials}
@@ -706,7 +644,6 @@ function PlasmicProjectList__RenderFunc(props: {
           name={"Get Started"}
           type={"starters"}
         />
-
         <div
           className={classNames(projectcss.all, sty.freeBox__miuC3, {
             [sty.freeBoxhideStarters__miuC3T8RVy]: hasVariant(
@@ -716,6 +653,7 @@ function PlasmicProjectList__RenderFunc(props: {
             ),
           })}
         >
+          <div className={sty.header}>All Projects</div>
           <ProjectsFilter
             data-plasmic-name={"filter"}
             data-plasmic-override={overrides.filter}

@@ -33,10 +33,16 @@
   min-height: 16px;
   width: 16px;
   height: 16px;
+  color: #7A7C8B;
 }
 .searchBox:global(.__wab_instance) {
   position: relative;
   min-width: 200px;
+  width: 464px;
+  height: 50px;
+  > input {
+    font-size: 16px;
+  }
 }
 @media (min-width: 0px) and (max-width: 768px) {
   .searchBox:global(.__wab_instance) {
@@ -48,8 +54,9 @@
   display: flex;
   position: relative;
   object-fit: cover;
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
+  margin-right: 14px;
 }
 .svg__wowH7 {
   display: flex;

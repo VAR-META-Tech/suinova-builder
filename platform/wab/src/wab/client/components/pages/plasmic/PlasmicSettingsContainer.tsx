@@ -222,7 +222,41 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           }
         )}
       >
-        {"Profile settings"}
+        {"My Profile"}
+      </div>
+      <div
+        className={classNames(
+          projectcss.all,
+          projectcss.__wab_text,
+          {
+            [sty.texttokenState_loading__mqBhAmpB4V]: hasVariant(
+              $state,
+              "tokenState",
+              "loading"
+            ),
+            [sty.texttrustedHostsState_enabled__mqBhA8K6RB]: hasVariant(
+              $state,
+              "trustedHostsState",
+              "enabled"
+            ),
+          },
+          sty.subtitle
+        )}
+      >
+        {
+          "You can set preferred displayed name, change your profile image and view your connected wallet address"
+        }
+      </div>
+      <div>
+        <div>
+          <div></div>
+          <div></div>
+        </div>
+        <div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
       </div>
 
       <p.Stack
@@ -394,7 +428,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           })}
         />
 
-        <div
+        {/* <div
           className={classNames(projectcss.all, sty.freeBox__amKmj, {
             [sty.freeBoxtokenState_error__amKmJa2Ye]: hasVariant(
               $state,
@@ -477,9 +511,9 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           >
             {"New Token"}
           </Button>
-        </div>
+        </div> */}
 
-        {(
+        {/* {(
           hasVariant($state, "tokenState", "error")
             ? false
             : hasVariant($state, "tokenState", "loading")
@@ -583,8 +617,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               }
             />
           </div>
-        ) : null}
-        {(
+        ) : null} */}
+        {/* {(
           hasVariant($state, "trustedHostsState", "enabled")
             ? true
             : hasVariant($state, "tokenState", "loading")
@@ -637,8 +671,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           >
             {hasVariant($state, "tokenState", "loading") ? "Loading…" : ""}
           </div>
-        ) : null}
-        {(hasVariant($state, "tokenState", "error") ? true : false) ? (
+        ) : null} */}
+        {/* {(hasVariant($state, "tokenState", "error") ? true : false) ? (
           <div
             className={classNames(
               projectcss.all,
@@ -675,8 +709,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               ? "Error while load existing tokens. Please refresh page to try again."
               : ""}
           </div>
-        ) : null}
-        {(
+        ) : null} */}
+        {/* {(
           hasVariant($state, "trustedHostsState", "error")
             ? true
             : hasVariant($state, "trustedHostsState", "loading")
@@ -706,8 +740,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               ),
             })}
           />
-        ) : null}
-        {(
+        ) : null} */}
+        {/* {(
           hasVariant($state, "trustedHostsState", "error")
             ? true
             : hasVariant($state, "trustedHostsState", "loading")
@@ -806,7 +840,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
                 : "New Token"}
             </Button>
           </div>
-        ) : null}
+        ) : null} */}
         {(
           hasVariant($state, "trustedHostsState", "error")
             ? false

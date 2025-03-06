@@ -176,12 +176,12 @@ function ProjectListItem(props: ProjectListItemProps) {
           props: {
             menu: () => (
               <Menu>
-                {accessLevelRank(projectAccessLevel) >=
+                {/* {accessLevelRank(projectAccessLevel) >=
                   accessLevelRank("editor") && (
                   <Menu.Item onClick={() => setConfigProjectId(project.id)}>
                     <strong>Configure</strong> project
                   </Menu.Item>
-                )}
+                )} */}
                 <Menu.Item
                   onClick={async () => {
                     const response = await promptMoveToWorkspace(
@@ -217,12 +217,12 @@ function ProjectListItem(props: ProjectListItemProps) {
                 >
                   <strong>Duplicate</strong> project
                 </Menu.Item>
-                {DEVFLAGS.demo && (
+                {/* {DEVFLAGS.demo && (
                   <Menu.Item onClick={() => appOps.download(project.id)}>
                     <strong>Download</strong> project
                   </Menu.Item>
-                )}
-                {workspaces && canMove && (
+                )} */}
+                {/* {workspaces && canMove && (
                   <Menu.Item
                     onClick={async () => {
                       const response = await promptMoveToWorkspace(
@@ -261,8 +261,8 @@ function ProjectListItem(props: ProjectListItemProps) {
                   >
                     <strong>Move</strong> to workspace
                   </Menu.Item>
-                )}
-                {accessLevelRank(workspaceAccessLevel) >=
+                )} */}
+                {/* {accessLevelRank(workspaceAccessLevel) >=
                   accessLevelRank("editor") && (
                   <Menu.Item
                     onClick={async () => {
@@ -281,8 +281,8 @@ function ProjectListItem(props: ProjectListItemProps) {
                     <strong>{!project.isUserStarter ? "Set" : "Unset"}</strong>{" "}
                     as workspace starter
                   </Menu.Item>
-                )}
-                {!(
+                )} */}
+                {/* {!(
                   accessLevelRank(workspaceAccessLevel) >=
                   accessLevelRank("viewer")
                 ) &&
@@ -310,7 +310,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                     >
                       <strong>Remove</strong> from dashboard
                     </Menu.Item>
-                  )}
+                  )} */}
                 {accessLevelRank(projectAccessLevel) >=
                   accessLevelRank("owner") && (
                   <Menu.Item

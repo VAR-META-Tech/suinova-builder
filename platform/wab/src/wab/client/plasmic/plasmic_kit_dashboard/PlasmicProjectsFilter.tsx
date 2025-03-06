@@ -124,7 +124,7 @@ function PlasmicProjectsFilter__RenderFunc(props: {
         sty.root
       )}
     >
-      <Select
+      {/* <Select
         data-plasmic-name={"orderBySelect"}
         data-plasmic-override={overrides.orderBySelect}
         icon={
@@ -166,12 +166,12 @@ function PlasmicProjectsFilter__RenderFunc(props: {
         >
           {"Alphabetically"}
         </Select__Option>
-      </Select>
+      </Select> */}
       <Textbox
         data-plasmic-name={"searchBox"}
         data-plasmic-override={overrides.searchBox}
         className={classNames("__wab_instance", sty.searchBox)}
-        placeholder={"Search..."}
+        placeholder={"Search Project Name..."}
         prefixIcon={
           <SearchsvgIcon
             className={classNames(projectcss.all, sty.svg___7Xs0L)}

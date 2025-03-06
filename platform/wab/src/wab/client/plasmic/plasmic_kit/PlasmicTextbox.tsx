@@ -294,11 +294,11 @@ function PlasmicTextbox__RenderFunc(props: {
             "autoheight"
           ),
           [sty.rootstyleType_blue]: hasVariant($state, "styleType", "blue"),
-          [sty.rootstyleType_bordered]: hasVariant(
-            $state,
-            "styleType",
-            "bordered"
-          ),
+          // [sty.rootstyleType_bordered]: hasVariant(
+          //   $state,
+          //   "styleType",
+          //   "bordered"
+          // ),
           [sty.rootstyleType_gray]: hasVariant($state, "styleType", "gray"),
           [sty.rootstyleType_green]: hasVariant($state, "styleType", "green"),
           [sty.rootstyleType_inverted]: hasVariant(
@@ -486,11 +486,11 @@ function PlasmicTextbox__RenderFunc(props: {
             "autoheight"
           ),
           [sty.textboxstyleType_blue]: hasVariant($state, "styleType", "blue"),
-          [sty.textboxstyleType_bordered]: hasVariant(
-            $state,
-            "styleType",
-            "bordered"
-          ),
+          // [sty.textboxstyleType_bordered]: hasVariant(
+          //   $state,
+          //   "styleType",
+          //   "bordered"
+          // ),
           [sty.textboxstyleType_gray]: hasVariant($state, "styleType", "gray"),
           [sty.textboxstyleType_green]: hasVariant(
             $state,

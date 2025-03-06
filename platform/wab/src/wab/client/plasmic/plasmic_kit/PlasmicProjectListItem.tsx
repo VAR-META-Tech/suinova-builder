@@ -271,7 +271,7 @@ function PlasmicProjectListItem__RenderFunc(props: {
                 ),
               }),
             })}
-            <div
+            {/* <div
               className={classNames(
                 projectcss.all,
                 projectcss.__wab_text,
@@ -286,8 +286,8 @@ function PlasmicProjectListItem__RenderFunc(props: {
               )}
             >
               {"\u2022"}
-            </div>
-            {(
+            </div> */}
+            {/* {(
               hasVariant($state, "showWorkspace", "showWorkspace")
                 ? true
                 : false
@@ -330,7 +330,7 @@ function PlasmicProjectListItem__RenderFunc(props: {
                   {"PlasmicKit"}
                 </div>
               </Button>
-            ) : null}
+            ) : null} */}
             {(
               hasVariant($state, "explorations", "moreInfoOnHover") &&
               triggers.hover_root

@@ -4,6 +4,7 @@
   position: relative;
   width: 100%;
   min-width: 0;
+  background: linear-gradient(266.25deg, #FFF0F0 1.83%, #D3E3FA 103%);
 }
 .header {
   display: flex;
@@ -84,22 +85,28 @@
 .newProjectButtonhideNewProjectButton:global(.__wab_instance) {
   display: none;
 }
+.newProjectButtonText {
+  color: white;
+}
 .svg__pMrgf {
   display: flex;
   position: relative;
   object-fit: cover;
-  color: var(--token-mu3x63xzJRW);
+  color: white;
   height: 1em;
+  font-weight: 500;
 }
 .text {
   font-weight: 500;
   color: var(--token-VUsIDivgUss);
+  font-size: 16px;
 }
 .svg__iw3P2 {
   display: flex;
   position: relative;
   object-fit: cover;
   height: 1em;
+
 }
 .svgnewProjectButtonAsDropdown__iw3P2LewDp {
   margin-left: 5px;
@@ -421,7 +428,7 @@
   align-items: stretch;
   justify-content: flex-start;
   width: 100%;
-  margin-left: 200px;
+  margin: 0px auto;
   height: 100%;
   min-width: 0;
   min-height: 0;

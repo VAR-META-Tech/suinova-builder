@@ -183,6 +183,9 @@
 .rootcolor_darkRed {
   background: var(--token-iDpByWoW0eF);
 }
+.rootcolor_white {
+  background: white;
+}
 .rootsize_small_withIcons_startIcon {
   padding-left: 4px;
 }

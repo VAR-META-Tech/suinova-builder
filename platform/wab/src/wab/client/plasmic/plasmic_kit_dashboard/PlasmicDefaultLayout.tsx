@@ -49,7 +49,6 @@ import sty from "./PlasmicDefaultLayout.module.css"; // plasmic-import: nSkQWLjK
 import HelpIcon from "../plasmic_kit/PlasmicIcon__Help"; // plasmic-import: -9-68IGPdLG-5/icon
 import PlusIcon from "../plasmic_kit/PlasmicIcon__Plus"; // plasmic-import: -k064DlQ8k8-L/icon
 import TriangleBottomIcon from "../plasmic_kit/PlasmicIcon__TriangleBottom"; // plasmic-import: A8NQUZ7Lg1OHO/icon
-import MarkFullColorIcon from "../plasmic_kit_design_system/PlasmicIcon__MarkFullColor"; // plasmic-import: l_n_OBLJg/icon
 import BooksvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__BookSvg"; // plasmic-import: hxRmy8Nhq/icon
 import ChevronDownsvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__ChevronDownSvg"; // plasmic-import: xZrB9_0ir/icon
 import GolfsvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__GolfSvg"; // plasmic-import: U5dSOeF1P/icon
@@ -57,6 +56,7 @@ import RocketsvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__RocketSvg"; /
 import SparklessvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__SparklesSvg"; // plasmic-import: 9Z0Cu-c5J/icon
 import UnorderedListsvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__UnorderedListSvg"; // plasmic-import: suHkgkKOX/icon
 import UsersPlussvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__UsersPlusSvg"; // plasmic-import: OqMJdWElK/icon
+import Logo from "@/wab/client/assets/logo.png";
 
 createPlasmicElementProxy;
 
@@ -248,12 +248,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
             href={"/"}
             platform={"react"}
           >
-            <MarkFullColorIcon
-              data-plasmic-name={"headerLogo"}
-              data-plasmic-override={overrides.headerLogo}
-              className={classNames(projectcss.all, sty.headerLogo)}
-              role={"img"}
-            />
+            <img src={Logo} width={50} />
           </PlasmicLink__>
           <Stack__
             as={"div"}
@@ -281,36 +276,36 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                     "hideNewProjectButton"
                   ),
                 })}
-                endIcon={
-                  <ChevronDownsvgIcon
-                    className={classNames(projectcss.all, sty.svg__iw3P2, {
-                      [sty.svgnewProjectButtonAsDropdown__iw3P2LewDp]:
-                        hasVariant(
-                          $state,
-                          "newProjectButtonAsDropdown",
-                          "newProjectButtonAsDropdown"
-                        ),
-                    })}
-                    role={"img"}
-                  />
-                }
-                size={"wide"}
+                // endIcon={
+                //   <ChevronDownsvgIcon
+                //     className={classNames(projectcss.all, sty.svg__iw3P2, {
+                //       [sty.svgnewProjectButtonAsDropdown__iw3P2LewDp]:
+                //         hasVariant(
+                //           $state,
+                //           "newProjectButtonAsDropdown",
+                //           "newProjectButtonAsDropdown"
+                //         ),
+                //     })}
+                //     role={"img"}
+                //   />
+                // }
                 startIcon={
                   <PlusIcon
                     className={classNames(projectcss.all, sty.svg__pMrgf)}
                     role={"img"}
                   />
                 }
-                type={["clearPrimary"]}
-                withIcons={
-                  hasVariant(
-                    $state,
-                    "newProjectButtonAsDropdown",
-                    "newProjectButtonAsDropdown"
-                  )
-                    ? ["startIcon", "endIcon"]
-                    : ["startIcon"]
-                }
+                type={["primary"]}
+                // withIcons={
+                //   hasVariant(
+                //     $state,
+                //     "newProjectButtonAsDropdown",
+                //     "newProjectButtonAsDropdown"
+                //   )
+                //     ? ["startIcon", "endIcon"]
+                //     : ["startIcon"]
+                // }
+                withIcons={["startIcon"]}
               >
                 <div
                   data-plasmic-name={"text"}
@@ -318,7 +313,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                   className={classNames(
                     projectcss.all,
                     projectcss.__wab_text,
-                    sty.text,
+                    sty.newProjectButtonText,
                     {
                       [sty.texthideNewProjectButton]: hasVariant(
                         $state,
@@ -333,6 +328,29 @@ function PlasmicDefaultLayout__RenderFunc(props: {
               </Button>
             </div>
             <NavButton
+              data-plasmic-name={"userButton"}
+              data-plasmic-override={overrides.userButton}
+              className={classNames("__wab_instance", sty.userButton)}
+              startIcon={
+                <div className={classNames(projectcss.all, sty.freeBox__hmXkw)}>
+                  {renderPlasmicSlot({
+                    defaultContents: (
+                      <img
+                        alt={""}
+                        className={classNames(
+                          projectcss.all,
+                          projectcss.img,
+                          sty.img__xzqEi
+                        )}
+                      />
+                    ),
+
+                    value: args.avatar,
+                  })}
+                </div>
+              }
+            ></NavButton>
+            {/* <NavButton
               data-plasmic-name={"upgradeButton"}
               data-plasmic-override={overrides.upgradeButton}
               bold={true}
@@ -363,7 +381,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                   ? true
                   : undefined
               }
-            />
+            /> */}
           </Stack__>
         </div>
       </header>
@@ -381,7 +399,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
           data-plasmic-override={overrides.wrapper}
           className={classNames(projectcss.all, sty.wrapper)}
         >
-          <aside
+          {/* <aside
             data-plasmic-name={"sidebar"}
             data-plasmic-override={overrides.sidebar}
             className={classNames(projectcss.all, sty.sidebar, {
@@ -699,7 +717,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
                 {"kim23"}
               </NavButton>
             </Stack__>
-          </aside>
+          </aside> */}
           <main
             data-plasmic-name={"main"}
             data-plasmic-override={overrides.main}
