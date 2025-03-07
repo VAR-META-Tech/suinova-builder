@@ -10,6 +10,11 @@ export interface WalletVerifyOptions {
   signature: string;
   nonce: number;
   message?: string;
+  nextPath?: string;
+  appInfo?: {
+    appName: string;
+    authorizationPath: string;
+  };
 }
 
 export interface VerifyCallback {
@@ -37,7 +42,7 @@ export class SuiWalletStrategy extends Strategy {
 
   async authenticate(req: Request, options?: any) {
     try {
-      const { address, signature, nonce } = req.body;
+      const { address, signature, nonce, nextPath, appInfo } = req.body;
 
       if (!address || !signature || !nonce) {
         return this.fail({ message: "Missing credentials" }, 400);
@@ -47,6 +52,8 @@ export class SuiWalletStrategy extends Strategy {
         address,
         signature,
         nonce,
+        nextPath,
+        appInfo,
       };
 
       await this._verify(req, verifyOpts, (err, user, info) => {
