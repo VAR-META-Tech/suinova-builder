@@ -563,30 +563,34 @@ export async function suiWalletLogin(
   res: Response,
   next: NextFunction
 ) {
+  console.log("authenticating with sui wallet");
   await new Promise<void>((resolve) =>
-    passport.authenticate("sui-wallet", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-
-      if (!user) {
-        return res.status(401).json({
-          status: false,
-          reason: info?.message || "Authentication failed",
-        });
-      }
-
-      doLogin(req, user, (err2) => {
-        if (err2) {
-          return next(err2);
-        }
-        console.log(
-          "logged in as",
-          getUser(req, { allowUnverifiedEmail: true }).email
-        );
-        res.json(ensureType<LoginResponse>({ status: true, user }));
-      });
-    })(req, res, next)
+    passport.authenticate(
+      "sui-wallet",
+      (err: Error, user: User, info: IVerifyOptions) =>
+        (async () => {
+          if (err || !user) {
+            console.error("could not log in with sui wallet", user, err);
+            res.json(
+              ensureType<LoginResponse>({
+                status: false,
+                reason: info?.message || "Authentication failed",
+              })
+            );
+          } else {
+            doLogin(req, user, (err2) => {
+              if (err2) {
+                return next(err2);
+              }
+              console.log(
+                "logged in as",
+                getUser(req, { allowUnverifiedEmail: true }).email
+              );
+              res.json(ensureType<LoginResponse>({ status: true, user }));
+            });
+          }
+        })().then(() => resolve())
+    )(req, res, next)
   );
 }
 
