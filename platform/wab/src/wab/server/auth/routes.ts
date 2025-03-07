@@ -134,7 +134,7 @@ export async function createUserFull({
         }
       : {}),
     needsTeamCreationPrompt:
-      !noWelcomeEmailAndSurvey && req.devflags.createTeamPrompt,
+      !noWelcomeEmailAndSurvey && req?.devflags?.createTeamPrompt,
   });
 
   const emailVerificationToken = password
@@ -172,12 +172,21 @@ export async function createUserWithWallet(
     firstName,
     lastName,
     email,
+    req,
+    nextPath,
+    appInfo,
   }: {
     chainId: string;
     walletAddress: string;
     firstName: string;
     lastName: string;
     email: string;
+    req: Request;
+    nextPath?: string;
+    appInfo?: {
+      appName: string;
+      authorizationPath: string;
+    };
   }
 ) {
   // Create user first
@@ -186,7 +195,9 @@ export async function createUserWithWallet(
     email,
     firstName,
     lastName,
-    req: null as any, // Passing null as request since we don't have it here
+    req,
+    nextPath,
+    appInfo,
   });
 
   // Add wallet info
