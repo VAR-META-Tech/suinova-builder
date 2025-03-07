@@ -15,7 +15,7 @@ module.exports = {
       env: {
         BACKEND_PORT: 5004,
         debug: 1,
-        REACT_APP_DEFAULT_HOST_URL: `${DOMAIN}/api/static/host.html`,
+        REACT_APP_DEFAULT_HOST_URL: `${DOMAIN}/static/host.html`,
         CODEGEN_HOST: getCodegenHost(),
         SOCKET_HOST: `${DOMAIN}/socket`,
         REACT_APP_CDN_URL: DOMAIN,
