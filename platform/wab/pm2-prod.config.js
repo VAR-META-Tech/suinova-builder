@@ -15,7 +15,7 @@ module.exports = {
       env: {
         BACKEND_PORT: 5004,
         debug: 1,
-        REACT_APP_DEFAULT_HOST_URL: `${DOMAIN}/api/static/host.html`,
+        REACT_APP_DEFAULT_HOST_URL: `${DOMAIN}/static/host.html`,
         CODEGEN_HOST: getCodegenHost(),
         SOCKET_HOST: `${DOMAIN}/socket`,
         REACT_APP_CDN_URL: DOMAIN,
@@ -40,8 +40,6 @@ module.exports = {
       },
       node_args: ["--max-old-space-size=2000"],
       interpreter: "none",
-      exec_mode: "cluster",
-      instances: 1,
       merge_logs: true,
     },
     ...(BACKEND_ONLY

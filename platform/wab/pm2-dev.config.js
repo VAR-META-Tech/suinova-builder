@@ -90,9 +90,6 @@ module.exports = {
       },
       node_args: ["--max-old-space-size=2000"],
       interpreter: "none",
-      exec_mode: "cluster",
-      instances: 1,
-      merge_logs: true,
     },
     ...(BACKEND_ONLY
       ? []
