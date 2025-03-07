@@ -100,7 +100,7 @@ export async function setupPassport(
     new SuiWalletStrategy(
       { passReqToCallback: true },
       async (req, options, done) => {
-        const { address, signature, nonce } = options;
+        const { address, signature, nonce, nextPath, appInfo } = options;
         const mgr = superDbMgr(req);
 
         try {
@@ -139,6 +139,9 @@ export async function setupPassport(
               firstName: "Sui",
               lastName: `User ${shortAddress}`,
               email: `${address.toLowerCase()}@sui.wallet`,
+              req,
+              nextPath,
+              appInfo,
             });
 
             if (req.analytics && req.analytics.track) {
