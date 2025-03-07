@@ -1,0 +1,76 @@
+module.exports = {
+  apps: [
+    {
+      name: "suinova-dev-backend",
+      script: "yarn",
+      args: ["backend"],
+      log_date_format: "HH:mm:ss.SSS",
+      env: {
+        NODE_ENV: "development",
+        BACKEND_PORT: 6004,
+        REACT_APP_DEFAULT_HOST_URL:
+          "https://host.suinova.var-meta.com/static/host.html",
+        CODEGEN_HOST: "https://codegen.suinova.var-meta.com",
+        SOCKET_HOST: "https://socket.suinova.var-meta.com",
+        REACT_APP_CDN_URL: "https://suinova.var-meta.com",
+        REACT_APP_PUBLIC_URL: "https://suinova.var-meta.com",
+        INTEGRATIONS_HOST: "https://api.suinova.var-meta.com",
+      },
+      interpreter: "none",
+    },
+    {
+      name: "suinova-dev-socket-server",
+      script: "yarn",
+      args: ["socket-server"],
+      wait_ready: true,
+      time: true,
+      env: {
+        NODE_ENV: "development",
+        SOCKET_PORT: 6020,
+      },
+      node_args: ["--max-old-space-size=2000"],
+      interpreter: "none",
+    },
+    {
+      name: "suinova-dev-host-server",
+      script: "yarn",
+      args: ["host-server"],
+      env: {
+        NODE_ENV: "development",
+        HOSTSERVER_PORT: 6005,
+      },
+      interpreter: "none",
+    },
+    {
+      name: "suinova-dev-codegen-backend",
+      script: "yarn",
+      args: ["run-ts", "src/wab/server/codegen-backend.ts"],
+      time: true,
+      env: {
+        NODE_ENV: "development",
+        BACKEND_PORT: 6008,
+        CODEGEN_HOST: "https://codegen.suinova.var-meta.com",
+        INTEGRATIONS_HOST: "https://api.suinova.var-meta.com",
+        REACT_APP_PUBLIC_URL: "https://suinova.var-meta.com",
+        WITH_HOSTING: "true",
+      },
+      node_args: ["--max-old-space-size=2000"],
+      interpreter: "none",
+    },
+    {
+      name: "suinova-dev-codegen-hosting",
+      exec_mode: "fork_mode",
+      interpreter: "none",
+      time: true,
+      node_args: ["--max-old-space-size=2000"],
+      script: "yarn",
+      args: ["start"],
+      env: {
+        NODE_ENV: "development",
+        PORT: 6010,
+        NEXT_PUBLIC_PLASMIC_HOST: "https://api.suinova.var-meta.com",
+        WITH_DEDICATED_CODEGEN: "true",
+      },
+    },
+  ],
+};
