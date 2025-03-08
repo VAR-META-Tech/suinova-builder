@@ -241,7 +241,7 @@ function DefaultLayout_(
         }}
         userButton={{
           props: {
-            children: <Avatar user={userInfo} />,
+            children: <Avatar hideTooltip user={userInfo} />,
             "data-test-id": "btn-dashboard-user",
           },
           wrap: (node) => (
