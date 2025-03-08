@@ -10,14 +10,12 @@ import AppLogo from "@/wab/client/assets/logo.png";
 import { useNonAuthCtx } from "@/wab/client/app-ctx";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import { useState } from "react";
-import { ApiUser, UserId } from "@/wab/shared/ApiSchema";
-import { mkUuid } from "@/wab/shared/common";
+import { ApiUser } from "@/wab/shared/ApiSchema";
 import { U, UU, isPlasmicPath } from "@/wab/client/cli-routes";
 import {
   useWallets,
   useConnectWallet as useConnectWalletSui,
   useSignPersonalMessage,
-  useAccounts,
 } from "@mysten/dapp-kit";
 import { notification } from "antd";
 
@@ -83,7 +81,6 @@ const useConnectWallet = ({
   const nonAuthCtx = useNonAuthCtx();
   const appCtx = useAppCtx();
   const wallets = useWallets();
-  const accounts = useAccounts();
 
   const { mutateAsync: connectWallet, isPending: isPendingConnectWallet } =
     useConnectWalletSui();
@@ -141,60 +138,16 @@ const useConnectWallet = ({
         appInfo,
       });
       if (res.status) {
-        console.log("🚀 ~ connect ~ user:", res.user);
+        setSelfInfo(res.user);
+        notification.success({
+          message: "Connected wallet successfully",
+        });
       } else {
-        console.log("🚀 ~ connect ~ res:", res);
+        setFormFeedback({
+          type: "error",
+          content: "Unexpected error occurred logging in.",
+        });
       }
-
-      notification.success({
-        message: "Connected wallet successfully",
-      });
-
-      // if (res.status) {
-      //   setSelfInfo(res.user);
-      // } else {
-      //   if (res.reason === "IncorrectLoginError") {
-      //     setFormFeedback({
-      //       type: "error",
-      //       content: "That email and password combination is incorrect.",
-      //     });
-      //   } else if (res.reason === "WeakPasswordError") {
-      //     setFormFeedback({
-      //       type: "error",
-      //       content: "Please try a stronger password.",
-      //     });
-      //   } else if (res.reason === "PwnedPasswordError") {
-      //     setFormFeedback({
-      //       type: "error",
-      //       content:
-      //         "Password is a known leaked password. Please try another password.",
-      //     });
-      //   } else if (res.reason === "BadEmailError") {
-      //     setFormFeedback({
-      //       type: "error",
-      //       content: "Please use a valid email address.",
-      //     });
-      //   } else if (res.reason === "MissingFieldsError") {
-      //     setFormFeedback({
-      //       type: "error",
-      //       content: "Please fill in all fields.",
-      //     });
-      //   } else if (res.reason === "EmailSent") {
-      //     setSelfInfo(
-      //       createFakeUser(
-      //         userCreate.email,
-      //         userCreate.firstName,
-      //         userCreate.lastName
-      //       ),
-      //       false
-      //     );
-      //   } else {
-      //     setFormFeedback({
-      //       type: "error",
-      //       content: "Unexpected error occurred logging in.",
-      //     });
-      //   }
-      // }
     } catch (err) {
       setFormFeedback({
         type: "error",
@@ -223,20 +176,9 @@ const useConnectWallet = ({
 
 function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
   const { connect, appCtx, nextPath } = useConnectWallet({
-    onLoggedIn: (login) => {
+    onLoggedIn: () => {
       onLoggedIn();
-      if (login) {
-        appCtx.router.routeTo(nextPath);
-      } else {
-        appCtx.router.routeTo(
-          UU.survey.fill(
-            {},
-            {
-              continueTo: U.emailVerification({}),
-            }
-          )
-        );
-      }
+      appCtx.router.routeTo(UU.allProjects.fill({}));
     },
   });
 
@@ -259,6 +201,7 @@ function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
         <div className="ConnectWallet__Wallets">
           {SUPPORTED_WALLETS.map((item) => (
             <div
+              key={item.originalName}
               className="ConnectWallet__WalletItem"
               onClick={() => connect(item)}
             >
@@ -281,31 +224,6 @@ function getNextPath() {
   return continueToPath && isPlasmicPath(continueToPath)
     ? continueToPath
     : U.dashboard({});
-}
-
-function createFakeUser(
-  email: string,
-  firstName: string,
-  lastName: string
-): ApiUser {
-  return {
-    id: mkUuid() as UserId,
-    email: email,
-    firstName: firstName,
-    lastName: lastName,
-    avatarUrl: null,
-    needsIntroSplash: false,
-    extraData: null,
-    needsSurvey: true,
-    waitingEmailVerification: true,
-    createdAt: Date.now().toLocaleString(),
-    updatedAt: Date.now().toLocaleString(),
-    deletedAt: null,
-    createdById: null,
-    updatedById: null,
-    deletedById: null,
-    isFake: true,
-  };
 }
 
 export type Feedback = { type: "error" | "success"; content: React.ReactNode };

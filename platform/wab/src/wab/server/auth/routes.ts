@@ -198,6 +198,7 @@ export async function createUserWithWallet(
     req,
     nextPath,
     appInfo,
+    noWelcomeEmailAndSurvey: true,
   });
 
   // Add wallet info
