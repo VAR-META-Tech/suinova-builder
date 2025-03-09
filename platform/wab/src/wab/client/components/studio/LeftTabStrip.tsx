@@ -277,49 +277,49 @@ Help
           },
         }
       : mainGroups),
-    helpGroup: {
-      type: "group",
-      icon: <HelpCirclesvgIcon />,
-      title: "Help",
-      style: { marginTop: "auto" },
-      items: {
-        keyboard: {
-          type: "item",
-          icon: <KeyboardIcon />,
-          label: "Keyboard shortcuts",
-          className: shortcutModalButtonClassName,
-          onClick: studioCtx.openShortcutsModal,
-        },
-        slack: {
-          type: "item",
-          icon: <SlackIcon style={{ margin: 4 }} height={16} width={16} />,
-          label: "Slack community",
-          href: "https://www.plasmic.app/slack",
-          cond: !isWhiteLabelUser,
-        },
-        forum: {
-          type: "item",
-          icon: <MessagesvgIcon />,
-          label: "Forum",
-          href: BASE_URL,
-          cond: !isWhiteLabelUser,
-        },
-        docs: {
-          type: "item",
-          icon: <BooksvgIcon />,
-          label: "Documentation",
-          href: "https://docs.plasmic.app/",
-          cond: !isWhiteLabelUser,
-        },
-        help: {
-          type: "item",
-          icon: <HelpsvgIcon />,
-          label: "Help",
-          href: UU.orgSupport.fill({ teamId: studioCtx.siteInfo.teamId! }),
-          cond: !isWhiteLabelUser,
-        },
-      },
-    },
+    // helpGroup: {
+    //   type: "group",
+    //   icon: <HelpCirclesvgIcon />,
+    //   title: "Help",
+    //   style: { marginTop: "auto" },
+    //   items: {
+    //     keyboard: {
+    //       type: "item",
+    //       icon: <KeyboardIcon />,
+    //       label: "Keyboard shortcuts",
+    //       className: shortcutModalButtonClassName,
+    //       onClick: studioCtx.openShortcutsModal,
+    //     },
+    //     slack: {
+    //       type: "item",
+    //       icon: <SlackIcon style={{ margin: 4 }} height={16} width={16} />,
+    //       label: "Slack community",
+    //       href: "https://www.plasmic.app/slack",
+    //       cond: !isWhiteLabelUser,
+    //     },
+    //     forum: {
+    //       type: "item",
+    //       icon: <MessagesvgIcon />,
+    //       label: "Forum",
+    //       href: BASE_URL,
+    //       cond: !isWhiteLabelUser,
+    //     },
+    //     docs: {
+    //       type: "item",
+    //       icon: <BooksvgIcon />,
+    //       label: "Documentation",
+    //       href: "https://docs.plasmic.app/",
+    //       cond: !isWhiteLabelUser,
+    //     },
+    //     help: {
+    //       type: "item",
+    //       icon: <HelpsvgIcon />,
+    //       label: "Help",
+    //       href: UU.orgSupport.fill({ teamId: studioCtx.siteInfo.teamId! }),
+    //       cond: !isWhiteLabelUser,
+    //     },
+    //   },
+    // },
   };
 
   function renderButton(

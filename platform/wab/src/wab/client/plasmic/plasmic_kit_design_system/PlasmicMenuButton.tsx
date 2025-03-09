@@ -35,6 +35,7 @@ import sty from "./PlasmicMenuButton.module.css"; // plasmic-import: h69wHrrKtL/
 
 import ChevronDownSvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__ChevronDownSvg"; // plasmic-import: xZrB9_0ir/icon
 import DotsVerticalSvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__DotsVerticalSvg"; // plasmic-import: joYBQwH-P/icon
+import MenuIcon from "../plasmic_kit/PlasmicIcon__MenuIcon";
 
 createPlasmicElementProxy;
 
@@ -181,7 +182,8 @@ function PlasmicMenuButton__RenderFunc(props: {
           : undefined
       }
     >
-      <DotsVerticalSvgIcon
+      <MenuIcon style={{ height: "12px" }} />
+      {/* <DotsVerticalSvgIcon
         className={classNames(projectcss.all, sty.svg__jeWc1, {
           [sty.svgtype_seamless__jeWc1Z4VSy]: hasVariant(
             $state,
@@ -195,7 +197,7 @@ function PlasmicMenuButton__RenderFunc(props: {
           ),
         })}
         role={"img"}
-      />
+      /> */}
     </IconButton>
   ) as React.ReactElement | null;
 }
