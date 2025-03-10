@@ -37,6 +37,7 @@ import sty from "@/wab/client/components/pages/plasmic/PlasmicSettingsContainer.
 import { Form, Input } from "antd";
 import { ReactNode } from "react";
 import CopyIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Copy";
+import { useCurrentAccount } from "@mysten/dapp-kit";
 
 export type PlasmicSettingsContainer__VariantMembers = {
   tokenState: "loading" | "loaded" | "error";
@@ -121,6 +122,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
 
   forNode?: string;
 }) {
+  const currentAccount = useCurrentAccount();
   const { variants, overrides, forNode } = props;
 
   const $ctx = ph.useDataEnv?.() || {};
@@ -169,7 +171,6 @@ function PlasmicSettingsContainer__RenderFunc(props: {
 
   const [form] = Form.useForm();
   const [username, setUsername] = React.useState("");
-  const [walletAddress, setWalletAddress] = React.useState("");
 
   function onChange(changed, data) {}
   async function onSubmit(data) {}
@@ -295,7 +296,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
             <Input
               className={sty.profileInput}
               type={"input"}
-              value={walletAddress}
+              value={currentAccount?.address}
               placeholder="Wallet Address"
               onChange={(e) => setWalletAddress(e.target.value)}
               suffix={
