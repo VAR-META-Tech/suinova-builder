@@ -43,7 +43,7 @@ export function FromStarterTemplate(props: {
       );
     } else if (!appCtx.selfInfo) {
       appCtx.router.routeTo(
-        UU.login.fill({}, { continueTo: `/starters/${starter.tag}` })
+        UU.connectWallet.fill({}, { continueTo: `/starters/${starter.tag}` })
       );
     } else {
       appCtx.router.routeTo(
