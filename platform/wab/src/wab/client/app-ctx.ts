@@ -198,7 +198,7 @@ export class AppCtx {
     // Explicitly setting window.location.href, instead of
     // using router, to make sure we completely clear in-page
     // js state
-    window.location.href = UU.login.fill({});
+    window.location.href = UU.connectWallet.fill({});
   }
 
   isWhiteLabelUser() {
