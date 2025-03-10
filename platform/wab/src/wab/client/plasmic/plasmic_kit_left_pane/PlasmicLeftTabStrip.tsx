@@ -389,7 +389,7 @@ function PlasmicLeftTabStrip__RenderFunc(props: {
           value: args.buttons,
         })}
       </div>
-      <div
+      {/* <div
         data-plasmic-name={"divider"}
         data-plasmic-override={overrides.divider}
         className={classNames(projectcss.all, sty.divider, {
@@ -409,9 +409,9 @@ function PlasmicLeftTabStrip__RenderFunc(props: {
             "withInsertButton"
           ),
         })}
-      />
+      /> */}
 
-      <LeftTabButton
+      {/* <LeftTabButton
         data-plasmic-name={"copilot"}
         data-plasmic-override={overrides.copilot}
         className={classNames("__wab_instance", sty.copilot, {
@@ -987,8 +987,8 @@ function PlasmicLeftTabStrip__RenderFunc(props: {
             role={"img"}
           />
         </IconButton>
-      </Stack__>
-      <div
+      </Stack__> */}
+      {/* <div
         className={classNames(projectcss.all, sty.freeBox__igmvF, {
           [sty.freeBoxactiveTab_copilot__igmvFnzL96]: hasVariant(
             $state,
@@ -1143,7 +1143,7 @@ function PlasmicLeftTabStrip__RenderFunc(props: {
           }
           src={image9D5NIfkhj}
         />
-      </div>
+      </div> */}
     </Stack__>
   ) as React.ReactElement | null;
 }
