@@ -60,6 +60,9 @@ import PlussvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__PlusSvg"; // pl
 import IconIcon from "./icons/PlasmicIcon__Icon"; // plasmic-import: jnoWwmZ86t/icon
 import SegmentSeparatorIcon from "./icons/PlasmicIcon__SegmentSeparator"; // plasmic-import: yzguJQZL37/icon
 import imageAy93RhuWbc from "./images/image.svg"; // plasmic-import: ay93RhuWbc/picture
+import Logo from "@/wab/client/assets/logo.png";
+import StraightSeparator from "./icons/PlasmicIcon__StraightSeparator";
+import PlayIcon from "./icons/PlasmicIcon__PlayIcon";
 
 export type PlasmicTopBar__VariantMembers = {
   mode: "preview";
@@ -285,7 +288,7 @@ function PlasmicTopBar__RenderFunc(props: {
                 }
               )}
             >
-              <p.PlasmicIcon
+              {/* <p.PlasmicIcon
                 PlasmicIconType={
                   triggers.hover_4303647 ? MarkFullColorIcon : MarkIcon
                 }
@@ -298,7 +301,8 @@ function PlasmicTopBar__RenderFunc(props: {
                 })}
                 role={"img"}
                 data-plasmic-trigger-props={[triggerN4303647HoverProps]}
-              />
+              /> */}
+              <img src={Logo} width={50} />
             </a>
           </div>
         ) : null}
@@ -332,21 +336,18 @@ function PlasmicTopBar__RenderFunc(props: {
               className={classNames("__wab_instance", sty.projectMenu)}
             />
 
-            <SaveIndicator
+            {/* <SaveIndicator
               data-plasmic-name={"saveIndicator"}
               data-plasmic-override={overrides.saveIndicator}
               className={classNames("__wab_instance", sty.saveIndicator)}
-            />
+            /> */}
           </div>
         ) : null}
-        <SegmentSeparatorIcon
-          data-plasmic-name={"branchSeparator"}
-          data-plasmic-override={overrides.branchSeparator}
-          className={classNames(projectcss.all, sty.branchSeparator)}
-          role={"img"}
+        <StraightSeparator
+          className={sty.straightSeparator}
         />
 
-        {true ? (
+        {/* {true ? (
           <div
             data-plasmic-name={"branchSegment"}
             data-plasmic-override={overrides.branchSegment}
@@ -358,13 +359,7 @@ function PlasmicTopBar__RenderFunc(props: {
               className={classNames("__wab_instance", sty.branchSwitcher)}
             />
           </div>
-        ) : null}
-        <SegmentSeparatorIcon
-          data-plasmic-name={"arenaSeparator"}
-          data-plasmic-override={overrides.arenaSeparator}
-          className={classNames(projectcss.all, sty.arenaSeparator)}
-          role={"img"}
-        />
+        ) : null} */}
 
         {(hasVariant($state, "mode", "preview") ? false : true) ? (
           <div
@@ -429,15 +424,8 @@ function PlasmicTopBar__RenderFunc(props: {
           />
         ) : null}
         {(hasVariant($state, "mode", "preview") ? true : false) ? (
-          <SegmentSeparatorIcon
-            className={classNames(projectcss.all, sty.svg__u6BdQ, {
-              [sty.svgmode_preview__u6BdQqMfAz]: hasVariant(
-                $state,
-                "mode",
-                "preview"
-              ),
-            })}
-            role={"img"}
+          <StraightSeparator
+            className={sty.straightSeparator}
           />
         ) : null}
         {(hasVariant($state, "mode", "preview") ? true : false) ? (
@@ -548,7 +536,7 @@ function PlasmicTopBar__RenderFunc(props: {
           className={classNames("__wab_instance", sty.viewAsButton)}
         />
 
-        {(hasVariant($state, "mode", "preview") ? false : true) ? (
+        {/* {(hasVariant($state, "mode", "preview") ? false : true) ? (
           <ZoomButton
             data-plasmic-name={"zoomButton"}
             data-plasmic-override={overrides.zoomButton}
@@ -560,8 +548,8 @@ function PlasmicTopBar__RenderFunc(props: {
               ),
             })}
           />
-        ) : null}
-        {(hasVariant($state, "mode", "preview") ? false : true) ? (
+        ) : null} */}
+        {/* {(hasVariant($state, "mode", "preview") ? false : true) ? (
           <ViewButton
             data-plasmic-name={"viewButton"}
             data-plasmic-override={overrides.viewButton}
@@ -578,7 +566,7 @@ function PlasmicTopBar__RenderFunc(props: {
                 : undefined
             }
           />
-        ) : null}
+        ) : null} */}
         {true ? (
           <div
             className={classNames(projectcss.all, sty.freeBox__wHg9U, {
@@ -605,7 +593,7 @@ function PlasmicTopBar__RenderFunc(props: {
                 size={"medium" as const}
                 withGreenBackgroundHover={true}
               >
-                <IconIcon
+                {/* <IconIcon
                   className={classNames(projectcss.all, sty.svg__amc5N, {
                     [sty.svgmode_preview__amc5NqMfAz]: hasVariant(
                       $state,
@@ -614,15 +602,16 @@ function PlasmicTopBar__RenderFunc(props: {
                     ),
                   })}
                   role={"img"}
-                />
+                /> */}
+                <PlayIcon width={16} height={16} />
               </IconButton>
             ) : null}
-            <LivePopOutButton
+            {/* <LivePopOutButton
               data-plasmic-name={"livePopOutButton"}
               data-plasmic-override={overrides.livePopOutButton}
-            />
+            /> */}
 
-            {(hasVariant($state, "mode", "preview") ? true : true) ? (
+            {/* {(hasVariant($state, "mode", "preview") ? true : true) ? (
               <CommentButton
                 data-plasmic-name={"commentButton"}
                 data-plasmic-override={overrides.commentButton}
@@ -634,7 +623,7 @@ function PlasmicTopBar__RenderFunc(props: {
                   ),
                 })}
               />
-            ) : null}
+            ) : null} */}
           </div>
         ) : null}
         <p.Stack
@@ -642,7 +631,7 @@ function PlasmicTopBar__RenderFunc(props: {
           hasGap={true}
           className={classNames(projectcss.all, sty.freeBox___3DoVm)}
         >
-          {(hasVariant($state, "mode", "preview") ? true : true) ? (
+          {/* {(hasVariant($state, "mode", "preview") ? true : true) ? (
             <CodeButton
               data-plasmic-name={"codeButton"}
               data-plasmic-override={overrides.codeButton}
@@ -654,7 +643,7 @@ function PlasmicTopBar__RenderFunc(props: {
                 ),
               })}
             />
-          ) : null}
+          ) : null} */}
           {(hasVariant($state, "mode", "preview") ? false : true) ? (
             <ShareButton
               data-plasmic-name={"shareButton"}

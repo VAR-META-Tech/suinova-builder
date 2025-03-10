@@ -99,7 +99,7 @@ const ArenaSwitcher = observer(function ArenaSwitcher(
           children: (
             <span
               className="fill-width text-ellipsis inline-block"
-              style={{ maxWidth: 300 }}
+              style={{ maxWidth: 300, padding: "0px 8px", color: "#27273A", fontSize: "13px", fontWeight: 500 }}
             >
               {currentArenaName}
             </span>

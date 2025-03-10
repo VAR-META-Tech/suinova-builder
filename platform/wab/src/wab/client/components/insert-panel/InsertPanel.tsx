@@ -71,6 +71,7 @@ import { isFlexContainer } from "@/wab/client/utils/tpl-client-utils";
 import { HighlightBlinker } from "@/wab/commons/components/HighlightBlinker";
 import { MaybeWrap } from "@/wab/commons/components/ReactUtil";
 import { isBuiltinCodeComponent } from "@/wab/shared/code-components/builtin-code-components";
+import { propMetasToComponentParams } from "@/wab/shared/code-components/code-components";
 import { createMapFromObject } from "@/wab/shared/collections";
 import {
   assertNever,
@@ -586,13 +587,14 @@ const AddDrawerContent = observer(function AddDrawerContent(props: {
               const children = Object.entries(allSections).map(
                 ([sectionKey, groupsInSection]) => {
                   const [someGroupInSection] = groupsInSection;
+                  const isSelected = section === sectionKey
                   return (
                     <React.Fragment key={sectionKey}>
                       <div style={{ position: "relative", width: "100%" }}>
                         <InsertPanelTabItem
                           key={sectionKey}
                           children={
-                            <span>
+                            <span style={{ fontSize: '11px', fontWeight: isSelected ? 700 : 400 }}>
                               {someGroupInSection.sectionLabel ??
                                 someGroupInSection.label}{" "}
                               {scrollToSection === sectionKey && (
@@ -620,7 +622,7 @@ const AddDrawerContent = observer(function AddDrawerContent(props: {
                           onClick={() => {
                             setSection(sectionKey);
                           }}
-                          isSelected={section === sectionKey}
+                          isSelected={isSelected}
                         />
                         {highlightSection === someGroupInSection.key && (
                           <HighlightBlinker doScroll />
@@ -1446,7 +1448,16 @@ export function buildAddItemGroups({
           (item) => item.label
         ),
       },
-
+    {
+      key: "ui-nft",
+      sectionLabel: "NFT Marketplace",
+      sectionKey: "NFT Marketplace",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
     hasPlexus
       ? {
           key: "ui-kits",
@@ -1459,6 +1470,96 @@ export function buildAddItemGroups({
             .map(createAddInstallable),
         }
       : undefined,
+    {
+      key: "ui-antd",
+      sectionLabel: "Ant Design",
+      sectionKey: "Ant Design",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-layout",
+      sectionLabel: "Layout",
+      sectionKey: "Layout",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-effects",
+      sectionLabel: "Effects",
+      sectionKey: "Effects",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-apis",
+      sectionLabel: "APIs",
+      sectionKey: "APIs",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-cms",
+      sectionLabel: "CMS",
+      sectionKey: "CMS",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-social",
+      sectionLabel: "Social",
+      sectionKey: "Social",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-text-editors",
+      sectionLabel: "Text Editors",
+      sectionKey: "Text Editors",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-developer",
+      sectionLabel: "Developer",
+      sectionKey: "Developer",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
+    {
+      key: "ui-code-libs",
+      sectionLabel: "Code Libraries",
+      sectionKey: "Code Libraries",
+      familyKey: "hostless-packages",
+      isHeaderLess: true,
+      items: studioCtx.appCtx.appConfig.installables
+          .filter((meta) => meta.type === "ui-kit")
+          .map(createAddInstallable),
+    },
     canInsertHostlessPackage(uiConfig, "unstyled", canInsertContext) &&
       studioCtx.shownSyntheticSections.get("unstyled") && {
         key: "synthetic-unstyled",

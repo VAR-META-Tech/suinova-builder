@@ -20,6 +20,7 @@
   height: auto;
   max-width: 400px;
   min-width: 0;
+  margin: 0px 10px;
 }
 .text {
   white-space: pre;
@@ -28,6 +29,7 @@
   text-align: left;
   width: 100%;
   min-width: 0;
+  margin: 0px 10px;
 }
 .svg__ffxcx {
   display: flex;

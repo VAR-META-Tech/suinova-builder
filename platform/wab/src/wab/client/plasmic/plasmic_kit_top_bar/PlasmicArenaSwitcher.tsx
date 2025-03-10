@@ -180,6 +180,7 @@ function PlasmicArenaSwitcher__RenderFunc(props: {
                 ),
               }
             )}
+            style={{ margin: "0px 10px" }}
           >
             {"Arena Name"}
           </div>
