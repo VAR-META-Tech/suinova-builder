@@ -46,6 +46,7 @@ import {
 } from "react-beautiful-dnd";
 import { createPortal } from "react-dom";
 import { FaUpload } from "react-icons/fa";
+import Logo from "@/wab/client/assets/logo.png";
 
 export function LinkButton(props: React.ComponentProps<"button">) {
   const { className, ...rest } = props;
@@ -890,7 +891,8 @@ export function StudioPlaceholder() {
   return (
     <div className="StudioPlaceholder visible">
       <div className="placeholder_topBar">
-        <svg
+        <img src={Logo} width={50} />
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           className="placeholder_icon"
           fill="none"
@@ -911,7 +913,7 @@ export function StudioPlaceholder() {
             d="M12.8 22a3.2 3.2 0 016.4 0h3.2a6.4 6.4 0 10-12.8 0h3.2z"
             fill="currentColor"
           ></path>
-        </svg>
+        </svg> */}
       </div>
       <div className="placeholder_leftToolbar"></div>
       <div className="placeholder_leftPanel"></div>

@@ -153,6 +153,7 @@ export const PublishButton = observer(function PublishButton(
                       </Tooltip>
                     ),
                 props: {
+                  className: props.className,
                   id: "topbar-publish-btn",
                   onClick: spawnWrapper(() => {
                     studioCtx.tourActionEvents.dispatch({
