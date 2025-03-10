@@ -564,22 +564,6 @@ export function Root() {
                           <Switch>
                             <Route
                               exact
-                              path={UU.login.pattern}
-                              render={() => (
-                                <>
-                                  <PromoBanner />
-                                  <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                                    {documentTitle("Sign in")}
-                                    <AuthForm
-                                      mode="sign in"
-                                      onLoggedIn={reloadData}
-                                    />
-                                  </NormalNonAuthLayout>
-                                </>
-                              )}
-                            />
-                            <Route
-                              exact
                               path={UU.connectWallet.pattern}
                               render={() => (
                                 <>

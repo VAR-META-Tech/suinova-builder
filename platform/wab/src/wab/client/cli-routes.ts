@@ -417,7 +417,7 @@ export function getRouteContinuation() {
 
 export function getLoginRouteWithContinuation() {
   const continueTo = getRouteContinuation();
-  return UU.login.fill({}, { continueTo });
+  return UU.connectWallet.fill({}, { continueTo });
 }
 
 export function getEmaiLVerificationRouteWithContinuation() {

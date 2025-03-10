@@ -30,7 +30,6 @@ function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
     "loading" | "error" | ApiTrustedHost[]
   >();
   const [showHostModal, setShowHostModal] = React.useState(false);
-
   const updateHostList = React.useCallback(() => {
     setHostsState("loading");
     appCtx.api
