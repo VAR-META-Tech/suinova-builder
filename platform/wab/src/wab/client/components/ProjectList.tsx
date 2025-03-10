@@ -116,7 +116,7 @@ function ProjectList(props: ProjectListProps) {
         noProjectsText={
           matcher.hasQuery()
             ? "No projects matching query."
-            : 'You have no projects. Create a new one by hitting the "New project" button in the top bar.'
+            : "No Projects Found"
         }
       />
     </>

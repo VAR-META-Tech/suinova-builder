@@ -487,7 +487,7 @@ export async function promptWorkspace({
               />
             </Form.Item>
           )}
-          <Form.Item name="select" label={message}>
+          {/* <Form.Item name="select" label={message}>
             <Select name="select" autoFocus>
               {selectedWorkspaceId && allowNoWorkspace ? (
                 <Select.Option key="none" value="">
@@ -511,7 +511,7 @@ export async function promptWorkspace({
                 </Select.Option>
               )}
             </Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item style={{ margin: 0 }} shouldUpdate>
             {({ getFieldsValue }) => {
               const { select } = getFieldsValue();

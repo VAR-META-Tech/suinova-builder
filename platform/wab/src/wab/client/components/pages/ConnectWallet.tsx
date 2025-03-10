@@ -9,15 +9,20 @@ import SuietIcon from "@/wab/client/assets/suiet-icon.svg";
 import AppLogo from "@/wab/client/assets/logo.png";
 import { useNonAuthCtx } from "@/wab/client/app-ctx";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ApiUser } from "@/wab/shared/ApiSchema";
 import { U, UU, isPlasmicPath } from "@/wab/client/cli-routes";
 import {
   useWallets,
   useConnectWallet as useConnectWalletSui,
   useSignPersonalMessage,
+  ConnectButton,
+  useCurrentAccount,
+  useCurrentWallet,
 } from "@mysten/dapp-kit";
 import { notification } from "antd";
+import Button from "@/wab/client/components/widgets/Button";
+import "@mysten/dapp-kit/dist/index.css";
 
 type SupportedWallet = {
   name: string;
@@ -80,6 +85,10 @@ const useConnectWallet = ({
 }) => {
   const nonAuthCtx = useNonAuthCtx();
   const appCtx = useAppCtx();
+  const { isConnected, currentWallet } = useCurrentWallet();
+  const account = useCurrentAccount();
+  console.log("🚀 ~ account:", account);
+  console.log("🚀 ~ currentWallet:", currentWallet);
   const wallets = useWallets();
 
   const { mutateAsync: connectWallet, isPending: isPendingConnectWallet } =
@@ -108,22 +117,20 @@ const useConnectWallet = ({
     setOauthFeedback(undefined);
   }
 
-  async function connect(wallet: SupportedWallet) {
-    const selectedWallet = wallets.find(
-      (item) => item.name === wallet.originalName
-    );
-
-    if (!selectedWallet) {
-      window.open(wallet.installURl, "_blank");
-      return;
+  useEffect(() => {
+    if (isConnected) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      connect();
     }
+  }, [isConnected]);
 
+  async function connect() {
     try {
-      await nonAuthCtx.api.refreshCsrfToken();
+      if (!account?.address) {
+        return;
+      }
 
-      await connectWallet({
-        wallet: selectedWallet,
-      });
+      await nonAuthCtx.api.refreshCsrfToken();
 
       const nonce = Date.now();
       const message = `Welcome to SuiNova! By signing this message, you'll securely authenticate your wallet. Timestamp: ${nonce}`;
@@ -133,7 +140,7 @@ const useConnectWallet = ({
 
       const res = await nonAuthCtx.api.loginWithWallet({
         signature: signMessageResult.signature,
-        address: selectedWallet.accounts[0].address,
+        address: account.address,
         nonce: nonce.toString(),
         appInfo,
       });
@@ -175,13 +182,12 @@ const useConnectWallet = ({
 };
 
 function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
-  const { connect, appCtx, nextPath } = useConnectWallet({
+  const { connect, appCtx } = useConnectWallet({
     onLoggedIn: () => {
       onLoggedIn();
       appCtx.router.routeTo(UU.allProjects.fill({}));
     },
   });
-
   return (
     <div className="ConnectWallet__Container">
       <div className="ConnectWallet__Card">
@@ -198,7 +204,8 @@ function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
             <span className="ConnectWallet__SubtitleHighlight">SuiNova</span>
           </div>
         </div>
-        <div className="ConnectWallet__Wallets">
+        <ConnectButton>Connect Wallet</ConnectButton>
+        {/* <div className="ConnectWallet__Wallets">
           {SUPPORTED_WALLETS.map((item) => (
             <div
               key={item.originalName}
@@ -211,7 +218,7 @@ function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
             </div>
           ))}
         </div>
-        <div className="ConnectWallet__MoreWallet">More wallet options</div>
+        <div className="ConnectWallet__MoreWallet">More wallet options</div> */}
       </div>
     </div>
   );

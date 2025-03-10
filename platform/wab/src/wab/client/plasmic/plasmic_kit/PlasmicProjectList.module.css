@@ -565,6 +565,19 @@
 .img___60YkE > picture > img {
   object-fit: cover;
 }
+.EmptyProject {
+  display: flex;
+  flex-direction: column;
+  margin: 100px auto;
+  align-items: center;
+  margin-top: 200px !important;
+}
+.text__aTmMe {
+  color: #7A7C8B;
+  font-weight: 600;
+  font-size: 20px;
+  margin-top: 24px;
+}
 
 @media only screen and (max-width: 768px) {
   .freeBox__miuC3 {

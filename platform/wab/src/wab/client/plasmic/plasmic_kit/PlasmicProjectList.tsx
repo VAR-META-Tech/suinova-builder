@@ -54,6 +54,7 @@ import CheckIcon from "./PlasmicIcon__Check"; // plasmic-import: pawp1H5YxB_3B/i
 import LightBulbIcon from "./PlasmicIcon__LightBulb"; // plasmic-import: L1GrIYxdm_MJL/icon
 import PlusIcon from "./PlasmicIcon__Plus"; // plasmic-import: -k064DlQ8k8-L/icon
 import TrashIcon from "./PlasmicIcon__Trash"; // plasmic-import: 7bxap5bzcUODa/icon
+import NoProjectsIcon from "../plasmic_kit_icons/icons/NoProjectSvg";
 
 createPlasmicElementProxy;
 
@@ -744,25 +745,12 @@ function PlasmicProjectList__RenderFunc(props: {
             timestamp={"updated 1h ago"}
           />
         </Stack__>
-        {(hasVariant($state, "noProjects", "noProjects") ? true : false)
-          ? renderPlasmicSlot({
-              defaultContents: (
-                <div
-                  className={classNames(
-                    projectcss.all,
-                    projectcss.__wab_text,
-                    sty.text__aTmMe
-                  )}
-                >
-                  {
-                    'You have no projects. Create a new one by hitting "New project" in the top bar.'
-                  }
-                </div>
-              ),
-
-              value: args.noProjectsText,
-            })
-          : null}
+        {(hasVariant($state, "noProjects", "noProjects") ? true : false) ? (
+          <div className={sty.EmptyProject}>
+            <NoProjectsIcon />
+            <div className={sty.text__aTmMe}>{args.noProjectsText}</div>
+          </div>
+        ) : null}
         <ProjectListSection
           data-plasmic-name={"deleted"}
           data-plasmic-override={overrides.deleted}

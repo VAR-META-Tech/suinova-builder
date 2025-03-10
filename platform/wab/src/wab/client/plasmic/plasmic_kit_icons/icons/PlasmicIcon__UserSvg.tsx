@@ -13,36 +13,18 @@ export function UserSvgIcon(props: UserSvgIconProps) {
   const { className, style, title, ...restProps } = props;
   return (
     <svg
-      xmlns={"http://www.w3.org/2000/svg"}
-      fill={"none"}
-      viewBox={"0 0 24 24"}
-      height={"1em"}
-      width={"1em"}
       className={classNames("plasmic-default__svg", className)}
-      style={style}
-      {...restProps}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
     >
-      {title && <title>{title}</title>}
-
-      <circle
-        cx={"12"}
-        cy={"8"}
-        r={"3.25"}
-        stroke={"currentColor"}
-        strokeLinecap={"round"}
-        strokeLinejoin={"round"}
-        strokeWidth={"1.5"}
-      ></circle>
-
       <path
-        stroke={"currentColor"}
-        strokeLinecap={"round"}
-        strokeLinejoin={"round"}
-        strokeWidth={"1.5"}
-        d={
-          "M6.848 19.25h10.305c1.141 0 2.021-.982 1.488-1.992C17.856 15.773 16.068 14 12 14s-5.856 1.773-6.64 3.258c-.534 1.01.346 1.992 1.487 1.992z"
-        }
-      ></path>
+        d="M19.6515 20.3956C20.2043 20.2804 20.5336 19.7019 20.2589 19.2086C19.6533 18.1209 18.6993 17.1651 17.4788 16.4368C15.907 15.4987 13.9812 14.9902 12 14.9902C10.0188 14.9902 8.09292 15.4987 6.52112 16.4368C5.30069 17.1651 4.34666 18.1209 3.74108 19.2086C3.46638 19.7019 3.79562 20.2804 4.34843 20.3956C9.39524 21.4474 14.6047 21.4474 19.6515 20.3956Z"
+        fill="#27273A"
+      />
+      <circle cx="12" cy="7.99023" r="5" fill="#27273A" />
     </svg>
   );
 }

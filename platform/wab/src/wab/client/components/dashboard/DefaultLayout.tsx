@@ -29,6 +29,10 @@ import { observer } from "mobx-react";
 import * as React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import UserSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__UserSvg";
+import WalletSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__WalletSvg";
+import LogOutSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__LogOutSvg";
+import CopyIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Copy";
 
 type DefaultLayoutProps = DefaultDefaultLayoutProps & {
   helpButton: PlasmicDefaultLayout__OverridesType["helpButton"];
@@ -95,17 +99,61 @@ function DefaultLayout_(
 
   useBrowserNotification();
 
+  const menuItemStyle: React.CSSProperties = {
+    color: "#27273A",
+    fontSize: 14,
+    paddingBottom: 4,
+    paddingTop: 4,
+  };
+
   const userMenu = (
-    <Menu>
-      <Menu.Item>
+    <Menu
+      style={{
+        borderRadius: 16,
+        paddingBottom: 10,
+        paddingTop: 10,
+        paddingRight: 4,
+        paddingLeft: 4,
+      }}
+    >
+      <Menu.Item
+        style={{ ...menuItemStyle, marginBottom: 4 }}
+        icon={<WalletSvgIcon width={24} height={24} />}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          Wallet Address
+          <CopyIcon
+            onClick={(e) => {
+              e.stopPropagation();
+              alert("asjdahjksd");
+            }}
+            width={24}
+            height={24}
+            style={{
+              marginLeft: 12,
+            }}
+          />
+        </div>
+      </Menu.Item>
+      <Menu.Item
+        style={{ ...menuItemStyle, marginBottom: 4 }}
+        icon={<UserSvgIcon width={24} height={24} />}
+      >
         <PublicLink href={UU.settings.fill({})}>My Profile</PublicLink>
       </Menu.Item>
       <Menu.Item
+        style={menuItemStyle}
         onClick={async () => {
           await appCtx.logout();
         }}
+        icon={<LogOutSvgIcon width={24} height={24} />}
       >
-        Sign Out
+        Disconnect Wallet
       </Menu.Item>
     </Menu>
   );
