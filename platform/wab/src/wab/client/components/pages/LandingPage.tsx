@@ -26,14 +26,14 @@ const LandingPage = () => {
         <div className="container">
           <div className="nav">
             <div className="logo">
-              <img src={suiNovaLogo} />
+              <img src={suiNovaLogo} width={70} height={70} />
             </div>
             <nav className="nav-links">
               <a href="#features">Features</a>
               <a href="#how-it-works">How It Works</a>
             </nav>
             <div className="nav-cta">
-              <a href="/login" className="btn btn-primary">
+              <a href="/connect-wallet" className="btn btn-primary">
                 Get Started
               </a>
             </div>
@@ -67,7 +67,7 @@ const LandingPage = () => {
         {/* CTA Button */}
         <div className="drawer-cta">
           <a
-            href="/login"
+            href="/connect-wallet"
             className="btn-primary"
             onClick={() => setIsOpen(false)}
           >
@@ -88,7 +88,7 @@ const LandingPage = () => {
                 with no code required.
               </p>
               <div className="hero-btns">
-                <a href="/login" className="btn btn-primary">
+                <a href="/connect-wallet" className="btn btn-primary">
                   Get Started
                 </a>
               </div>
@@ -439,7 +439,7 @@ const LandingPage = () => {
                 </svg>
               </a>
             </div>
-            <p className="copyright">Copyright © 2025 Varmeta</p>
+            <p className="copyright">Copyright © 2025 SuiNova</p>
           </div>
         </div>
       </footer>

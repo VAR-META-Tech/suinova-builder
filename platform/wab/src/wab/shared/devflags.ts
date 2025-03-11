@@ -498,8 +498,8 @@ const DEFAULT_DEVFLAGS = {
   logToConsole: !production,
 
   // github settings
-  githubClientId: "Iv1.8a4a47b0b0d4bf88",
-  githubAppName: "plasmic-app",
+  githubClientId: process.env.GITHUB_CLIENT_ID || "Iv1.8a4a47b0b0d4bf88",
+  githubAppName: process.env.GITHUB_APP_NAME || "plasmic-app",
 
   // change simplified defaults
   simplifiedLayout: false,

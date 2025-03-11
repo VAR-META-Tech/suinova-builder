@@ -1,11 +1,11 @@
 :root
-    --primary: #0081f1
-    --primary-dark: #2978D1
-    --secondary: #f43f5e
-    --dark: #1e293b
-    --light: #f8fafc
-    --gray: #64748b
-    --gray-light: #e2e8f0
+    --landing-primary: #0081f1
+    --landing-primary-dark: #2978D1
+    --landing-secondary: #f43f5e
+    --landing-dark: #1e293b
+    --landing-light: #f8fafc
+    --landing-gray: #64748b
+    --landing-gray-light: #e2e8f0
 
 
 *
@@ -16,8 +16,8 @@
 
 
 body
-    color: var(--dark)
-    background-color: var(--light)
+    color: var(--landing-dark)
+    background-color: var(--landing-light)
     line-height: 1.6
 
 
@@ -50,19 +50,19 @@ header
 
 .nav-links
     display: flex
-    gap: 30px
+    gap: 40px
     font-size: 16px
 
 
 .nav-links a
     text-decoration: none
-    color: var(--dark)
+    color: var(--landing-gray)
     font-weight: 500
     transition: color 0.3s
 
 
 .nav-links a:hover
-    color: var(--primary)
+    color: var(--landing-primary)
 
 
 .nav-cta
@@ -81,24 +81,24 @@ header
 
 
 .btn-outline
-    border: 1px solid var(--primary)
-    color: var(--primary)
+    border: 1px solid var(--landing-primary)
+    color: var(--landing-primary)
     background: transparent
 
 
 .btn-outline:hover
-    background-color: var(--primary)
+    background-color: var(--landing-primary)
     color: white
 
 
 .btn-primary
-    background-color: var(--primary-dark)
+    background-color: var(--landing-primary-dark)
     color: white
     border: none
 
 
 .btn-primary:hover
-    background-color: var(--primary)
+    background-color: var(--landing-primary)
     color: white !important
 
 
@@ -123,7 +123,7 @@ header
 .hero-title
     font-size: 3.5rem
     margin-bottom: 20px
-    background: linear-gradient(to right, var(--primary), var(--secondary))
+    background: linear-gradient(to right, var(--landing-primary), var(--landing-secondary))
     -webkit-background-clip: text
     background-clip: text
     color: transparent
@@ -131,7 +131,7 @@ header
 
 .hero-subtitle
     font-size: 1.2rem
-    color: var(--gray)
+    color: var(--landing-gray)
     margin-bottom: 30px
 
 
@@ -171,7 +171,7 @@ header
 
 .section-subtitle
     font-size: 1.1rem
-    color: var(--gray)
+    color: var(--landing-gray)
     max-width: 600px
     margin: 0 auto
 
@@ -199,7 +199,7 @@ header
     width: 60px
     height: 60px
     border-radius: 50%
-    background-color: var(--primary)
+    background-color: var(--landing-primary)
     color: white
     display: flex
     align-items: center
@@ -213,7 +213,7 @@ header
 
 
 .feature-desc
-    color: var(--gray)
+    color: var(--landing-gray)
 
 
 .how-it-works
@@ -242,7 +242,7 @@ header
 .step-number
     width: 50px
     height: 50px
-    background-color: var(--primary)
+    background-color: var(--landing-primary)
     color: white
     border-radius: 50%
     display: flex
@@ -256,7 +256,7 @@ header
 .step-image
     width: 100%
     height: 150px
-    background-color: var(--gray-light)
+    background-color: var(--landing-gray-light)
     border-radius: 8px
     margin-bottom: 20px
     display: flex
@@ -276,12 +276,12 @@ header
 
 
 .step-desc
-    color: var(--gray)
+    color: var(--landing-gray)
     font-size: 0.9rem
 
 
 footer
-    background-color: var(--dark)
+    background-color: var(--landing-dark)
     color: white
     padding: 60px 0 30px
 
@@ -324,7 +324,7 @@ footer
 
 
 .social-link:hover
-    background-color: var(--primary)
+    background-color: var(--landing-primary)
 
 
 .copyright
@@ -336,49 +336,9 @@ footer
     display: none
     background: none
     border: none
-    color: var(--dark)
+    color: var(--landing-dark)
     cursor: pointer
     font-size: 1.5rem
-
-
-@media (max-width: 1250px)
-    .hero-content
-        flex-direction: column
-    
-    
-    .hero-text
-        text-align: center
-        max-width: 100%
-    
-    
-    .hero-btns
-        justify-content: center
-
-
-@media (max-width: 768px)
-    .nav-cta 
-        display: none
-
-    .mobile-menu-btn
-        display: block
-    
-    
-    .nav-links
-        display: none
-    
-    
-    .hero-title
-        font-size: 2.5rem
-    
-    
-    .section-title
-        font-size: 2rem
-    
-    
-    .step-card
-        width: 100%
-        margin-bottom: 30px
-    
 
 .illus-container
     width: 100%
@@ -398,7 +358,7 @@ footer
 .illus-head-brand
     font-size: 14px
     font-weight: 600
-    color: var(--primary)
+    color: var(--landing-primary)
 
 .illus-head-btn
     padding: 8px 16px
@@ -442,7 +402,7 @@ footer
 .illus-widget-icon 
   width: 16px
   height: 16px
-  color: var(--primary)
+  color: var(--landing-primary)
 
 .illus-widget-label 
   font-size: 14px
@@ -461,7 +421,7 @@ footer
   border: 2px solid #e2e8f0
 
 .illus-dragging 
-  border: 2px dashed var(--primary)
+  border: 2px dashed var(--landing-primary)
 
 .illus-canvas-overlay 
   position: absolute
@@ -469,7 +429,7 @@ footer
   display: flex
   align-items: center
   justify-content: center
-  color: var(--primary)
+  color: var(--landing-primary)
   font-size: 14px
 
 .illus-placed-component 
@@ -493,7 +453,7 @@ footer
 .illus-component-icon 
   width: 16px
   height: 16px
-  color: var(--primary)
+  color: var(--landing-primary)
 
 .illus-component-label 
   font-size: 14px
@@ -519,25 +479,25 @@ footer
 
 .nav-links 
   display: flex
-  gap: 20px
+  gap: 60px
 
 .nav-links a 
   text-decoration: none
-  color: #333
+  color: var(--landing-gray)
   font-weight: 500
 
 .nav-links a:hover 
-  color: var(--primary)
+  color: var(--landing-primary)
 
 .nav-cta .btn-primary 
-  background-color: var(--primary-dark)
+  background-color: var(--landing-primary-dark)
   color: white
   padding: 8px 16px
   border-radius: 6px
   text-decoration: none
 
 .nav-cta .btn-primary:hover 
-  background-color: var(--primary)
+  background-color: var(--landing-primary)
 
 .mobile-menu-btn 
   font-size: 24px
@@ -596,7 +556,7 @@ footer
   font-size: 18px
 
 .drawer-links a:hover 
-  color: var(--primary)
+  color: var(--landing-primary)
 
 .drawer-cta 
   margin-top: 20px
@@ -605,17 +565,78 @@ footer
   display: block
   text-align: center
   padding: 10px
-  background-color: var(--primary-dark)
+  background-color: var(--landing-primary-dark)
   color: white
   border-radius: 6px  
   text-decoration: none
 
 .drawer-cta .btn-primary:hover 
-  background-color: var(--primary)
+  background-color: var(--landing-primary)
 
-@media (max-width: 768px) 
-  .nav-links, .nav-cta 
-    display: none
+@media (max-width: 1250px)
+    .hero-content
+        flex-direction: column
+        gap: 40px
+    
+    .hero-text
+        text-align: center
+        max-width: 100%
+    
+    .hero-btns
+        justify-content: center
 
-  .mobile-menu-btn 
-    display: block
+    .illus-container
+        width: 90%
+    
+@media (max-width: 768px)
+    .hero-content
+        flex-direction: column
+        gap: 30px
+
+    .nav-cta 
+        display: none
+
+    .mobile-menu-btn
+        display: block
+    
+    
+    .nav-links
+        display: none
+    
+    
+    .hero-title
+        font-size: 2.5rem
+    
+    
+    .section-title
+        font-size: 2rem
+    
+    
+    .step-card
+        width: 100%
+        margin-bottom: 30px
+
+    .nav-links, .nav-cta 
+        display: none
+
+    .mobile-menu-btn 
+        display: block
+
+
+@media (max-width: 660px) 
+    .illus-canvas 
+        display: none
+
+    .illus-component-library 
+        width: 100%
+
+    .illus-grid-layout
+        grid-template-columns: none
+
+    .illus-container
+        width: 80%
+
+@media (max-width: 450px) 
+    .illus-container
+        width: 90%
+

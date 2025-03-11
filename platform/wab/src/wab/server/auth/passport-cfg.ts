@@ -1,6 +1,5 @@
 import { setupCustomPassport } from "@/wab/server/auth/custom-passport-cfg";
 import { createUserFull, createUserWithWallet } from "@/wab/server/auth/routes";
-import { SuiWalletStrategy } from "@/wab/server/auth/sui-wallet-strategy";
 import { Config } from "@/wab/server/config";
 import { DbMgr, SUPER_USER } from "@/wab/server/db/DbMgr";
 import { OauthTokenProvider, User } from "@/wab/server/entities/Entities";
@@ -35,6 +34,7 @@ import { verifyPersonalMessageSignature } from "@mysten/sui/verify";
 import { Request } from "express-serve-static-core";
 import { omit } from "lodash";
 import passport, { Profile } from "passport";
+import { Strategy as CustomStrategy } from "passport-custom";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import passportLocal from "passport-local";
 import OAuth2Strategy from "passport-oauth2";
@@ -97,17 +97,16 @@ export async function setupPassport(
 
   passport.use(
     "sui-wallet",
-    new SuiWalletStrategy(
-      { passReqToCallback: true },
-      async (req, options, done) => {
-        const { address, signature, nonce } = options;
-        const mgr = superDbMgr(req);
-
+    new CustomStrategy((req, done) => {
+      asyncToCallback(done, async () => {
         try {
-          // Check if nonce (timestamp) is within acceptable range (5 minutes)
+          const mgr = superDbMgr(req);
+          const { address, signature, nonce, nextPath, appInfo } = req.body;
+
+          // Check if nonce is within acceptable range (5 minutes)
           const currentTime = Date.now();
           if (Math.abs(currentTime - nonce) > 5 * 60 * 1000) {
-            return done(null, false, { message: "Expired signature" });
+            return false;
           }
 
           // Construct the message that was signed
@@ -121,7 +120,8 @@ export async function setupPassport(
               address,
             });
           } catch (e) {
-            return done(null, false, { message: "Invalid signature" });
+            console.error("Invalid signature:", e);
+            return false;
           }
 
           // Look up user by wallet address
@@ -133,13 +133,25 @@ export async function setupPassport(
               0,
               6
             )}...${address.substring(address.length - 4)}`;
+
             user = await createUserWithWallet(mgr, {
               chainId: "101",
               walletAddress: address,
               firstName: "Sui",
               lastName: `User ${shortAddress}`,
               email: `${address.toLowerCase()}@sui.wallet`,
+              req,
+              nextPath,
+              appInfo,
             });
+
+            // user = await createUserFull({
+            //   mgr,
+            //   email: "namdang+test@var-meta.com",
+            //   firstName: "nam",
+            //   lastName: "dang",
+            //   req,
+            // });
 
             if (req.analytics && req.analytics.track) {
               req.analytics.track("Create wallet user", {
@@ -148,13 +160,18 @@ export async function setupPassport(
             }
           }
 
-          return done(null, user);
+          // Must reset the session to prevent session fixation
+          if (req.session) {
+            await util.promisify(req.session.regenerate).bind(req.session)();
+          }
+
+          return user;
         } catch (error) {
-          console.error("Error during wallet login:", error);
-          return done(error);
+          console.error("Error during sui wallet auth:", error);
+          throw error;
         }
-      }
-    )
+      });
+    })
   );
 
   /**

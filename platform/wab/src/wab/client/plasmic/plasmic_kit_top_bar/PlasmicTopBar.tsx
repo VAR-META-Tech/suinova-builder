@@ -63,6 +63,7 @@ import imageAy93RhuWbc from "./images/image.svg"; // plasmic-import: ay93RhuWbc/
 import Logo from "@/wab/client/assets/logo.png";
 import StraightSeparator from "./icons/PlasmicIcon__StraightSeparator";
 import PlayIcon from "./icons/PlasmicIcon__PlayIcon";
+import { UU } from "../../cli-routes";
 
 export type PlasmicTopBar__VariantMembers = {
   mode: "preview";
@@ -274,7 +275,8 @@ function PlasmicTopBar__RenderFunc(props: {
           <div className={classNames(projectcss.all, sty.freeBox___7MgoJ)}>
             <a
               data-plasmic-name={"logoLink"}
-              data-plasmic-override={overrides.logoLink}
+              // data-plasmic-override={overrides.logoLink}
+              href={UU.allProjects.pattern}
               className={classNames(
                 projectcss.all,
                 projectcss.a,

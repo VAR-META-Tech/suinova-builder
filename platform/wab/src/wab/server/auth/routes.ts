@@ -134,7 +134,7 @@ export async function createUserFull({
         }
       : {}),
     needsTeamCreationPrompt:
-      !noWelcomeEmailAndSurvey && req.devflags.createTeamPrompt,
+      !noWelcomeEmailAndSurvey && req?.devflags?.createTeamPrompt,
   });
 
   const emailVerificationToken = password
@@ -172,12 +172,21 @@ export async function createUserWithWallet(
     firstName,
     lastName,
     email,
+    req,
+    nextPath,
+    appInfo,
   }: {
     chainId: string;
     walletAddress: string;
     firstName: string;
     lastName: string;
     email: string;
+    req: Request;
+    nextPath?: string;
+    appInfo?: {
+      appName: string;
+      authorizationPath: string;
+    };
   }
 ) {
   // Create user first
@@ -186,7 +195,10 @@ export async function createUserWithWallet(
     email,
     firstName,
     lastName,
-    req: null as any, // Passing null as request since we don't have it here
+    req,
+    nextPath,
+    appInfo,
+    noWelcomeEmailAndSurvey: true,
   });
 
   // Add wallet info
@@ -552,30 +564,34 @@ export async function suiWalletLogin(
   res: Response,
   next: NextFunction
 ) {
+  console.log("authenticating with sui wallet");
   await new Promise<void>((resolve) =>
-    passport.authenticate("sui-wallet", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-
-      if (!user) {
-        return res.status(401).json({
-          status: false,
-          reason: info?.message || "Authentication failed",
-        });
-      }
-
-      doLogin(req, user, (err2) => {
-        if (err2) {
-          return next(err2);
-        }
-        console.log(
-          "logged in as",
-          getUser(req, { allowUnverifiedEmail: true }).email
-        );
-        res.json(ensureType<LoginResponse>({ status: true, user }));
-      });
-    })(req, res, next)
+    passport.authenticate(
+      "sui-wallet",
+      (err: Error, user: User, info: IVerifyOptions) =>
+        (async () => {
+          if (err || !user) {
+            console.error("could not log in with sui wallet", user, err);
+            res.json(
+              ensureType<LoginResponse>({
+                status: false,
+                reason: info?.message || "Authentication failed",
+              })
+            );
+          } else {
+            doLogin(req, user, (err2) => {
+              if (err2) {
+                return next(err2);
+              }
+              console.log(
+                "logged in as",
+                getUser(req, { allowUnverifiedEmail: true }).email
+              );
+              res.json(ensureType<LoginResponse>({ status: true, user }));
+            });
+          }
+        })().then(() => resolve())
+    )(req, res, next)
   );
 }
 

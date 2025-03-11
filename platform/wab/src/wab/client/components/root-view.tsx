@@ -69,6 +69,7 @@ import { Redirect, Route, Switch, useHistory, useLocation } from "react-router";
 import ConnectWallet from "@/wab/client/components/pages/ConnectWallet";
 import { ConnectWalletLayout } from "@/wab/client/components/connect-wallet-layout";
 import {
+  ConnectButton,
   createNetworkConfig,
   SuiClientProvider,
   WalletProvider,
@@ -532,58 +533,39 @@ export function Root() {
     return appCtx;
   };
   return (
-    <AppView
-      contents={(app) => {
-        nonAuthCtx.app = app;
-        // We are adding no-op event handlers here because of the following:
-        //
-        // When you addEventListener() in a componentDidMount (say,
-        // pointerdown), it usually but won’t always fire after the same event
-        // type in your React components (onPointerDown).  It depends entirely
-        // on whether React has ever before had to set up that event handler!
-        // If it hasn’t (this is the first time you’ve used onPointerDown in
-        // your app), then React’s will come second.  But if you unmount and
-        // then remount the component, the componentDidMount listener will
-        // come second.  So to ensure consistent ordering, make sure you’ve
-        // already used onPointerDown somewhere before.
-        //
-        // This matters in particular to e.g. SidebarPopup.
-        return (
-          <widgets.Loadable
-            key={loaderKey}
-            loader={loader}
-            contents={(appCtx: /*TWZ*/ AppCtx) => {
-              return providesAppCtx(appCtx)(
-                <NonAuthCtxContext.Provider value={nonAuthCtx}>
-                  <QueryClientProvider client={queryClient}>
-                    <SuiClientProvider
-                      networks={networkConfig}
-                      defaultNetwork="localnet"
-                    >
-                      <WalletProvider>
+    <QueryClientProvider client={queryClient}>
+      <SuiClientProvider networks={networkConfig} defaultNetwork="localnet">
+        <WalletProvider>
+          <AppView
+            contents={(app) => {
+              nonAuthCtx.app = app;
+              // We are adding no-op event handlers here because of the following:
+              //
+              // When you addEventListener() in a componentDidMount (say,
+              // pointerdown), it usually but won’t always fire after the same event
+              // type in your React components (onPointerDown).  It depends entirely
+              // on whether React has ever before had to set up that event handler!
+              // If it hasn’t (this is the first time you’ve used onPointerDown in
+              // your app), then React’s will come second.  But if you unmount and
+              // then remount the component, the componentDidMount listener will
+              // come second.  So to ensure consistent ordering, make sure you’ve
+              // already used onPointerDown somewhere before.
+              //
+              // This matters in particular to e.g. SidebarPopup.
+              return (
+                <widgets.Loadable
+                  key={loaderKey}
+                  loader={loader}
+                  contents={(appCtx: /*TWZ*/ AppCtx) => {
+                    return providesAppCtx(appCtx)(
+                      <NonAuthCtxContext.Provider value={nonAuthCtx}>
                         <div className={"root"} onPointerDown={() => {}}>
                           <Switch>
-                          <Route
+                            <Route
                               exact
                               path={UU.home.pattern}
                               render={() => (
                                 <LandingPage />
-                              )}
-                            />
-                            <Route
-                              exact
-                              path={UU.login.pattern}
-                              render={() => (
-                                <>
-                                  <PromoBanner />
-                                  <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
-                                    {documentTitle("Sign in")}
-                                    <AuthForm
-                                      mode="sign in"
-                                      onLoggedIn={reloadData}
-                                    />
-                                  </NormalNonAuthLayout>
-                                </>
                               )}
                             />
                             <Route
@@ -703,15 +685,15 @@ export function Root() {
                             />
                           </Switch>
                         </div>
-                      </WalletProvider>
-                    </SuiClientProvider>
-                  </QueryClientProvider>
-                </NonAuthCtxContext.Provider>
+                      </NonAuthCtxContext.Provider>
+                    );
+                  }}
+                />
               );
             }}
           />
-        );
-      }}
-    />
+        </WalletProvider>
+      </SuiClientProvider>
+    </QueryClientProvider>
   );
 }

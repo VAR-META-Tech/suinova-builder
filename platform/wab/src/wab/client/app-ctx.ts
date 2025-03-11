@@ -146,6 +146,7 @@ export class AppCtx {
   change: (f: () => void) => void;
   bundler: FastBundler;
   selfInfo: SelfInfo | null;
+  walletAddress: string;
   teams: ApiTeam[];
   workspaces: ApiWorkspace[];
   perms: ApiPermission[];
@@ -198,7 +199,7 @@ export class AppCtx {
     // Explicitly setting window.location.href, instead of
     // using router, to make sure we completely clear in-page
     // js state
-    window.location.href = UU.login.fill({});
+    window.location.href = UU.connectWallet.fill({});
   }
 
   isWhiteLabelUser() {
