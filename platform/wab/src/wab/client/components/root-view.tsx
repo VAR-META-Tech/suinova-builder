@@ -75,6 +75,7 @@ import {
 } from "@mysten/dapp-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import LandingPage from "./pages/LandingPage";
 
 const LazyTeamAnalytics = React.lazy(() => import("./analytics/TeamAnalytics"));
 const LazyAdminPage = React.lazy(() => import("./pages/admin/AdminPage"));
@@ -562,6 +563,13 @@ export function Root() {
                       <WalletProvider>
                         <div className={"root"} onPointerDown={() => {}}>
                           <Switch>
+                          <Route
+                              exact
+                              path={UU.home.pattern}
+                              render={() => (
+                                <LandingPage />
+                              )}
+                            />
                             <Route
                               exact
                               path={UU.login.pattern}

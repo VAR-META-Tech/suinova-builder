@@ -1,0 +1,621 @@
+:root
+    --primary: #0081f1
+    --primary-dark: #2978D1
+    --secondary: #f43f5e
+    --dark: #1e293b
+    --light: #f8fafc
+    --gray: #64748b
+    --gray-light: #e2e8f0
+
+
+*
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+
+
+body
+    color: var(--dark)
+    background-color: var(--light)
+    line-height: 1.6
+
+
+h1, h2, h3
+    font-weight: 700
+    line-height: 1.2
+
+
+header
+    background-color: rgba(255, 255, 255, 0.8)
+    backdrop-filter: blur(10px)
+    position: sticky
+    top: 0
+    z-index: 100
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05)
+
+
+.container
+    max-width: 1500px
+    margin: 0 auto
+    padding: 0 20px
+
+
+.nav
+    display: flex
+    justify-content: space-between
+    align-items: center
+    height: 80px
+
+
+.nav-links
+    display: flex
+    gap: 30px
+    font-size: 16px
+
+
+.nav-links a
+    text-decoration: none
+    color: var(--dark)
+    font-weight: 500
+    transition: color 0.3s
+
+
+.nav-links a:hover
+    color: var(--primary)
+
+
+.nav-cta
+    display: flex
+    gap: 15px
+
+
+.btn
+    padding: 10px 20px
+    border-radius: 8px
+    font-weight: 500
+    cursor: pointer
+    transition: all 0.3s
+    text-align: center
+    text-decoration: none
+
+
+.btn-outline
+    border: 1px solid var(--primary)
+    color: var(--primary)
+    background: transparent
+
+
+.btn-outline:hover
+    background-color: var(--primary)
+    color: white
+
+
+.btn-primary
+    background-color: var(--primary-dark)
+    color: white
+    border: none
+
+
+.btn-primary:hover
+    background-color: var(--primary)
+    color: white !important
+
+
+.hero
+    padding: 80px 0
+    background: linear-gradient(90deg, #d4e4fa 0%, #fff0f0 100%)
+    position: relative
+    overflow: hidden
+
+
+.hero-content
+    display: flex
+    align-items: center
+    gap: 100px
+
+
+.hero-text
+    flex: 1
+    max-width: 600px
+
+
+.hero-title
+    font-size: 3.5rem
+    margin-bottom: 20px
+    background: linear-gradient(to right, var(--primary), var(--secondary))
+    -webkit-background-clip: text
+    background-clip: text
+    color: transparent
+
+
+.hero-subtitle
+    font-size: 1.2rem
+    color: var(--gray)
+    margin-bottom: 30px
+
+
+.hero-btns
+    display: flex
+    gap: 15px
+    margin-bottom: 30px
+
+
+.hero-image
+    flex: 1
+    display: flex
+    justify-content: center
+    position: relative
+    width: 100%
+
+
+.hero-image img
+    height: auto
+    border-radius: 10px
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1)
+
+
+.features
+    padding: 100px 0
+
+
+.section-header
+    text-align: center
+    margin-bottom: 60px
+
+
+.section-title
+    font-size: 2.5rem
+    margin-bottom: 15px
+
+
+.section-subtitle
+    font-size: 1.1rem
+    color: var(--gray)
+    max-width: 600px
+    margin: 0 auto
+
+
+.features-grid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
+    gap: 30px
+
+
+.feature-card
+    background-color: white
+    border-radius: 10px
+    padding: 30px
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05)
+    transition: transform 0.3s, box-shadow 0.3s
+
+
+.feature-card:hover
+    transform: translateY(-5px)
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1)
+
+
+.feature-icon
+    width: 60px
+    height: 60px
+    border-radius: 50%
+    background-color: var(--primary)
+    color: white
+    display: flex
+    align-items: center
+    justify-content: center
+    margin-bottom: 20px
+
+
+.feature-title
+    font-size: 1.5rem
+    margin-bottom: 15px
+
+
+.feature-desc
+    color: var(--gray)
+
+
+.how-it-works
+    padding: 100px 0
+    background: linear-gradient(90deg, #d4e4fa 0%, #fff0f0 100%)
+
+
+.steps
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+    max-width: 1000px
+    margin: 0 auto
+
+
+.step-card
+    width: calc(25% - 20px)
+    background-color: white
+    border-radius: 10px
+    padding: 30px
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05)
+    text-align: center
+    margin-bottom: 20px
+
+
+.step-number
+    width: 50px
+    height: 50px
+    background-color: var(--primary)
+    color: white
+    border-radius: 50%
+    display: flex
+    align-items: center
+    justify-content: center
+    font-weight: 700
+    font-size: 1.2rem
+    margin: 0 auto 20px
+
+
+.step-image
+    width: 100%
+    height: 150px
+    background-color: var(--gray-light)
+    border-radius: 8px
+    margin-bottom: 20px
+    display: flex
+    align-items: center
+    justify-content: center
+    overflow: hidden
+
+
+.step-image img
+    max-width: 100%
+    max-height: 100%
+
+
+.step-title
+    font-size: 1.2rem
+    margin-bottom: 10px
+
+
+.step-desc
+    color: var(--gray)
+    font-size: 0.9rem
+
+
+footer
+    background-color: var(--dark)
+    color: white
+    padding: 60px 0 30px
+
+
+.footer-content
+    display: flex
+    flex-direction: column
+    align-items: center
+    text-align: center
+
+
+.footer-logo
+    font-size: 1.5rem
+    font-weight: 700
+    margin-bottom: 20px
+    display: flex
+    align-items: center
+
+
+.footer-logo svg
+    margin-right: 10px
+
+
+.social-links
+    display: flex
+    gap: 15px
+    margin-bottom: 30px
+
+
+.social-link
+    width: 40px
+    height: 40px
+    border-radius: 50%
+    background-color: rgba(255, 255, 255, 0.1)
+    color: white
+    display: flex
+    align-items: center
+    justify-content: center
+    transition: background-color 0.3s
+
+
+.social-link:hover
+    background-color: var(--primary)
+
+
+.copyright
+    color: rgba(255, 255, 255, 0.7)
+    font-size: 0.9rem
+
+
+.mobile-menu-btn
+    display: none
+    background: none
+    border: none
+    color: var(--dark)
+    cursor: pointer
+    font-size: 1.5rem
+
+
+@media (max-width: 1250px)
+    .hero-content
+        flex-direction: column
+    
+    
+    .hero-text
+        text-align: center
+        max-width: 100%
+    
+    
+    .hero-btns
+        justify-content: center
+
+
+@media (max-width: 768px)
+    .nav-cta 
+        display: none
+
+    .mobile-menu-btn
+        display: block
+    
+    
+    .nav-links
+        display: none
+    
+    
+    .hero-title
+        font-size: 2.5rem
+    
+    
+    .section-title
+        font-size: 2rem
+    
+    
+    .step-card
+        width: 100%
+        margin-bottom: 30px
+    
+
+.illus-container
+    width: 100%
+    background-color: white
+    border-radius: 16px
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)
+    padding: 24px
+
+.illus-head
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 16px
+    padding-bottom: 16px
+    border-bottom: 1px solid #e2e8f0
+
+.illus-head-brand
+    font-size: 14px
+    font-weight: 600
+    color: var(--primary)
+
+.illus-head-btn
+    padding: 8px 16px
+    border: 1px solid #e2e8f0
+    border-radius: 6px
+    background-color: transparent
+    color: #4a5568
+    cursor: pointer
+
+.illus-grid-layout 
+  display: grid
+  grid-template-columns: 200px 1fr
+  gap: 16px
+
+.illus-component-library 
+  border: 1px solid #e2e8f0
+  border-radius: 8px
+  padding: 16px
+
+.illus-section-title 
+  margin: 0 0 12px 0
+  font-size: 14px
+  font-weight: 600
+  color: #4a5568
+
+.illus-component-list 
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+.illus-widget-item 
+  display: flex
+  align-items: center
+  gap: 8px
+  padding: 8px 12px
+  background-color: #f7fafc
+  border-radius: 6px
+  cursor: move
+  user-select: none
+
+.illus-widget-icon 
+  width: 16px
+  height: 16px
+  color: var(--primary)
+
+.illus-widget-label 
+  font-size: 14px
+  color: #4a5568
+
+.illus-canvas 
+  border: 1px solid #e2e8f0
+  border-radius: 8px
+  padding: 16px
+
+.illus-canvas-body 
+  position: relative
+  height: 300px
+  background-color: #f7fafc
+  border-radius: 8px
+  border: 2px solid #e2e8f0
+
+.illus-dragging 
+  border: 2px dashed var(--primary)
+
+.illus-canvas-overlay 
+  position: absolute
+  inset: 0
+  display: flex
+  align-items: center
+  justify-content: center
+  color: var(--primary)
+  font-size: 14px
+
+.illus-placed-component 
+  position: absolute
+  display: flex
+  align-items:center
+  gap: 8px
+  padding: 8px 12px
+  background-color: white
+  border-radius: 6px
+  box-shadow :0 1px 3px 0 rgba(0, 0, 0, 0.1)
+
+.illus-top-left 
+  top: 12px
+  left: 12px
+
+.illus-bottom-right 
+  bottom: 12px
+  right: 12px
+
+.illus-component-icon 
+  width: 16px
+  height: 16px
+  color: var(--primary)
+
+.illus-component-label 
+  font-size: 14px
+  color: #4a5568
+
+.illus-move-icon 
+  width:12px
+  height: 12px
+  color: #a0aec0
+
+.navbar 
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 16px
+  background-color: white
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)
+
+.logo 
+  font-size: 20px
+  font-weight: bold
+  color: #333
+
+.nav-links 
+  display: flex
+  gap: 20px
+
+.nav-links a 
+  text-decoration: none
+  color: #333
+  font-weight: 500
+
+.nav-links a:hover 
+  color: var(--primary)
+
+.nav-cta .btn-primary 
+  background-color: var(--primary-dark)
+  color: white
+  padding: 8px 16px
+  border-radius: 6px
+  text-decoration: none
+
+.nav-cta .btn-primary:hover 
+  background-color: var(--primary)
+
+.mobile-menu-btn 
+  font-size: 24px
+  background: none
+  border: none
+  cursor: pointer
+  color: #333
+  display: none
+
+.overlay 
+  position: fixed
+  inset: 0
+  background: rgba(0, 0, 0, 0.5)
+  opacity: 0
+  pointer-events: none
+  transition: opacity 0.3s ease
+
+.overlay.show 
+  opacity: 1
+  pointer-events: auto
+  z-index: 100
+
+.drawer 
+  position: fixed
+  top: 0
+  right: -260px
+  width: 250px
+  height: 100vh
+  background: white
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.2)
+  padding: 20px
+  transition: right 0.3s ease
+  z-index: 100
+
+.drawer.open 
+  right: 0
+
+.close-btn 
+  font-size: 18px
+  background: none
+  border: none
+  cursor: pointer
+  position: absolute
+  top: 10px
+  right: 15px
+
+.drawer-links 
+  display: flex
+  flex-direction: column
+  gap: 16px
+  margin-top: 40px
+
+.drawer-links a 
+  text-decoration: none
+  color: #333
+  font-size: 18px
+
+.drawer-links a:hover 
+  color: var(--primary)
+
+.drawer-cta 
+  margin-top: 20px
+
+.drawer-cta .btn-primary 
+  display: block
+  text-align: center
+  padding: 10px
+  background-color: var(--primary-dark)
+  color: white
+  border-radius: 6px  
+  text-decoration: none
+
+.drawer-cta .btn-primary:hover 
+  background-color: var(--primary)
+
+@media (max-width: 768px) 
+  .nav-links, .nav-cta 
+    display: none
+
+  .mobile-menu-btn 
+    display: block
