@@ -57,6 +57,7 @@ import SparklessvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__SparklesSvg
 import UnorderedListsvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__UnorderedListSvg"; // plasmic-import: suHkgkKOX/icon
 import UsersPlussvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__UsersPlusSvg"; // plasmic-import: OqMJdWElK/icon
 import Logo from "@/wab/client/assets/logo.png";
+import { UU } from "../../cli-routes";
 
 createPlasmicElementProxy;
 
@@ -245,7 +246,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
               projectcss.a,
               sty.headerLogoLink
             )}
-            href={"/"}
+            href={UU.allProjects.pattern}
             platform={"react"}
           >
             <img src={Logo} width={50} />

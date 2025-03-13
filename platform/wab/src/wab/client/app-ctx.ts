@@ -146,6 +146,7 @@ export class AppCtx {
   change: (f: () => void) => void;
   bundler: FastBundler;
   selfInfo: SelfInfo | null;
+  walletAddress: string;
   teams: ApiTeam[];
   workspaces: ApiWorkspace[];
   perms: ApiPermission[];
