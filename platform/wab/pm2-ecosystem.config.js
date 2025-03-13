@@ -8,13 +8,14 @@ module.exports = {
       env: {
         NODE_ENV: "development",
         BACKEND_PORT: 6004,
-        REACT_APP_DEFAULT_HOST_URL:
-          "https://host.suinova.var-meta.com/static/host.html",
+        REACT_APP_DEV_HOST_PROXY: "https://host.suinova.var-meta.com",
         CODEGEN_HOST: "https://codegen.suinova.var-meta.com",
         SOCKET_HOST: "https://socket.suinova.var-meta.com",
         REACT_APP_CDN_URL: "https://suinova.var-meta.com",
         REACT_APP_PUBLIC_URL: "https://suinova.var-meta.com",
         INTEGRATIONS_HOST: "https://api.suinova.var-meta.com",
+        HOST: "https://host.suinova.var-meta.com",
+        WITH_HOSTING: "true",
       },
       interpreter: "none",
     },
