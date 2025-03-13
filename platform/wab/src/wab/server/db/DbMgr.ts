@@ -694,6 +694,7 @@ export class DbMgr implements MigrationDbMgr {
   public readonly cmsIdsAndTokens?: CmsIdAndToken[];
   public readonly teamApiToken?: string;
   public readonly temporaryTeamApiToken?: string;
+
   constructor(
     entMgr: EntityManager,
     actor: Actor,
@@ -720,6 +721,7 @@ export class DbMgr implements MigrationDbMgr {
   public getEntMgr() {
     return this.entMgr;
   }
+
   //
   // Actor utilities.
   //
@@ -1786,6 +1788,28 @@ export class DbMgr implements MigrationDbMgr {
       }),
       `FeatureTier with ID ${featureTierId}`
     );
+  }
+
+  async tryGetUserWalletByUserId(
+    userId: string,
+    chainId: string
+  ): Promise<UserWallet | undefined> {
+    const userWallet = await getOneOrFailIfTooMany(
+      this.userWallets()
+        .createQueryBuilder("userWallets")
+        .where(`lower(userWallets.userId) = lower(:userId)`, {
+          userId,
+        })
+        .andWhere(`lower(userWallets.chainId) = lower(:chainId)`, {
+          chainId,
+        })
+    );
+
+    if (!userWallet) {
+      return undefined;
+    }
+
+    return userWallet;
   }
 
   async tryGetUserByWalletAddress(
@@ -4282,6 +4306,7 @@ export class DbMgr implements MigrationDbMgr {
       }${tag ? ", tag=" + tag : ""}`
     );
   }
+
   async tryGetPkgVersion(
     pkgId: string,
     versionRange?: string,
@@ -9491,6 +9516,7 @@ export class DbMgr implements MigrationDbMgr {
       mostActiveApps,
     };
   }
+
   // Initialize a new auth config re using the auth config from another project
   async createAppAuthConfigFromProject(opts: {
     fromProjectId: ProjectId;
