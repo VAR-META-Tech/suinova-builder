@@ -44,6 +44,7 @@ import {
   SignUpResponse,
   UpdatePasswordResponse,
   UpdateSelfRequest,
+  UserProfileResponse,
 } from "@/wab/shared/ApiSchema";
 import {
   ensureType,
@@ -339,6 +340,20 @@ export async function self(req: Request, res: Response) {
       user,
       usesOauth,
       observer: req.cookies?.["plasmic-observer"] === "true",
+    })
+  );
+}
+
+export async function userProfile(req: Request, res: Response) {
+  const dbMgr = userDbMgr(req, { allowUnverifiedEmail: true });
+  const user = getUser(req, { allowUnverifiedEmail: true });
+  console.log("getting user wallet for", user.email);
+  const userWallet = await dbMgr.tryGetUserWalletByUserId(user.id, "101");
+  res.json(
+    ensureType<UserProfileResponse>({
+      id: user.id,
+      username: user.username,
+      walletAddress: userWallet?.walletAddress,
     })
   );
 }

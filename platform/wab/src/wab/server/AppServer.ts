@@ -1300,6 +1300,7 @@ export function addMainAppServerRoutes(
     sensitiveRateLimiter,
     withNext(authRoutes.signUp)
   );
+  app.get("/api/v1/auth/profile", withNext(authRoutes.userProfile));
   app.get("/api/v1/auth/self", withNext(authRoutes.self));
   app.post("/api/v1/auth/self", withNext(authRoutes.updateSelf));
   app.post(
