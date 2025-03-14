@@ -290,6 +290,7 @@ export const updatableUserFields = [
   "needsTeamCreationPrompt",
   "extraData",
   "whiteLabelInfo",
+  "username",
 ] as const;
 
 export type UpdatableUserFields = Pick<
@@ -1839,6 +1840,20 @@ export class DbMgr implements MigrationDbMgr {
       this.users()
         .createQueryBuilder("users")
         .where(`lower(users.email) = lower(:email)`, { email })
+        .andWhere("users.deletedAt is null")
+    );
+    if (!user) {
+      return user;
+    }
+    await this.checkUserPerms(user.id, "read", "get");
+    return user;
+  }
+
+  async tryGetUserByUsername(username: string) {
+    const user = await getOneOrFailIfTooMany(
+      this.users()
+        .createQueryBuilder("users")
+        .where(`lower(users.username) = lower(:username)`, { username })
         .andWhere("users.deletedAt is null")
     );
     if (!user) {

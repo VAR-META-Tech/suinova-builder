@@ -2176,6 +2176,11 @@ export function isValidEmail(str: string) {
   return !!str.match(/^\S+@\S+\.\S+$/);
 }
 
+export function isValidUsername(str: string): boolean {
+  const regex = /^[a-zA-Z0-9]+$/;
+  return regex.test(str);
+}
+
 /**
  * Simple async monadic do-notation implementation for maybe types (undefined |
  * T).
