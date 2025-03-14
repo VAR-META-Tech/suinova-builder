@@ -253,6 +253,9 @@ export class User extends OrgChild<"UserId"> {
   @Column("timestamptz", { nullable: true })
   permanentlyDeletedAt: Date | null;
 
+  @Column("text", { nullable: true })
+  username: string;
+
   /**
    * For now, we can only reference URLs from elsewhere, and not
    * host the image blob ourselves.

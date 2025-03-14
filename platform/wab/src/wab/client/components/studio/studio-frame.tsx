@@ -61,6 +61,13 @@ const whitelistedHosts = [
   // Remove when this ticket is done:
   // https://app.shortcut.com/plasmic/story/36383/allow-setting-trusted-host-for-whole-organization
   "https://website-git-benjaminflores-brand-2274-homepage-a-3a7667-scaleai.vercel.app",
+
+  "suinova.var-meta.com",
+  "api.suinova.var-meta.com",
+  "socket.suinova.var-meta.com",
+  "host.suinova.var-meta.com",
+  "codegen.suinova.var-meta.com",
+  "codegen-hosting.suinova.var-meta.com",
 ];
 
 export function StudioFrame({

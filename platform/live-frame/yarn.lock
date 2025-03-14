@@ -186,6 +186,7 @@
   uid ""
 
 "@react-aria/checkbox@^3.14.2":
+
   version "3.15.2"
   resolved "https://registry.yarnpkg.com/@react-aria/checkbox/-/checkbox-3.15.2.tgz#d23447c91294445cc1400ca311363d37e1b58012"
   integrity sha512-vJf91ToLN+BHfJUbulKBxN2POB7XzIb/3whF+fSk6wSld2vtFjQ80SQfz5HktYG/Af5VccxyCg70dp4moLvsTw==
@@ -228,12 +229,14 @@
   version "3.12.6"
   resolved "https://registry.yarnpkg.com/@react-aria/i18n/-/i18n-3.12.6.tgz#0b45bff2b9c0421e7fbfff2dc3a3c02d78ff819d"
   integrity sha512-I2Qz1vAlgdeW2GUMLhHucYhk514/BRuEzvH1iih8qeqvv0gEbKdSIjPJUomW+WzYVmJ2/bwKQAr7otr2fNcbrw==
+
   dependencies:
     "@internationalized/date" "^3.7.0"
     "@internationalized/message" "^3.1.6"
     "@internationalized/number" "^3.6.0"
     "@internationalized/string" "^3.2.5"
     "@react-aria/ssr" "^3.9.7"
+
     "@react-aria/utils" "^3.28.0"
     "@react-types/shared" "^3.28.0"
     "@swc/helpers" "^0.5.0"

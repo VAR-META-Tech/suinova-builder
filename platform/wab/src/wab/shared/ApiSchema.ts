@@ -111,6 +111,7 @@ export interface ApiEntityBase<IdType extends string = string> {
 export interface ApiUser extends ApiEntityBase {
   id: UserId;
   email: string;
+  username?: string;
   firstName: string | null;
   lastName: string | null;
   avatarUrl: string | null;
@@ -428,6 +429,12 @@ export interface SelfResponse {
   user: ApiUser;
   usesOauth?: boolean;
   observer?: boolean;
+}
+
+export interface UserProfileResponse {
+  id: UserId;
+  username?: string;
+  walletAddress?: string;
 }
 
 export interface UpdateSelfRequest {
