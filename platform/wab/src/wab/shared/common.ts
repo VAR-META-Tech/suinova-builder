@@ -2181,6 +2181,15 @@ export function isValidUsername(str: string): boolean {
   return regex.test(str);
 }
 
+export function isValidUrl(str: string) {
+  try {
+    new URL(str);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Simple async monadic do-notation implementation for maybe types (undefined |
  * T).

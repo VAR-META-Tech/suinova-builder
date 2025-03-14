@@ -452,7 +452,8 @@ export interface UpdateSelfRequest {
 }
 
 export interface UpdateProfileRequest {
-  username: string;
+  username?: string;
+  avatarUrl?: string;
 }
 
 export type UpdateProfileResponse =
