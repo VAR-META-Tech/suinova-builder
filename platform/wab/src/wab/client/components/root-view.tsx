@@ -76,7 +76,7 @@ import {
 } from "@mysten/dapp-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "@/wab/client/components/pages/LandingPage";
 
 const LazyTeamAnalytics = React.lazy(() => import("./analytics/TeamAnalytics"));
 const LazyAdminPage = React.lazy(() => import("./pages/admin/AdminPage"));
@@ -143,6 +143,7 @@ function LoggedInContainer(props: LoggedInContainerProps) {
   const currentLocation = useLocation();
 
   const isWhiteLabeled = !!selfInfo?.isWhiteLabel;
+
   return (
     <React.Suspense
       fallback={
@@ -158,7 +159,13 @@ function LoggedInContainer(props: LoggedInContainerProps) {
         // Not logged in users
         <Switch>
           {projectRoute()}
-          <Redirect to={getLoginRouteWithContinuation()} />
+          <Redirect
+            to={
+              location.href === UU.home.pattern
+                ? UU.home.pattern
+                : getLoginRouteWithContinuation()
+            }
+          />
         </Switch>
       ) : isWhiteLabeled ? (
         // White-labeled users only get projectRoute()
@@ -564,8 +571,22 @@ export function Root() {
                             <Route
                               exact
                               path={UU.home.pattern}
+                              render={() => <LandingPage />}
+                            />
+                            <Route
+                              exact
+                              path={UU.login.pattern}
                               render={() => (
-                                <LandingPage />
+                                <>
+                                  <PromoBanner />
+                                  <NormalNonAuthLayout nonAuthCtx={nonAuthCtx}>
+                                    {documentTitle("Sign in")}
+                                    <AuthForm
+                                      mode="sign in"
+                                      onLoggedIn={reloadData}
+                                    />
+                                  </NormalNonAuthLayout>
+                                </>
                               )}
                             />
                             <Route
