@@ -52,6 +52,7 @@ import {
   ensureType,
   extractDomainFromEmail,
   isValidEmail,
+  isValidUrl,
   isValidUsername,
   uncheckedCast,
 } from "@/wab/shared/common";
@@ -366,49 +367,70 @@ export async function updateProfile(req: Request, res: Response) {
   const dbMgr = userDbMgr(req, { allowUnverifiedEmail: true });
   const user = getUser(req, { allowUnverifiedEmail: true });
 
-  const { username } = uncheckedCast<UpdateProfileRequest>(req.body);
+  const { username, avatarUrl } = uncheckedCast<UpdateProfileRequest>(req.body);
 
-  if (!username) {
+  if (!username && !avatarUrl) {
     res.json(
       ensureType<UpdateProfileResponse>({
         status: false,
         reason: "MissingFieldsError",
       })
     );
+    return;
   }
 
-  if (username && !isValidUsername(username)) {
-    res.json(
-      ensureType<UpdateProfileResponse>({
-        status: false,
-        reason: "InvalidUsername",
-      })
-    );
+  // validate username
+  if (username) {
+    if (!isValidUsername(username)) {
+      res.json(
+        ensureType<UpdateProfileResponse>({
+          status: false,
+          reason: "InvalidUsername",
+        })
+      );
+      return;
+    }
+
+    if (username === user.username) {
+      res.json(
+        ensureType<UpdateProfileResponse>({
+          status: false,
+          reason: "SameUsername",
+        })
+      );
+      return;
+    }
+
+    const existingUser = await dbMgr.tryGetUserByUsername(username);
+
+    if (existingUser && existingUser.username === username) {
+      res.json(
+        ensureType<UpdateProfileResponse>({
+          status: false,
+          reason: "UsernameTaken",
+        })
+      );
+      return;
+    }
   }
 
-  if (username && username === user.username) {
-    res.json(
-      ensureType<UpdateProfileResponse>({
-        status: false,
-        reason: "SameUsername",
-      })
-    );
-  }
-
-  const existingUser = await dbMgr.tryGetUserByUsername(username);
-
-  if (existingUser && existingUser.username === username) {
-    res.json(
-      ensureType<UpdateProfileResponse>({
-        status: false,
-        reason: "UsernameTaken",
-      })
-    );
+  // validate avatarUrl
+  if (avatarUrl) {
+    if (!isValidUrl(avatarUrl)) {
+      res.json(
+        ensureType<UpdateProfileResponse>({
+          status: false,
+          reason: "InvalidAvatarUrl",
+        })
+      );
+      return;
+    }
   }
 
   await dbMgr.updateUser({
     id: getUser(req, { allowUnverifiedEmail: true }).id,
     username,
+    avatarUrl,
   });
 
   req.analytics.identify(user.id, makeUserTraits(user));
