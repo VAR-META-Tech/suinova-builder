@@ -111,7 +111,7 @@ export interface ApiEntityBase<IdType extends string = string> {
 export interface ApiUser extends ApiEntityBase {
   id: UserId;
   email: string;
-  username?: string;
+  username: string | null;
   firstName: string | null;
   lastName: string | null;
   avatarUrl: string | null;
@@ -355,6 +355,7 @@ export interface LoginRequest {
     authorizationPath: string;
   };
 }
+
 export type LoginResponse =
   | {
       status: true;
@@ -374,6 +375,7 @@ export interface LoginWithWalletRequest {
     authorizationPath: string;
   };
 }
+
 export type LoginWithWalletResponse =
   | {
       status: true;
@@ -433,8 +435,9 @@ export interface SelfResponse {
 
 export interface UserProfileResponse {
   id: UserId;
-  username?: string;
-  walletAddress?: string;
+  username: string | null;
+  avatarUrl: string | null;
+  walletAddress: string | null;
 }
 
 export interface UpdateSelfRequest {
@@ -447,6 +450,19 @@ export interface UpdateSelfRequest {
   extraData?: string | null;
   waitingEmailVerification?: boolean;
 }
+
+export interface UpdateProfileRequest {
+  username: string;
+}
+
+export type UpdateProfileResponse =
+  | {
+      status: true;
+    }
+  | {
+      status: false;
+      reason: string;
+    };
 
 export interface UpdateSelfAdminModeRequest {
   adminModeDisabled: boolean;
@@ -699,6 +715,7 @@ export interface PlayerSelectionInfo {
   selectableFrameUuid: string;
   selectableKey?: string;
 }
+
 export interface PlayerCursorInfo {
   left: number;
   top: number;
@@ -1081,6 +1098,7 @@ export interface ApiProjectWebhook {
   headers: Array<WebhookHeader> | undefined;
   payload: string | undefined;
 }
+
 export const apiProjectWebhookFields = [
   "id",
   "method",
@@ -1497,6 +1515,7 @@ export interface FilterClause {
   $and?: FilterClause[];
   $or?: FilterClause[];
   $not?: FilterClause;
+
   [field: string]: any;
 }
 
@@ -1614,6 +1633,7 @@ export type UpdateNotificationSettingsRequest = ApiNotificationSettings;
 export interface EditCommentRequest {
   body: string;
 }
+
 export interface ResolveThreadRequest {
   resolved: boolean;
 }
@@ -1663,6 +1683,7 @@ export interface SetCustomDomainForProjectRequest {
 export interface SetCustomDomainForProjectResponse {
   status: { [domain: string]: SetDomainStatus };
 }
+
 export type ApiAnalyticsProjectMeta = {
   pages: Array<{
     id: string;
@@ -1939,6 +1960,7 @@ export interface ApiAppUserOpConfig {
 }
 
 export type AppAuthProvider = "plasmic-auth" | "custom-auth";
+
 export interface ApiAppAuthConfig {
   directoryId?: string | null;
   redirectUri?: string | null;
@@ -2032,6 +2054,7 @@ export interface QueryCopilotResponse {
   response: string;
   typeDebug?: string;
 }
+
 export interface CopilotResponseData extends WholeChatCompletionResponse {
   copilotInteractionId: CopilotInteractionId;
 }

@@ -1301,6 +1301,7 @@ export function addMainAppServerRoutes(
     withNext(authRoutes.signUp)
   );
   app.get("/api/v1/auth/profile", withNext(authRoutes.userProfile));
+  app.put("/api/v1/auth/profile", withNext(authRoutes.updateProfile));
   app.get("/api/v1/auth/self", withNext(authRoutes.self));
   app.post("/api/v1/auth/self", withNext(authRoutes.updateSelf));
   app.post(

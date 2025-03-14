@@ -43,6 +43,8 @@ import {
   SignUpRequest,
   SignUpResponse,
   UpdatePasswordResponse,
+  UpdateProfileRequest,
+  UpdateProfileResponse,
   UpdateSelfRequest,
   UserProfileResponse,
 } from "@/wab/shared/ApiSchema";
@@ -50,6 +52,7 @@ import {
   ensureType,
   extractDomainFromEmail,
   isValidEmail,
+  isValidUsername,
   uncheckedCast,
 } from "@/wab/shared/common";
 import { isGoogleAuthRequiredEmailDomain } from "@/wab/shared/devflag-utils";
@@ -353,9 +356,66 @@ export async function userProfile(req: Request, res: Response) {
     ensureType<UserProfileResponse>({
       id: user.id,
       username: user.username,
-      walletAddress: userWallet?.walletAddress,
+      avatarUrl: user.avatarUrl,
+      walletAddress: userWallet?.walletAddress || null,
     })
   );
+}
+
+export async function updateProfile(req: Request, res: Response) {
+  const dbMgr = userDbMgr(req, { allowUnverifiedEmail: true });
+  const user = getUser(req, { allowUnverifiedEmail: true });
+
+  const { username } = uncheckedCast<UpdateProfileRequest>(req.body);
+
+  if (!username) {
+    res.json(
+      ensureType<UpdateProfileResponse>({
+        status: false,
+        reason: "MissingFieldsError",
+      })
+    );
+  }
+
+  if (username && !isValidUsername(username)) {
+    res.json(
+      ensureType<UpdateProfileResponse>({
+        status: false,
+        reason: "InvalidUsername",
+      })
+    );
+  }
+
+  if (username && username === user.username) {
+    res.json(
+      ensureType<UpdateProfileResponse>({
+        status: false,
+        reason: "SameUsername",
+      })
+    );
+  }
+
+  const existingUser = await dbMgr.tryGetUserByUsername(username);
+
+  if (existingUser && existingUser.username === username) {
+    res.json(
+      ensureType<UpdateProfileResponse>({
+        status: false,
+        reason: "UsernameTaken",
+      })
+    );
+  }
+
+  await dbMgr.updateUser({
+    id: getUser(req, { allowUnverifiedEmail: true }).id,
+    username,
+  });
+
+  req.analytics.identify(user.id, makeUserTraits(user));
+
+  res.json({
+    status: true,
+  });
 }
 
 export async function updateSelf(req: Request, res: Response) {
