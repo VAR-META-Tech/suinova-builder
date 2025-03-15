@@ -23,6 +23,7 @@ interface SettingsPageProps extends DefaultSettingsPageProps {
 function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
   const { appCtx, ...rest } = props;
   const user = ensure(appCtx.selfInfo, "Unexpected null selfInfo");
+  const profile = ensure(appCtx.profileInfo, "Unexpected null selfInfo");
   const tokensState = usePersonalApiTokens();
   const ops = ensure(appCtx.ops, "Unexpected null AppOps");
   const [copiedToken, setCopiedToken] = React.useState("");
@@ -37,6 +38,15 @@ function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
       .then((data) => setHostsState(data.trustedHosts))
       .catch(() => setHostsState("error"));
   }, [appCtx, setHostsState]);
+
+  const refetchProfile = async () => {
+    try {
+      const res = await appCtx.api.getUserProfile();
+      appCtx.profileInfo = res;
+    } catch (e) {
+      console.log("updateProfile ~ e:", e);
+    }
+  };
 
   React.useEffect(() => {
     updateHostList();
@@ -64,6 +74,8 @@ function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
                 name={`${user.firstName} ${user.lastName}`}
                 email={user.email}
                 avatarImgUrl={user.avatarUrl || undefined}
+                walletAddress={profile.walletAddress}
+                username={profile.username}
                 tokensState={tokensState}
                 hostsState={hostsState}
                 hideChangePassword={appCtx.selfInfo?.usesOauth}
@@ -82,7 +94,19 @@ function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
                     .then(() => updateHostList())
                 }
                 onNewTrustedHost={() => setShowHostModal(true)}
-                avatar={<Avatar size="extraLarge" hideTooltip user={user} />}
+                updateProfileFunc={(data) => appCtx.api.updateUserProfile(data)}
+                uploadImage={(file) => appCtx.api.uploadImageFile(file)}
+                refetchProfile={() => {
+                  return refetchProfile();
+                }}
+                avatar={
+                  <Avatar
+                    size="extraLarge"
+                    hideTooltip
+                    user={user}
+                    url={profile.avatarUrl}
+                  />
+                }
               ></SettingsContainer>
             </>
           ),

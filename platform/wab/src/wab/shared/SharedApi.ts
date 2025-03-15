@@ -181,7 +181,9 @@ import {
   UpdateSelfAdminModeRequest,
   UpdateSelfRequest,
   UpdateTeamRequest,
+  UpdateUserProfileRequest,
   UpdateWorkspaceRequest,
+  UserProfileResponse,
   UsersResponse,
   WorkspaceId,
 } from "@/wab/shared/ApiSchema";
@@ -365,6 +367,14 @@ export abstract class SharedApi {
     const res: SelfResponse = await this.get("/auth/self");
     this.setUser(res.user);
     return res;
+  }
+
+  async getUserProfile(): Promise<UserProfileResponse> {
+    const res: UserProfileResponse = await this.get("/auth/profile");
+    return res;
+  }
+  async updateUserProfile(data: UpdateUserProfileRequest) {
+    await this.put("/auth/profile", data);
   }
 
   async updateSelfInfo(data: UpdateSelfRequest) {

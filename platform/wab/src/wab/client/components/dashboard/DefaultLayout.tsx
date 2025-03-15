@@ -33,6 +33,8 @@ import UserSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIco
 import WalletSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__WalletSvg";
 import LogOutSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__LogOutSvg";
 import CopyIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Copy";
+import { useCopy } from "@/wab/client/hooks/useCopy";
+import { formatWalletAddress } from "@/wab/client/utils/format-address";
 
 type DefaultLayoutProps = DefaultDefaultLayoutProps & {
   helpButton: PlasmicDefaultLayout__OverridesType["helpButton"];
@@ -46,6 +48,10 @@ function DefaultLayout_(
   const appCtx = useAppCtx();
   const userInfo = ensure(
     appCtx.selfInfo,
+    "DefaultLayout requires appCtx to contain user information"
+  );
+  const profileInfo = ensure(
+    appCtx.profileInfo,
     "DefaultLayout requires appCtx to contain user information"
   );
 
@@ -96,6 +102,7 @@ function DefaultLayout_(
   }, [appCtx.teams, appCtx.workspaces]);
 
   const [showNewProjectModal, setShowNewProjectModal] = React.useState(false);
+  const { copyToClipboard } = useCopy();
 
   useBrowserNotification();
 
@@ -126,11 +133,11 @@ function DefaultLayout_(
             alignItems: "center",
           }}
         >
-          Wallet Address
+          {formatWalletAddress(appCtx.profileInfo?.walletAddress || "")}
           <CopyIcon
             onClick={(e) => {
               e.stopPropagation();
-              alert("asjdahjksd");
+              void copyToClipboard(profileInfo.walletAddress || "");
             }}
             width={24}
             height={24}

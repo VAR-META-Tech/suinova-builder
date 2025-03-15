@@ -440,6 +440,11 @@ export interface UserProfileResponse {
   walletAddress: string | null;
 }
 
+export interface UpdateUserProfileRequest {
+  username?: string;
+  avatarUrl?: string;
+}
+
 export interface UpdateSelfRequest {
   needsIntroSplash?: boolean;
   needsSurvey?: boolean;
