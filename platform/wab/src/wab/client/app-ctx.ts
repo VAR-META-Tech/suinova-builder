@@ -13,6 +13,7 @@ import {
   ApiWorkspace,
   AppCtxResponse,
   PersonalApiToken,
+  UserProfileResponse,
 } from "@/wab/shared/ApiSchema";
 import { FastBundler } from "@/wab/shared/bundler";
 import { parseBundle } from "@/wab/shared/bundles";
@@ -135,6 +136,7 @@ interface AppCtxArgs {
   ops: AppOps | null;
   appConfig: typeof DEVFLAGS;
   readonly lastBundleVersion: string;
+  profileInfo: UserProfileResponse | null;
 }
 
 export class AppCtx {
@@ -158,6 +160,7 @@ export class AppCtx {
   appConfig: typeof DEVFLAGS;
   /** App config overrides only. */
   appConfigOverrides: Partial<typeof DEVFLAGS>;
+  profileInfo: UserProfileResponse | null;
 
   readonly lastBundleVersion: string;
 
@@ -196,6 +199,7 @@ export class AppCtx {
       await this.api.logout();
     }
     this.selfInfo = null;
+    this.profileInfo = null;
     // Explicitly setting window.location.href, instead of
     // using router, to make sure we completely clear in-page
     // js state
@@ -242,6 +246,9 @@ export class AppComponent<
   }
   selfInfo() {
     return this.appCtx().selfInfo;
+  }
+  profileInfo() {
+    return this.appCtx().profileInfo;
   }
   reloadAll() {
     return this.appCtx().reloadAll();
@@ -448,6 +455,7 @@ export async function loadAppCtx(
       selfInfo,
       { config: dbConfigOverrides },
       { teams, workspaces, perms },
+      profileInfo,
     ] = await Promise.all([
       withHostFrameCache("selfInfo", useCaching, baseApi, () =>
         swallowAsync(baseApi.getSelfInfo())
@@ -456,6 +464,9 @@ export async function loadAppCtx(
         baseApi.getAppConfig()
       ),
       getAppCtx(),
+      withHostFrameCache("profileInfo", useCaching, baseApi, () =>
+        swallowAsync(baseApi.getUserProfile())
+      ),
     ]);
 
     const user = selfInfo?.user || null;
@@ -494,6 +505,7 @@ export async function loadAppCtx(
       teams,
       workspaces,
       perms,
+      profileInfo: profileInfo || null,
     };
   }
 

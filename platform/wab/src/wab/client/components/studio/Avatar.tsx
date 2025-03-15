@@ -108,6 +108,7 @@ interface AvatarProps {
   size?: AvatarSize;
   onClick?: () => void;
   hideTooltip?: boolean;
+  url?: string | null;
 }
 
 export function Avatar({
@@ -118,6 +119,7 @@ export function Avatar({
   size,
   onClick,
   hideTooltip,
+  url,
 }: AvatarProps) {
   return (
     <RawAvatar
@@ -129,7 +131,7 @@ export function Avatar({
         user.lastName || "",
         getUserEmail(user)
       )}
-      imgUrl={nullToUndefined(user.avatarUrl)}
+      imgUrl={url || nullToUndefined(user.avatarUrl)}
       size={size}
       style={style}
       tooltipPlacement={tooltipPlacement}

@@ -1,6 +1,12 @@
 import * as React from "react";
 import PP__SettingsContainer from "@/wab/client/components/pages/plasmic/PlasmicSettingsContainer";
-import { ApiTrustedHost, PersonalApiToken } from "@/wab/shared/ApiSchema";
+import {
+  ApiTrustedHost,
+  ImageUploadRequest,
+  ImageUploadResponse,
+  PersonalApiToken,
+  UpdateUserProfileRequest,
+} from "@/wab/shared/ApiSchema";
 import { ensure } from "@/wab/shared/common";
 import { Flex } from "@plasmicapp/react-web";
 import TrustedHost from "@/wab/client/components/TrustedHost";
@@ -15,6 +21,8 @@ interface SettingsContainerProps {
   avatarImgUrl?: string;
   name: string;
   email: string;
+  walletAddress: string | null;
+  username: string | null;
   tokensState: AsyncState<PersonalApiToken[]>;
   hideChangePassword?: boolean;
   onNewToken: () => void;
@@ -25,6 +33,9 @@ interface SettingsContainerProps {
   onDeleteTrustedHost: (host: ApiTrustedHost) => void;
   onNewTrustedHost: () => void;
   avatar: React.JSX.Element;
+  updateProfileFunc: (data: UpdateUserProfileRequest) => Promise<void>;
+  uploadImage(req: ImageUploadRequest): Promise<ImageUploadResponse>;
+  refetchProfile(): Promise<void>;
 }
 
 function SettingsContainer(props: SettingsContainerProps) {
@@ -89,6 +100,11 @@ function SettingsContainer(props: SettingsContainerProps) {
           name: props.name,
           email: props.email,
           avatar: props.avatar,
+          walletAddress: props.walletAddress,
+          username: props.username,
+          updateProfileFunc: props.updateProfileFunc,
+          uploadImage: props.uploadImage,
+          refetchProfile: props.refetchProfile,
         }}
         overrides={overrides}
         hideChangePassword={props.hideChangePassword}

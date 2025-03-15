@@ -4,7 +4,7 @@ import AppLogo from "@/wab/client/assets/logo.png";
 import { useNonAuthCtx } from "@/wab/client/app-ctx";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import { useEffect, useState } from "react";
-import { ApiUser } from "@/wab/shared/ApiSchema";
+import { ApiUser, UserProfileResponse } from "@/wab/shared/ApiSchema";
 import { U, UU, isPlasmicPath } from "@/wab/client/cli-routes";
 import {
   useSignPersonalMessage,
@@ -13,7 +13,6 @@ import {
   useCurrentWallet,
 } from "@mysten/dapp-kit";
 import { notification } from "antd";
-import Button from "@/wab/client/components/widgets/Button";
 import "@mysten/dapp-kit/dist/index.css";
 
 interface ConnectWalletProps {
@@ -47,9 +46,14 @@ const useConnectWallet = ({
   );
   const nextPath = getNextPath();
 
-  function setSelfInfo(user: ApiUser, login = true) {
+  function setSelfInfo(
+    user: ApiUser,
+    profile: UserProfileResponse,
+    login = true
+  ) {
     setTimeout(() => {
       appCtx.selfInfo = user;
+      appCtx.profileInfo = profile;
       onLoggedIn(login);
     });
   }
@@ -83,7 +87,8 @@ const useConnectWallet = ({
         appInfo,
       });
       if (res.status) {
-        setSelfInfo(res.user);
+        const profileRes = await nonAuthCtx.api.getUserProfile();
+        setSelfInfo(res.user, profileRes);
         notification.success({
           message: "Connected wallet successfully",
         });

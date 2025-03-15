@@ -1,8 +1,3 @@
-// @ts-nocheck
-/* eslint-disable */
-/* tslint:disable */
-/* prettier-ignore-start */
-
 /** @jsxRuntime classic */
 /** @jsx createPlasmicElementProxy */
 /** @jsxFrag React.Fragment */
@@ -24,7 +19,7 @@ import {
   deriveRenderOpts,
   hasVariant,
 } from "@plasmicapp/react-web";
-import TrustedHost from "@/wab/client/components/TrustedHost"; // plasmic-import: 0O5nMBdoCe/component
+// import TrustedHost from "@/wab/client/components/TrustedHost"; // plasmic-import: 0O5nMBdoCe/component
 import Button from "@/wab/client/components/widgets/Button"; // plasmic-import: SEF-sRmSoqV5c/component
 import PersonalAccessToken from "@/wab/client/components/pages/plasmic/PersonalAccessToken"; // plasmic-import: F4ZVtfq6Xg/component
 
@@ -34,10 +29,18 @@ import plasmic_plasmic_kit_color_tokens_css from "@/wab/client/plasmic/plasmic_k
 import plasmic_plasmic_kit_design_system_css from "@/wab/client/plasmic/PP__plasmickit_design_system.module.css"; // plasmic-import: tXkSR39sgCDWSitZxC5xFV/projectcss
 import projectcss from "@/wab/client/plasmic/PP__plasmickit_settings.module.css"; // plasmic-import: aaggSgVS8yYsAwQffVQB4p/projectcss
 import sty from "@/wab/client/components/pages/plasmic/PlasmicSettingsContainer.module.css"; // plasmic-import: XkSd43CUYOB/css
-import { Form, Input } from "antd";
+import { Form, Input, notification } from "antd";
 import { ReactNode } from "react";
 import CopyIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__Copy";
-import { useCurrentAccount } from "@mysten/dapp-kit";
+import { useForm } from "react-hook-form";
+import PlusSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__PlusSvg";
+import {
+  ImageUploadRequest,
+  ImageUploadResponse,
+  UpdateUserProfileRequest,
+} from "@/wab/shared/ApiSchema";
+import { Spinner } from "@/wab/client/components/widgets";
+import { useCopy } from "@/wab/client/hooks/useCopy";
 
 export type PlasmicSettingsContainer__VariantMembers = {
   tokenState: "loading" | "loaded" | "error";
@@ -65,6 +68,11 @@ export type PlasmicSettingsContainer__ArgsType = {
   email?: React.ReactNode;
   role?: React.ReactNode;
   avatar?: React.ReactNode;
+  username?: string | null;
+  walletAddress?: string | null;
+  updateProfileFunc?: (data: UpdateUserProfileRequest) => Promise<void>;
+  uploadImage?(req: ImageUploadRequest): Promise<ImageUploadResponse>;
+  refetchProfile?(): Promise<void>;
 };
 
 type ArgPropType = keyof PlasmicSettingsContainer__ArgsType;
@@ -73,7 +81,12 @@ export const PlasmicSettingsContainer__ArgProps = new Array<ArgPropType>(
   "name",
   "email",
   "role",
-  "avatar"
+  "avatar",
+  "username",
+  "walletAddress",
+  "updateProfileFunc",
+  "uploadImage",
+  "refetchProfile"
 );
 
 export type PlasmicSettingsContainer__OverridesType = {
@@ -109,11 +122,22 @@ const __wrapUserPromise =
 
 function Label({ children }: { children: ReactNode }) {
   return (
-    <div style={{ fontSize: "20px", color: "#27273A", fontWeight: 500 }}>
+    <div
+      style={{
+        fontSize: "20px",
+        color: "#27273A",
+        fontWeight: 500,
+        marginBottom: 20,
+      }}
+    >
       {children}
     </div>
   );
 }
+
+type FieldType = {
+  username?: string;
+};
 
 function PlasmicSettingsContainer__RenderFunc(props: {
   variants: PlasmicSettingsContainer__VariantsArgs;
@@ -122,7 +146,6 @@ function PlasmicSettingsContainer__RenderFunc(props: {
 
   forNode?: string;
 }) {
-  const currentAccount = useCurrentAccount();
   const { variants, overrides, forNode } = props;
 
   const $ctx = ph.useDataEnv?.() || {};
@@ -169,11 +192,85 @@ function PlasmicSettingsContainer__RenderFunc(props: {
 
   const [$queries, setDollarQueries] = React.useState({});
 
-  const [form] = Form.useForm();
-  const [username, setUsername] = React.useState("");
+  const [isUploading, setIsUploading] = React.useState(false);
+  const [isUpdatingProfile, setIsUpdatingProfile] = React.useState(false);
+  const { copyToClipboard } = useCopy();
 
-  function onChange(changed, data) {}
-  async function onSubmit(data) {}
+  const avatarImageRef = React.useRef<HTMLInputElement>(null);
+  const { setValue, getValues, trigger } = useForm<FieldType>({
+    defaultValues: {
+      username: args.username || undefined,
+    },
+  });
+  const onSubmit = async () => {
+    try {
+      const isValid = await trigger();
+
+      if (isValid) {
+        setIsUpdatingProfile(true);
+        const data = getValues();
+        await args.updateProfileFunc?.(data);
+        void args.refetchProfile?.();
+        notification.success({
+          message: "Update profile successfully",
+        });
+      }
+    } catch (e) {
+      notification.error({
+        message: "Update profile failed",
+        description: e.message,
+      });
+    } finally {
+      setIsUpdatingProfile(false);
+    }
+  };
+
+  const onUploadAvatar = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        notification.error({
+          message: "File size must be less than 5MB",
+        });
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        notification.error({
+          message: "Only image files are allowed",
+        });
+        return;
+      }
+
+      try {
+        setIsUploading(true);
+
+        // Upload the file
+        const uploadResp = await args.uploadImage?.({ imageFile: file });
+
+        // Update profile with new avatar URL
+        await args.updateProfileFunc?.({
+          avatarUrl: uploadResp?.dataUri,
+        });
+
+        // Refresh profile data
+        void args.refetchProfile?.();
+
+        notification.success({
+          message: "Avatar updated successfully",
+        });
+      } catch (err) {
+        notification.error({
+          message: "Failed to update avatar",
+          description: err.message,
+        });
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
 
   return (
     <p.Stack
@@ -272,47 +369,66 @@ function PlasmicSettingsContainer__RenderFunc(props: {
             size="stretch"
             className={sty.updateAvatarBtn}
             type={"primary"}
+            style={{
+              height: 44,
+            }}
+            onClick={() => avatarImageRef.current?.click()}
+            startIcon={isUploading && <Spinner />}
           >
             Update Avatar
           </Button>
+          <input
+            style={{
+              visibility: "hidden",
+            }}
+            type="file"
+            accept="image/*"
+            ref={avatarImageRef}
+            onChange={(e) => onUploadAvatar(e)}
+          />
         </div>
-        <Form
-          form={form}
-          layout={"vertical"}
-          onValuesChange={onChange}
-          onFinish={onSubmit}
-          className={sty.profileForm}
-        >
-          <Form.Item label={<Label>Username</Label>} name={"source"}>
+        <Form onFinish={() => onSubmit()} className={sty.profileForm}>
+          <div className={sty.fieldWrapper}>
+            <Label>Username</Label>
             <Input
               className={sty.profileInput}
-              type={"input"}
-              value={username}
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Unnamed"
+              name="username"
+              onChange={(e) => setValue("username", e.target.value)}
+              defaultValue={args.username as any}
             />
-          </Form.Item>
-          <Form.Item label={<Label>Wallet Address</Label>} name={"role"}>
+          </div>
+          <div className={sty.fieldWrapper}>
+            <Label>Wallet Address</Label>
             <Input
               className={sty.profileInput}
               type={"input"}
-              value={currentAccount?.address}
               placeholder="Wallet Address"
-              onChange={(e) => setWalletAddress(e.target.value)}
+              value={args.walletAddress || undefined}
+              disabled
               suffix={
-                <Button type={"clear"} onClick={() => {}}>
+                <Button
+                  type={"clear"}
+                  onClick={() => copyToClipboard(args.walletAddress || "")}
+                >
                   <CopyIcon width={20} height={20} />
                 </Button>
               }
             />
-          </Form.Item>
-          <Button htmlType={"submit"} type={"primary"} size={"stretch"}>
+          </div>
+          <Button
+            style={{ height: 44, fontSize: 16 }}
+            type={"primary"}
+            size={"stretch"}
+            onClick={() => onSubmit()}
+            startIcon={isUpdatingProfile && <Spinner />}
+          >
             Update Profile
           </Button>
         </Form>
       </div>
 
-      <p.Stack
+      {/* <p.Stack
         as={"div"}
         hasGap={true}
         className={classNames(projectcss.all, sty.freeBox__vlwnM, {
@@ -368,7 +484,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
             ),
           })}
         >
-          {/* <p.Stack
+          <p.Stack
             as={"div"}
             hasGap={true}
             className={classNames(projectcss.all, sty.freeBox__nPrWc, {
@@ -414,9 +530,9 @@ function PlasmicSettingsContainer__RenderFunc(props: {
                   })
                 : null}
             </div>
-          </p.Stack> */}
+          </p.Stack>
 
-          {/* {(
+          {(
             hasVariant($state, "hideChangePassword", "hideChangePassword")
               ? true
               : true
@@ -468,7 +584,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
             >
               {"Change password"}
             </Button>
-          ) : null} */}
+          ) : null}
         </div>
 
         <div
@@ -481,7 +597,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           })}
         />
 
-        {/* <div
+        <div
           className={classNames(projectcss.all, sty.freeBox__amKmj, {
             [sty.freeBoxtokenState_error__amKmJa2Ye]: hasVariant(
               $state,
@@ -564,9 +680,9 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           >
             {"New Token"}
           </Button>
-        </div> */}
+        </div>
 
-        {/* {(
+        {(
           hasVariant($state, "tokenState", "error")
             ? false
             : hasVariant($state, "tokenState", "loading")
@@ -670,8 +786,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               }
             />
           </div>
-        ) : null} */}
-        {/* {(
+        ) : null}
+        {(
           hasVariant($state, "trustedHostsState", "enabled")
             ? true
             : hasVariant($state, "tokenState", "loading")
@@ -724,8 +840,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
           >
             {hasVariant($state, "tokenState", "loading") ? "Loading…" : ""}
           </div>
-        ) : null} */}
-        {/* {(hasVariant($state, "tokenState", "error") ? true : false) ? (
+        ) : null}
+        {(hasVariant($state, "tokenState", "error") ? true : false) ? (
           <div
             className={classNames(
               projectcss.all,
@@ -762,8 +878,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               ? "Error while load existing tokens. Please refresh page to try again."
               : ""}
           </div>
-        ) : null} */}
-        {/* {(
+        ) : null}
+        {(
           hasVariant($state, "trustedHostsState", "error")
             ? true
             : hasVariant($state, "trustedHostsState", "loading")
@@ -793,8 +909,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               ),
             })}
           />
-        ) : null} */}
-        {/* {(
+        ) : null}
+        {(
           hasVariant($state, "trustedHostsState", "error")
             ? true
             : hasVariant($state, "trustedHostsState", "loading")
@@ -877,7 +993,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               })}
               size={"wide" as const}
               startIcon={
-                <PlussvgIcon
+                <PlusSvgIcon
                   className={classNames(projectcss.all, sty.svg___9ILd5)}
                   role={"img"}
                 />
@@ -893,7 +1009,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
                 : "New Token"}
             </Button>
           </div>
-        ) : null} */}
+        ) : null}
         {(
           hasVariant($state, "trustedHostsState", "error")
             ? false
@@ -1056,7 +1172,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               : "Enter some text"}
           </div>
         ) : null}
-      </p.Stack>
+      </p.Stack> */}
     </p.Stack>
   ) as React.ReactElement | null;
 }
