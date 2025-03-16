@@ -196,7 +196,7 @@ export function AuthForm({ mode, onLoggedIn }: AuthFormProps) {
   return (
     <IntakeFlowForm>
       {appCtx.selfInfo ? (
-        <Redirect to={nextPath} />
+        <Redirect to={nextPath === "/" ? UU.allProjects.pattern : nextPath} />
       ) : (
         <div className={"LoginForm__Controls"}>
           {["sign up", "sign in"].includes(mode) && (

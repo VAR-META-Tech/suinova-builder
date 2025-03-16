@@ -395,9 +395,24 @@ export function loadStarters(
     ],
     tag: "",
   };
+  const nftSection: StarterGroupProps = {
+    title: "NFT marketplace templates",
+    projects: [
+      {
+        name: "Home Page",
+        tag: "nft-marketplace-homepage",
+        imageUrl: "",
+        description: "",
+        baseProjectId: process.env.NFT_PROJECT_ID,
+        publishWizard: true,
+      },
+    ],
+    tag: "nft-marketplace",
+  };
 
   const templateAndExampleSections = [
     ...(appConfig.hideBlankStarter ? [] : [blankProjectSection]),
+    ...[nftSection],
     ...(filteredSections.slice(1) ?? []),
   ];
 
@@ -494,6 +509,7 @@ export async function loadAppCtx(
     applyDevFlagOverrides(appConfigOverrides);
 
     const starters = loadStarters(baseApi, user, dbConfigOverrides);
+    console.log("🚀 ~ load ~ starters:", starters);
 
     return {
       selfInfo: user

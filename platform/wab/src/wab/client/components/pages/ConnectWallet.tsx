@@ -14,6 +14,7 @@ import {
 } from "@mysten/dapp-kit";
 import { notification } from "antd";
 import "@mysten/dapp-kit/dist/index.css";
+import { Redirect } from "react-router";
 
 interface ConnectWalletProps {
   onLoggedIn: () => void;
@@ -125,13 +126,15 @@ const useConnectWallet = ({
 };
 
 function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
-  const { appCtx } = useConnectWallet({
+  const { appCtx, nextPath } = useConnectWallet({
     onLoggedIn: () => {
       onLoggedIn();
       appCtx.router.routeTo(UU.allProjects.fill({}));
     },
   });
-  return (
+  return appCtx.selfInfo ? (
+    <Redirect to={nextPath === "/" ? UU.allProjects.pattern : nextPath} />
+  ) : (
     <div className="ConnectWallet__Container">
       <div className="ConnectWallet__Card">
         <div className="ConnectWallet__CardHeader">
