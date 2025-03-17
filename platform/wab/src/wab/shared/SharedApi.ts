@@ -943,14 +943,14 @@ export abstract class SharedApi {
     return this.post("/workspaces", data);
   }
 
-  async createHostLessProject(): Promise<
-    MayTriggerPaywall<CreateWorkspaceResponse>
-  > {
+  async createHostLessProject(data: {
+    name: string;
+    npmPkg: string[];
+  }): Promise<MayTriggerPaywall<CreateWorkspaceResponse>> {
     return this.post("/projects/create-project-with-hostless-packages", {
       hostLessPackagesInfo: [
         new HostLessPackageInfo({
-          name: "antd",
-          npmPkg: ["@plasmicpkgs/antd"],
+          ...data,
           cssImport: [],
           deps: [],
           registerCalls: [],

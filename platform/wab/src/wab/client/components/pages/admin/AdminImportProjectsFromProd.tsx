@@ -144,10 +144,65 @@ export function AdminImportProjectsFromProd() {
         />
       </Modal>
       <Button
-        onClick={() => nonAuthCtx.api.createHostLessProject()}
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "antd",
+            npmPkg: ["@plasmicpkgs/antd"],
+          })
+        }
         // onClick={() => setModalVisible((v) => !v)}
       >
-        Create HostLess Project
+        Antd
+      </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "plasmic-query",
+            npmPkg: ["@plasmicpkgs/plasmic-query"],
+          })
+        }
+      >
+        APIs
+      </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "plasmic-nav",
+            npmPkg: ["@plasmicpkgs/plasmic-nav"],
+          })
+        }
+      >
+        Layout - plasmic-nav
+      </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "plasmic-tabs",
+            npmPkg: ["@plasmicpkgs/plasmic-tabs"],
+          })
+        }
+      >
+        Layout - plasmic-tabs
+      </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "react-slick",
+            npmPkg: ["@plasmicpkgs/react-slick"],
+          })
+        }
+      >
+        Layout - react-slick
+      </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "antd5",
+            npmPkg: ["@plasmicpkgs/antd5"],
+          })
+        }
+      >
+        Ant Design Systen 5
       </Button>
       <p>This will override your current devflags</p>
     </div>

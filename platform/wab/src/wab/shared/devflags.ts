@@ -478,7 +478,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd_rate.png",
         },
       ],
-      projectId: "rRbzBwWjxCJkbjLdJFjiZR",
+      projectId: "fobugS9bB9p9HLc5F7bdUj",
     },
   ]),
   // Turns on PlasmicImg for all

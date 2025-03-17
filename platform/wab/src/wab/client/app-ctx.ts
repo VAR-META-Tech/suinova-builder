@@ -205,7 +205,6 @@ export class AppCtx {
       await this.api.logout();
     }
     this.selfInfo = null;
-    this.profileInfo = null;
     // Explicitly setting window.location.href, instead of
     // using router, to make sure we completely clear in-page
     // js state
