@@ -256,7 +256,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
         });
 
         // Refresh profile data
-        void args.refetchProfile?.();
+        await args.refetchProfile?.();
 
         notification.success({
           message: "Avatar updated successfully",

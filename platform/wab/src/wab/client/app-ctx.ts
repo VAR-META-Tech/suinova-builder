@@ -160,16 +160,22 @@ export class AppCtx {
   appConfig: typeof DEVFLAGS;
   /** App config overrides only. */
   appConfigOverrides: Partial<typeof DEVFLAGS>;
-  profileInfo: UserProfileResponse | null;
 
   readonly lastBundleVersion: string;
 
   private _personalApiTokens = observable.box<PersonalApiToken[] | null>(null);
+  private _profileInfo = observable.box<UserProfileResponse | null>(null);
   get personalApiTokens() {
     return this._personalApiTokens.get();
   }
   set personalApiTokens(tokens: PersonalApiToken[] | null) {
     this._personalApiTokens.set(tokens);
+  }
+  get profileInfo() {
+    return this._profileInfo.get();
+  }
+  set profileInfo(tokens: UserProfileResponse | null) {
+    this._profileInfo.set(tokens);
   }
 
   constructor(args: AppCtxArgs) {
