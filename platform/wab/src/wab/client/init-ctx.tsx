@@ -56,7 +56,10 @@ export async function loadSiteDbCtx(
     isMainBranchProtected,
   } = await (async () => {
     try {
-      return await baseApi.getSiteInfo(siteId, { branchId: branch?.id });
+      const result = await baseApi.getSiteInfo(siteId, {
+        branchId: branch?.id,
+      });
+      return result;
     } catch (e) {
       if (!appCtx.selfInfo) {
         // User is not logged and project is not public.

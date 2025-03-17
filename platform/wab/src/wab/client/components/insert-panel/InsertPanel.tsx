@@ -587,14 +587,19 @@ const AddDrawerContent = observer(function AddDrawerContent(props: {
               const children = Object.entries(allSections).map(
                 ([sectionKey, groupsInSection]) => {
                   const [someGroupInSection] = groupsInSection;
-                  const isSelected = section === sectionKey
+                  const isSelected = section === sectionKey;
                   return (
                     <React.Fragment key={sectionKey}>
                       <div style={{ position: "relative", width: "100%" }}>
                         <InsertPanelTabItem
                           key={sectionKey}
                           children={
-                            <span style={{ fontSize: '11px', fontWeight: isSelected ? 700 : 400 }}>
+                            <span
+                              style={{
+                                fontSize: "11px",
+                                fontWeight: isSelected ? 700 : 400,
+                              }}
+                            >
                               {someGroupInSection.sectionLabel ??
                                 someGroupInSection.label}{" "}
                               {scrollToSection === sectionKey && (
@@ -1448,118 +1453,6 @@ export function buildAddItemGroups({
           (item) => item.label
         ),
       },
-    {
-      key: "ui-nft",
-      sectionLabel: "NFT Marketplace",
-      sectionKey: "NFT Marketplace",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    hasPlexus
-      ? {
-          key: "ui-kits",
-          sectionLabel: "Design systems",
-          sectionKey: "Design systems",
-          familyKey: "hostless-packages",
-          isHeaderLess: true,
-          items: studioCtx.appCtx.appConfig.installables
-            .filter((meta) => meta.type === "ui-kit")
-            .map(createAddInstallable),
-        }
-      : undefined,
-    {
-      key: "ui-antd",
-      sectionLabel: "Ant Design",
-      sectionKey: "Ant Design",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-layout",
-      sectionLabel: "Layout",
-      sectionKey: "Layout",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-effects",
-      sectionLabel: "Effects",
-      sectionKey: "Effects",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-apis",
-      sectionLabel: "APIs",
-      sectionKey: "APIs",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-cms",
-      sectionLabel: "CMS",
-      sectionKey: "CMS",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-social",
-      sectionLabel: "Social",
-      sectionKey: "Social",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-text-editors",
-      sectionLabel: "Text Editors",
-      sectionKey: "Text Editors",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-developer",
-      sectionLabel: "Developer",
-      sectionKey: "Developer",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
-    {
-      key: "ui-code-libs",
-      sectionLabel: "Code Libraries",
-      sectionKey: "Code Libraries",
-      familyKey: "hostless-packages",
-      isHeaderLess: true,
-      items: studioCtx.appCtx.appConfig.installables
-          .filter((meta) => meta.type === "ui-kit")
-          .map(createAddInstallable),
-    },
     canInsertHostlessPackage(uiConfig, "unstyled", canInsertContext) &&
       studioCtx.shownSyntheticSections.get("unstyled") && {
         key: "synthetic-unstyled",

@@ -150,12 +150,10 @@ export function AdminImportProjectsFromProd() {
         />
       </Modal>
       <Button
-        disabled={window.location.hostname.startsWith(
-          "https://studio.plasmic.app"
-        )}
-        onClick={() => setModalVisible((v) => !v)}
+        onClick={() => nonAuthCtx.api.createHostLessProject()}
+        // onClick={() => setModalVisible((v) => !v)}
       >
-        Import
+        Create HostLess Project
       </Button>
       <p>This will override your current devflags</p>
     </div>

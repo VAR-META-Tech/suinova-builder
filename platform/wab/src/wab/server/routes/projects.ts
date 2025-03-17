@@ -264,7 +264,7 @@ export async function createProjectWithHostlessPackages(
   const { bundler } = req;
 
   const site = createSite();
-  const { hostLessPackagesInfo } = req.body;
+  const { hostLessPackagesInfo, workspaceId } = req.body;
   for (const hostLessPackageInfo of hostLessPackagesInfo) {
     const projectDependency = await mgr.createHostLessProject(
       hostLessPackageInfo,
@@ -280,6 +280,7 @@ export async function createProjectWithHostlessPackages(
     bundler,
     name: "Untitled Project",
     ownerEmail: req.user?.email,
+    workspaceId,
   });
 
   req.promLabels.projectId = project.id;

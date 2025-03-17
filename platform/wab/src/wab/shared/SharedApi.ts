@@ -205,6 +205,7 @@ import { executePlasmicDataOp } from "@plasmicapp/data-sources";
 import L, { pick, uniq } from "lodash";
 import semver from "semver";
 import Stripe from "stripe";
+import { HostLessPackageInfo } from "@/wab/shared/model/classes";
 
 export interface SiteInfo {
   createdAt: string | Date;
@@ -940,6 +941,24 @@ export abstract class SharedApi {
     data: CreateWorkspaceRequest
   ): Promise<MayTriggerPaywall<CreateWorkspaceResponse>> {
     return this.post("/workspaces", data);
+  }
+
+  async createHostLessProject(): Promise<
+    MayTriggerPaywall<CreateWorkspaceResponse>
+  > {
+    return this.post("/projects/create-project-with-hostless-packages", {
+      hostLessPackagesInfo: [
+        new HostLessPackageInfo({
+          name: "antd",
+          npmPkg: ["@plasmicpkgs/antd"],
+          cssImport: [],
+          deps: [],
+          registerCalls: [],
+          minimumReactVersion: null,
+        }),
+      ],
+      workspaceId: "pLyXMFfLLGqiyA3ByT59Pj",
+    });
   }
 
   async updateWorkspace(
