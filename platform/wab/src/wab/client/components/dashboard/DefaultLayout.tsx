@@ -293,7 +293,11 @@ function DefaultLayout_(
         userButton={{
           props: {
             children: (
-              <Avatar hideTooltip user={userInfo} url={profileInfo.avatarUrl} />
+              <Avatar
+                hideTooltip
+                user={userInfo}
+                url={appCtx.profileInfo?.avatarUrl}
+              />
             ),
             "data-test-id": "btn-dashboard-user",
           },
