@@ -126,12 +126,6 @@ export function AdminImportProjectsFromProd() {
 
   useImportFromProdListener(onListenProjectsInfo);
 
-  const showImportFromProd = window.location.hostname.includes("localhost");
-  // Don't even show this on prod, just for extra safety
-  if (!showImportFromProd) {
-    return null;
-  }
-
   return (
     <div>
       <h2>Import devflags and plasmic projects from prod</h2>
