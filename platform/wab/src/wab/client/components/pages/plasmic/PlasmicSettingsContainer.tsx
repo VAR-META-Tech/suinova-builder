@@ -405,7 +405,7 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               type={"input"}
               placeholder="Wallet Address"
               value={args.walletAddress || undefined}
-              disabled
+              readOnly
               suffix={
                 <Button
                   type={"clear"}
