@@ -5,6 +5,7 @@ module.exports = {
       script: "yarn",
       args: ["backend"],
       log_date_format: "HH:mm:ss.SSS",
+      env_file: ".env",
       env: {
         NODE_ENV: "development",
         BACKEND_PORT: 6004,
@@ -16,6 +17,11 @@ module.exports = {
         INTEGRATIONS_HOST: "https://api.suinova.var-meta.com",
         HOST: "https://host.suinova.var-meta.com",
         WITH_HOSTING: "true",
+        // AWS_ACCESS_KEY_ID: "AKIA3SKG6CBRYKBDQ6R5",
+        // AWS_SECRET_ACCESS_KEY: "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",
+        // AWS_REGION: "ap-southeast-1",
+        // SITE_ASSETS_BUCKET: "dev-suinova",
+        // SITE_ASSETS_BASE_URL: "https://dev-suinova.s3.ap-southeast-1.amazonaws.com"
       },
       interpreter: "none",
     },
