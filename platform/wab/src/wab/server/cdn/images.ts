@@ -8,8 +8,28 @@ import { extension } from "mime-types";
 import sharp from "sharp";
 import { failableAsync } from "ts-failable";
 
+// Get environment variables for AWS configuration
 const siteAssetsBucket = process.env.SITE_ASSETS_BUCKET as string;
 const siteAssetsBaseUrl = process.env.SITE_ASSETS_BASE_URL as string;
+const awsAccessKeyId = process.env.AWS_ACCESS_KEY_ID;
+const awsSecretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+const awsRegion = process.env.AWS_REGION;
+
+// Configure AWS SDK with credentials
+const s3Client = new S3({
+  accessKeyId: awsAccessKeyId,
+  secretAccessKey: awsSecretAccessKey,
+  region: awsRegion,
+});
+
+// Log configuration status (but don't expose secrets)
+console.log(`S3 Configuration:
+  Bucket: ${siteAssetsBucket}
+  Base URL: ${siteAssetsBaseUrl}
+  Region: ${awsRegion}
+  Access Key configured: ${awsAccessKeyId ? "Yes" : "No"}
+  Secret Key configured: ${awsSecretAccessKey ? "Yes" : "No"}
+`);
 
 async function getFileType(buffer: Buffer | ArrayBuffer) {
   let fileType = await FileType.fromBuffer(buffer);
@@ -47,6 +67,12 @@ export async function uploadFileToS3(
 ) {
   return failableAsync<{ url: string; mimeType: string | undefined }, Error>(
     async ({ success, failure }) => {
+      // Check if AWS is properly configured
+      if (!awsAccessKeyId || !awsSecretAccessKey || !siteAssetsBucket) {
+        console.error("AWS S3 credentials or bucket not configured properly");
+        return failure(new Error("AWS S3 configuration missing"));
+      }
+
       const imageOnly = opts?.imageOnly ?? true;
 
       const fileType = await getFileType(fileBuffer);
@@ -69,13 +95,12 @@ export async function uploadFileToS3(
       const storagePath = `${fileHash}.${ext}`;
 
       try {
-        const { Location } = await new S3()
+        const { Location } = await s3Client
           .upload({
             Bucket: siteAssetsBucket,
             Key: storagePath,
             Body: optimizedBuffer,
             ContentType: mime,
-            ACL: "public-read",
             CacheControl: `max-age=3600, s-maxage=31536000`,
           })
           .promise();
@@ -85,12 +110,12 @@ export async function uploadFileToS3(
         // but if it's not available, we simply use the plain S3 URL.
         return success({
           url: siteAssetsBaseUrl
-            ? `${siteAssetsBaseUrl}${storagePath}`
+            ? `${siteAssetsBaseUrl}/${storagePath}`
             : Location,
           mimeType: mime,
         });
       } catch (err) {
-        console.log("Could not upload asset to S3:", err);
+        console.error("Could not upload asset to S3:", err);
         Sentry.captureMessage(`Could not upload asset to S3 (${err.message}).`);
         return failure(err);
       }
