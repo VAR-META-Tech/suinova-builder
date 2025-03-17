@@ -506,7 +506,7 @@ const DEFAULT_DEVFLAGS = {
 
   loaderBundler: "esbuild",
   esbuildProjectIds: [] as string[],
-  hostLessWorkspaceId: undefined as WorkspaceId | undefined,
+  hostLessWorkspaceId: "pLyXMFfLLGqiyA3ByT59Pj",
   manuallyUpdatedHostLessProjectIds: [] as string[],
   whitespaceNormalProjectIds: [] as string[],
   useWhitespaceNormal: false,

@@ -206,6 +206,7 @@ import L, { pick, uniq } from "lodash";
 import semver from "semver";
 import Stripe from "stripe";
 import { HostLessPackageInfo } from "@/wab/shared/model/classes";
+import { DEVFLAGS } from "@/wab/shared/devflags";
 
 export interface SiteInfo {
   createdAt: string | Date;
@@ -943,21 +944,25 @@ export abstract class SharedApi {
     return this.post("/workspaces", data);
   }
 
-  async createHostLessProject(data: {
+  async createHostLessProject({
+    workspaceId = DEVFLAGS.hostLessWorkspaceId,
+    ...rest
+  }: {
     name: string;
     npmPkg: string[];
+    workspaceId?: string;
   }): Promise<MayTriggerPaywall<CreateWorkspaceResponse>> {
     return this.post("/projects/create-project-with-hostless-packages", {
       hostLessPackagesInfo: [
         new HostLessPackageInfo({
-          ...data,
+          ...rest,
           cssImport: [],
           deps: [],
           registerCalls: [],
           minimumReactVersion: null,
         }),
       ],
-      workspaceId: "pLyXMFfLLGqiyA3ByT59Pj",
+      workspaceId,
     });
   }
 

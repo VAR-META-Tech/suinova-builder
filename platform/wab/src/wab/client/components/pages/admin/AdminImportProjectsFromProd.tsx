@@ -2,7 +2,7 @@ import { NonAuthCtx, useNonAuthCtx } from "@/wab/client/app-ctx";
 import { Modal } from "@/wab/client/components/widgets/Modal";
 import { WorkspaceId } from "@/wab/shared/ApiSchema";
 import { Bundle } from "@/wab/shared/bundles";
-import { DevFlagsType } from "@/wab/shared/devflags";
+import { DEVFLAGS, DevFlagsType } from "@/wab/shared/devflags";
 import { Button } from "antd";
 import React, { useState } from "react";
 
@@ -100,7 +100,10 @@ export function AdminImportProjectsFromProd() {
   const onListenProjectsInfo = React.useCallback(
     async (devflags: DevFlagsType, info: ProjectInfo[]) => {
       if (devflags.hostLessWorkspaceId) {
-        await setupHostlessWorkspace(nonAuthCtx, devflags.hostLessWorkspaceId);
+        await setupHostlessWorkspace(
+          nonAuthCtx,
+          devflags.hostLessWorkspaceId as WorkspaceId
+        );
       }
 
       devflags.hideBlankStarter = false;
@@ -143,6 +146,28 @@ export function AdminImportProjectsFromProd() {
           ref={ref}
         />
       </Modal>
+      <Button
+        onClick={() =>
+          setupHostlessWorkspace(
+            nonAuthCtx,
+            DEVFLAGS.hostLessWorkspaceId as WorkspaceId
+          )
+        }
+        // onClick={() => setModalVisible((v) => !v)}
+      >
+        Create Hostless Workspace
+      </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "antd",
+            npmPkg: ["@plasmicpkgs/antd"],
+          })
+        }
+        // onClick={() => setModalVisible((v) => !v)}
+      >
+        Antd
+      </Button>
       <Button
         onClick={() =>
           nonAuthCtx.api.createHostLessProject({

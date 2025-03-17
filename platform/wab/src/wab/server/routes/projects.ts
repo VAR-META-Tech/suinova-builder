@@ -265,7 +265,6 @@ export async function createProjectWithHostlessPackages(
 
   const site = createSite();
   const { hostLessPackagesInfo, workspaceId } = req.body;
-  console.log("🚀 ~ workspaceId:", workspaceId);
   for (const hostLessPackageInfo of hostLessPackagesInfo) {
     const projectDependency = await mgr.createHostLessProject(
       hostLessPackageInfo,
