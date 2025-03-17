@@ -515,7 +515,6 @@ export async function loadAppCtx(
     applyDevFlagOverrides(appConfigOverrides);
 
     const starters = loadStarters(baseApi, user, dbConfigOverrides);
-    console.log("🚀 ~ load ~ starters:", starters);
 
     return {
       selfInfo: user

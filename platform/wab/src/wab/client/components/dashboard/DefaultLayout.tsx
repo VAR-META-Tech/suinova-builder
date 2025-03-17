@@ -50,10 +50,6 @@ function DefaultLayout_(
     appCtx.selfInfo,
     "DefaultLayout requires appCtx to contain user information"
   );
-  const profileInfo = ensure(
-    appCtx.profileInfo,
-    "DefaultLayout requires appCtx to contain user information"
-  );
 
   const [activeTeam, setActiveTeam] = React.useState<TeamId | undefined>(
     undefined
@@ -137,7 +133,7 @@ function DefaultLayout_(
           <CopyIcon
             onClick={(e) => {
               e.stopPropagation();
-              void copyToClipboard(profileInfo.walletAddress || "");
+              void copyToClipboard(appCtx.profileInfo?.walletAddress || "");
             }}
             width={24}
             height={24}
