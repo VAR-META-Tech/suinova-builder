@@ -3468,7 +3468,7 @@
   resolved "https://registry.yarnpkg.com/@plasmicpkgs/luxon-parser/-/luxon-parser-3.4.4.tgz#32150fc2c7bbad1e9e0242c897518680c6dc5fed"
   integrity sha512-VN/nwVehURL1TeHt7WlxuYXD7v9f87MG58YLrZeBQOcGDA9ck/gZNz7m1S1MeJ67gpnbpyJ3uFUPt+t1KnMQxw==
 
-"@plasmicpkgs/nft-builder@link:../../internal_pkgs/nft-builder":
+"@plasmicpkgs/nft-builder@link:../../plasmicpkgs/nft-builder":
   version "0.0.0"
   uid ""
 

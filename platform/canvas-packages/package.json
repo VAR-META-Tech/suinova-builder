@@ -100,7 +100,7 @@
     "tinycolor2": "^1.6.0",
     "uuid": "^9.0.1",
     "zod": "^3.22.4",
-    "@plasmicpkgs/nft-builder": "link:../../internal_pkgs/nft-builder"
+    "@plasmicpkgs/nft-builder": "link:../../plasmicpkgs/nft-builder"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
