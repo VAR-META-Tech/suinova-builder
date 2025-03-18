@@ -945,7 +945,7 @@ export abstract class SharedApi {
   }
 
   async createHostLessProject({
-    workspaceId = DEVFLAGS.hostLessWorkspaceId,
+    workspaceId = DEVFLAGS.hostLessWorkspaceId || "",
     ...rest
   }: {
     name: string;
