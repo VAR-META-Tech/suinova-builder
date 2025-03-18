@@ -46,6 +46,7 @@
     "@plasmicpkgs/plasmic-wordpress": "^0.0.132",
     "@plasmicpkgs/plasmic-wordpress-graphql": "^0.0.127",
     "@plasmicpkgs/radix-ui": "^0.0.69",
+    "@plasmicpkgs/nft-builder": "^0.0.1",
     "@plasmicpkgs/react-aria": "^0.0.118",
     "@plasmicpkgs/react-awesome-reveal": "^3.8.213",
     "@plasmicpkgs/react-chartjs-2": "^1.0.119",

@@ -229,6 +229,16 @@ export function AdminImportProjectsFromProd() {
       >
         Ant Design Systen 5
       </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "nft-builder",
+            npmPkg: ["@plasmicpkgs/nft-builder"],
+          })
+        }
+      >
+        NFT Builder
+      </Button>
       <p>This will override your current devflags</p>
     </div>
   );

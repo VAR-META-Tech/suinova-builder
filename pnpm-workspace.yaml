@@ -53,6 +53,7 @@ packages:
   - plasmicpkgs/plasmic-wordpress-graphql
   - plasmicpkgs/plasmic-yotpo
   - plasmicpkgs/radix-ui
+  - plasmicpkgs/nft-builder
   - plasmicpkgs/react-aria
   - plasmicpkgs/react-audio-player
   - plasmicpkgs/react-awesome-reveal

@@ -39,6 +39,7 @@ export const fstPartyHostLessComponents = [
   "tiptap",
   "loading-boundary",
   "radix-ui",
+  "nft-builder",
   "lodash",
   "uuid",
   "isomorphic-fetch",
