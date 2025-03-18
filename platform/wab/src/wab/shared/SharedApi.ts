@@ -176,6 +176,7 @@ import {
   UpdateHostUrlResponse,
   UpdateNotificationSettingsRequest,
   UpdatePasswordResponse,
+  UpdateProfileResponse,
   UpdateProjectMetaRequest,
   UpdateProjectResponse,
   UpdateSelfAdminModeRequest,
@@ -375,8 +376,10 @@ export abstract class SharedApi {
     const res: UserProfileResponse = await this.get("/auth/profile");
     return res;
   }
-  async updateUserProfile(data: UpdateUserProfileRequest) {
-    await this.put("/auth/profile", data);
+  async updateUserProfile(
+    data: UpdateUserProfileRequest
+  ): Promise<UpdateProfileResponse> {
+    return await this.put("/auth/profile", data);
   }
 
   async updateSelfInfo(data: UpdateSelfRequest) {

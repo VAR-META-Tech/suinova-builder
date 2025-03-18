@@ -94,7 +94,9 @@ function SettingsPage_(props: SettingsPageProps, ref: HTMLElementRefOf<"div">) {
                     .then(() => updateHostList())
                 }
                 onNewTrustedHost={() => setShowHostModal(true)}
-                updateProfileFunc={(data) => appCtx.api.updateUserProfile(data)}
+                updateProfileFunc={async (data) =>
+                  await appCtx.api.updateUserProfile(data)
+                }
                 uploadImage={(file) => appCtx.api.uploadImageFile(file)}
                 refetchProfile={() => {
                   return refetchProfile();

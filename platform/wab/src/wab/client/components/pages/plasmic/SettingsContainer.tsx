@@ -5,6 +5,7 @@ import {
   ImageUploadRequest,
   ImageUploadResponse,
   PersonalApiToken,
+  UpdateProfileResponse,
   UpdateUserProfileRequest,
 } from "@/wab/shared/ApiSchema";
 import { ensure } from "@/wab/shared/common";
@@ -33,7 +34,9 @@ interface SettingsContainerProps {
   onDeleteTrustedHost: (host: ApiTrustedHost) => void;
   onNewTrustedHost: () => void;
   avatar: React.JSX.Element;
-  updateProfileFunc: (data: UpdateUserProfileRequest) => Promise<void>;
+  updateProfileFunc: (
+    data: UpdateUserProfileRequest
+  ) => Promise<UpdateProfileResponse>;
   uploadImage(req: ImageUploadRequest): Promise<ImageUploadResponse>;
   refetchProfile(): Promise<void>;
 }
