@@ -962,7 +962,6 @@ export abstract class SharedApi {
           minimumReactVersion: null,
         }),
       ],
-      workspaceId,
     });
   }
 

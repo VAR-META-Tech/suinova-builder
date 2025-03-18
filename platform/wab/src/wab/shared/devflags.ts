@@ -393,6 +393,94 @@ const DEFAULT_DEVFLAGS = {
       projectId: [],
     },
     {
+      hidden: false,
+      sectionLabel: "Design systems",
+      type: "hostless-package",
+      name: "Ant Design System 4",
+      isInstallOnly: true,
+      imageUrl: "https://static1.plasmic.app/antd.png",
+      codeName: "antd",
+      codeLink:
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/antd",
+      onlyShownIn: "new",
+      items: [
+        {
+          type: "hostless-component",
+          componentName: "AntdButton",
+          displayName: "Button",
+          imageUrl: "https://static1.plasmic.app/antd_button.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdSlider",
+          displayName: "Slider",
+          imageUrl: "https://static1.plasmic.app/antd_slider.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdSwitch",
+          displayName: "Switch",
+          imageUrl: "https://static1.plasmic.app/antd_switch.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdSelect",
+          displayName: "Select",
+          imageUrl: "https://static1.plasmic.app/antd_select.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdCollapse",
+          displayName: "Collapse",
+          imageUrl: "https://static1.plasmic.app/antd_collapse.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdCheckbox",
+          displayName: "Checkbox",
+          imageUrl: "https://static1.plasmic.app/antd_checkbox.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdMenu",
+          displayName: "Menu",
+          imageUrl: "https://static1.plasmic.app/antd_menu.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdCarousel",
+          displayName: "Carousel",
+          hidden: true,
+          imageUrl: "https://static1.plasmic.app/antd_carousel.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdInput",
+          displayName: "Input",
+          imageUrl: "https://static1.plasmic.app/antd_input.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdTable",
+          displayName: "Table",
+          imageUrl: "https://static1.plasmic.app/antd_table.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdTabs",
+          displayName: "Tabs",
+          imageUrl: "https://static1.plasmic.app/antd_tabs.png",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AntdRate",
+          displayName: "Rate",
+          imageUrl: "https://static1.plasmic.app/antd_rate.png",
+        },
+      ],
+      projectId: "hLZoAYNmhRwBBBqyULaZYx",
+    },
+    {
       sectionLabel: "Design systems",
       type: "hostless-package",
       name: "Ant Design System 5",
@@ -411,7 +499,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd.png",
         },
       ],
-      projectId: "icSGgqbxKALwzJe2fHi5xT",
+      projectId: "66MC2d9B7YecVEphuUMtqF",
     },
     {
       sectionLabel: "Ant Design",
@@ -623,7 +711,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Upload",
         },
       ],
-      projectId: "icSGgqbxKALwzJe2fHi5xT",
+      projectId: "66MC2d9B7YecVEphuUMtqF",
     },
     {
       sectionLabel: "APIs",
@@ -649,7 +737,7 @@ const DEFAULT_DEVFLAGS = {
         },
       ],
       showInstall: true,
-      projectId: "ugFcHfB2P9LQrCkbuzAZgM",
+      projectId: "wvY5dZS3doGb4WJWJKhqhH",
     },
     {
       type: "hostless-package",
@@ -680,7 +768,7 @@ const DEFAULT_DEVFLAGS = {
           },
         },
       ],
-      projectId: "u342NxfZpnmCLkeswMLTb",
+      projectId: "iVuV4r27S7YWSG5evhRtXe",
     },
     {
       type: "hostless-package",
@@ -697,7 +785,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/insertables/tabs.svg",
         },
       ],
-      projectId: "dy6ZUaT5yWvm674PuSzrBt",
+      projectId: "bGGYchQJnRrBLGcc2YbKZk",
     },
     {
       type: "hostless-package",
@@ -714,7 +802,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/plasmic-nav-thumbnail.svg",
         },
       ],
-      projectId: "qiHHwYvMY7SkRmn5SX6Z6t",
+      projectId: "bfniEFpM4tZx8htC9kkukb",
     },
   ]),
   // Turns on PlasmicImg for all
@@ -742,7 +830,7 @@ const DEFAULT_DEVFLAGS = {
 
   loaderBundler: "esbuild",
   esbuildProjectIds: [] as string[],
-  hostLessWorkspaceId: "pLyXMFfLLGqiyA3ByT59Pj",
+  hostLessWorkspaceId: null as WorkspaceId | null,
   manuallyUpdatedHostLessProjectIds: [] as string[],
   whitespaceNormalProjectIds: [] as string[],
   useWhitespaceNormal: false,
