@@ -427,8 +427,8 @@ function PlasmicSettingsContainer__RenderFunc(props: {
               placeholder="Unnamed"
               name="username"
               onChange={(e) => {
-                setValue("username", e.target.value);
-                if (e.target.value !== args.username) {
+                setValue("username", e.target.value.trim());
+                if (e.target.value?.trim() !== args.username) {
                   setIsEditingUsername(true);
                 } else {
                   setIsEditingUsername(false);
