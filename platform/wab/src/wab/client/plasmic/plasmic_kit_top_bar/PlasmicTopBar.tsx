@@ -60,7 +60,7 @@ import PlussvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__PlusSvg"; // pl
 import IconIcon from "./icons/PlasmicIcon__Icon"; // plasmic-import: jnoWwmZ86t/icon
 import SegmentSeparatorIcon from "./icons/PlasmicIcon__SegmentSeparator"; // plasmic-import: yzguJQZL37/icon
 import imageAy93RhuWbc from "./images/image.svg"; // plasmic-import: ay93RhuWbc/picture
-import Logo from "@/wab/client/assets/logo.png";
+import Logo from "@/wab/client/assets/logo-large.png";
 import StraightSeparator from "./icons/PlasmicIcon__StraightSeparator";
 import PlayIcon from "./icons/PlasmicIcon__PlayIcon";
 import { UU } from "../../cli-routes";
@@ -275,8 +275,7 @@ function PlasmicTopBar__RenderFunc(props: {
           <div className={classNames(projectcss.all, sty.freeBox___7MgoJ)}>
             <a
               data-plasmic-name={"logoLink"}
-              // data-plasmic-override={overrides.logoLink}
-              href={UU.allProjects.pattern}
+              data-plasmic-override={overrides.logoLink}
               className={classNames(
                 projectcss.all,
                 projectcss.a,
@@ -301,10 +300,10 @@ function PlasmicTopBar__RenderFunc(props: {
                     "preview"
                   ),
                 })}
-                role={"img"}
+                role={"img"}data-overlay-container
                 data-plasmic-trigger-props={[triggerN4303647HoverProps]}
               /> */}
-              <img src={Logo} width={50} />
+              <img src={Logo} width={36} style={{ padding: "8px 0px" }} />
             </a>
           </div>
         ) : null}
