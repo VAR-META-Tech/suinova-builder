@@ -756,7 +756,24 @@ const DEFAULT_DEVFLAGS = {
   selectInserted: true,
   showFullPreviewWarning: true,
   skipFreeVars: true,
-  starterSections: [] as StarterSectionConfig[],
+  starterSections: [
+    {
+      title: "NFT marketplaces templates",
+      tag: "general",
+      projects: [
+        {
+          projectId: null,
+          baseProjectId: "w33vSkXPFMAmCgdKCNtAQj",
+          name: "All-in-one NFT marketplace",
+          tag: "blank",
+          imageUrl:
+            "https://plasmic-static1.s3-us-west-2.amazonaws.com/starters/website-starter.png",
+          publishWizard: true,
+          description: "",
+        },
+      ],
+    },
+  ],
   versions: true,
   showMultipleAvatars: true,
   hiddenQuickstartPlatforms: ensureType<string[]>([]),
