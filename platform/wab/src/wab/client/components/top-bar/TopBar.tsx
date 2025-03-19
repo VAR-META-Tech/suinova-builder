@@ -1,5 +1,5 @@
 /** @format */
-import { U } from "@/wab/client/cli-routes";
+import { UU } from "@/wab/client/cli-routes";
 import { useContextMenu } from "@/wab/client/components/ContextMenu";
 import { PublicLink } from "@/wab/client/components/PublicLink";
 import { usePreviewCtx } from "@/wab/client/components/live/PreviewCtx";
@@ -361,7 +361,7 @@ function _TopBar({ preview }: TopBarProps) {
         logoLink={{
           render: (props) => (
             <Tooltip title={brand.logoTooltip ?? "Back to dashboard"}>
-              <PublicLink {...props} href={brand.logoHref ?? U.dashboard({})}>
+              <PublicLink {...props} href={UU.allProjects.pattern}>
                 {brand.logoImgSrc ? (
                   <img src={brand.logoImgSrc} style={{ maxHeight: 40 }} />
                 ) : (
