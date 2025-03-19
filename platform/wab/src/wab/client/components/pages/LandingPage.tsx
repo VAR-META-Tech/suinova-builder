@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "@/wab/client/components/pages/LandingPage.sass";
-import suiNovaLogo from "@/wab/client/assets/logo.png";
-import WalletSvgIcon from "../../plasmic/plasmic_kit_icons/icons/PlasmicIcon__WalletSvg";
-import ActivitySvgIcon from "../../plasmic/plasmic_kit_icons/icons/PlasmicIcon__ActivitySvg";
-import ImageUploadsIcon from "../../plasmic/plasmic_kit/PlasmicIcon__ImageUploads";
-import CoinsSvgIcon from "../../plasmic/plasmic_kit_icons/icons/PlasmicIcon__CoinsSvg";
-import MoveSvgIcon from "../../plasmic/plasmic_kit_icons/icons/PlasmicIcon__MoveSvg";
+import suiNovaLogo from "@/wab/client/assets/logo-large.png";
+import WalletSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__WalletSvg";
+import ActivitySvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__ActivitySvg";
+import ImageUploadsIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__ImageUploads";
+import CoinsSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__CoinsSvg";
+import MoveSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__MoveSvg";
 
 const LandingPage = () => {
   const [draggingWidget, setDraggingWidget] = useState<string | null>(null);
@@ -26,7 +26,7 @@ const LandingPage = () => {
         <div className="container">
           <div className="nav">
             <div className="logo">
-              <img src={suiNovaLogo} width={70} height={70} />
+              <img src={suiNovaLogo} width={40} style={{ padding: "8px 0px" }} />
             </div>
             <nav className="nav-links">
               <a href="#features">Features</a>
