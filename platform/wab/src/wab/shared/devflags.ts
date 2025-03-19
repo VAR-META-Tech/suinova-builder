@@ -767,8 +767,9 @@ const DEFAULT_DEVFLAGS = {
           name: "All-in-one NFT marketplace",
           tag: "blank",
           imageUrl:
-            "https://plasmic-static1.s3-us-west-2.amazonaws.com/starters/website-starter.png",
+            "https://suinova.var-meta.com/static/img/nft-template-bg.png",
           publishWizard: true,
+          hidden: true,
           description: "",
         },
       ],
