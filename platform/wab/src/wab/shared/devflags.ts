@@ -259,6 +259,27 @@ export function flattenInsertableIconGroups(
 
 const production = process.env.NODE_ENV === "production";
 
+const projectIdConfig = production
+  ? {
+      TEMPLATE_PROJECT_ID_NFT_BUILDER: "w33vSkXPFMAmCgdKCNtAQj",
+      HOST_LESS_PROJECT_ID_NFT: "3YRsZHmU6M2Qk7WYDM9QQ4",
+      HOST_LESS_PROJECT_ID_ANTD: "66MC2d9B7YecVEphuUMtqF",
+      HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "wvY5dZS3doGb4WJWJKhqhH",
+      HOST_LESS_PROJECT_ID_REACT_SLICK: "iVuV4r27S7YWSG5evhRtXe",
+      HOST_LESS_PROJECT_ID_PLASMIC_TAB: "bGGYchQJnRrBLGcc2YbKZk",
+      HOST_LESS_PROJECT_ID_PLASMIC_NAV: "bfniEFpM4tZx8htC9kkukb",
+    }
+  : {
+      /// Add your local project id
+      TEMPLATE_PROJECT_ID_NFT_BUILDER: "",
+      HOST_LESS_PROJECT_ID_NFT: "",
+      HOST_LESS_PROJECT_ID_ANTD: "",
+      HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "",
+      HOST_LESS_PROJECT_ID_REACT_SLICK: "",
+      HOST_LESS_PROJECT_ID_PLASMIC_TAB: "",
+      HOST_LESS_PROJECT_ID_PLASMIC_NAV: "",
+    };
+
 const DEFAULT_DEVFLAGS = {
   appContentBaseUrl: "https://docs.plasmic.app/app-content",
   artboardEval: true,
@@ -447,7 +468,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Collection Card",
         },
       ],
-      projectId: "8NvfqSg2gLWs8LPwK6bzmd",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
     // {
     //   type: "hostless-package",
@@ -519,7 +540,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd.png",
         },
       ],
-      projectId: "66MC2d9B7YecVEphuUMtqF",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD,
     },
     {
       sectionLabel: "Ant Design",
@@ -757,7 +778,7 @@ const DEFAULT_DEVFLAGS = {
         },
       ],
       showInstall: true,
-      projectId: "wvY5dZS3doGb4WJWJKhqhH",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD,
     },
     {
       type: "hostless-package",
@@ -788,7 +809,7 @@ const DEFAULT_DEVFLAGS = {
           },
         },
       ],
-      projectId: "iVuV4r27S7YWSG5evhRtXe",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_REACT_SLICK,
     },
     {
       type: "hostless-package",
@@ -805,7 +826,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/insertables/tabs.svg",
         },
       ],
-      projectId: "bGGYchQJnRrBLGcc2YbKZk",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_PLASMIC_TAB,
     },
     {
       type: "hostless-package",
@@ -822,7 +843,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/plasmic-nav-thumbnail.svg",
         },
       ],
-      projectId: "bfniEFpM4tZx8htC9kkukb",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_PLASMIC_NAV,
     },
   ]),
   // Turns on PlasmicImg for all
@@ -838,7 +859,25 @@ const DEFAULT_DEVFLAGS = {
   selectInserted: true,
   showFullPreviewWarning: true,
   skipFreeVars: true,
-  starterSections: [] as StarterSectionConfig[],
+  starterSections: [
+    {
+      title: "NFT marketplaces templates",
+      tag: "general",
+      projects: [
+        {
+          projectId: null,
+          baseProjectId: projectIdConfig.TEMPLATE_PROJECT_ID_NFT_BUILDER,
+          name: "All-in-one NFT marketplace",
+          tag: "blank",
+          imageUrl:
+            "https://suinova.var-meta.com/static/img/nft-template-bg.png",
+          publishWizard: true,
+          hidden: true,
+          description: "",
+        },
+      ],
+    },
+  ],
   versions: true,
   showMultipleAvatars: true,
   hiddenQuickstartPlatforms: ensureType<string[]>([]),
