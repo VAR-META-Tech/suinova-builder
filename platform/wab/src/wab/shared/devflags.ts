@@ -262,6 +262,7 @@ const production = process.env.NODE_ENV === "production";
 const projectIdConfig = production
   ? {
       TEMPLATE_PROJECT_ID_NFT_BUILDER: "w33vSkXPFMAmCgdKCNtAQj",
+
       HOST_LESS_PROJECT_ID_NFT: "3YRsZHmU6M2Qk7WYDM9QQ4",
       HOST_LESS_PROJECT_ID_ANTD: "66MC2d9B7YecVEphuUMtqF",
       HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "wvY5dZS3doGb4WJWJKhqhH",
@@ -272,9 +273,9 @@ const projectIdConfig = production
   : {
       /// Add your local project id
       TEMPLATE_PROJECT_ID_NFT_BUILDER:
-        process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER,
+        process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "",
 
-      HOST_LESS_PROJECT_ID_NFT: "",
+      HOST_LESS_PROJECT_ID_NFT: process.env.HOST_LESS_PROJECT_ID_NFT || "",
       HOST_LESS_PROJECT_ID_ANTD: "",
       HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "",
       HOST_LESS_PROJECT_ID_REACT_SLICK: "",
