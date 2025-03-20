@@ -258,30 +258,21 @@ export function flattenInsertableIconGroups(
 }
 
 const production = process.env.NODE_ENV === "production";
+console.log("🚀 ~ production:", production);
 
-const projectIdConfig = production
-  ? {
-      TEMPLATE_PROJECT_ID_NFT_BUILDER: "w33vSkXPFMAmCgdKCNtAQj",
+const projectIdConfig = {
+  /// Add your local project id
+  TEMPLATE_PROJECT_ID_NFT_BUILDER:
+    process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "w33vSkXPFMAmCgdKCNtAQj",
 
-      HOST_LESS_PROJECT_ID_NFT: "3YRsZHmU6M2Qk7WYDM9QQ4",
-      HOST_LESS_PROJECT_ID_ANTD: "66MC2d9B7YecVEphuUMtqF",
-      HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "wvY5dZS3doGb4WJWJKhqhH",
-      HOST_LESS_PROJECT_ID_REACT_SLICK: "iVuV4r27S7YWSG5evhRtXe",
-      HOST_LESS_PROJECT_ID_PLASMIC_TAB: "bGGYchQJnRrBLGcc2YbKZk",
-      HOST_LESS_PROJECT_ID_PLASMIC_NAV: "bfniEFpM4tZx8htC9kkukb",
-    }
-  : {
-      /// Add your local project id
-      TEMPLATE_PROJECT_ID_NFT_BUILDER:
-        process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "",
-
-      HOST_LESS_PROJECT_ID_NFT: process.env.HOST_LESS_PROJECT_ID_NFT || "",
-      HOST_LESS_PROJECT_ID_ANTD: "",
-      HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "",
-      HOST_LESS_PROJECT_ID_REACT_SLICK: "",
-      HOST_LESS_PROJECT_ID_PLASMIC_TAB: "",
-      HOST_LESS_PROJECT_ID_PLASMIC_NAV: "",
-    };
+  HOST_LESS_PROJECT_ID_NFT:
+    process.env.HOST_LESS_PROJECT_ID_NFT || "3YRsZHmU6M2Qk7WYDM9QQ4",
+  HOST_LESS_PROJECT_ID_ANTD: "66MC2d9B7YecVEphuUMtqF",
+  HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "wvY5dZS3doGb4WJWJKhqhH",
+  HOST_LESS_PROJECT_ID_REACT_SLICK: "iVuV4r27S7YWSG5evhRtXe",
+  HOST_LESS_PROJECT_ID_PLASMIC_TAB: "bGGYchQJnRrBLGcc2YbKZk",
+  HOST_LESS_PROJECT_ID_PLASMIC_NAV: "bfniEFpM4tZx8htC9kkukb",
+};
 
 const DEFAULT_DEVFLAGS = {
   appContentBaseUrl: "https://docs.plasmic.app/app-content",
@@ -424,21 +415,6 @@ const DEFAULT_DEVFLAGS = {
       codeLink:
         "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
       items: [
-        {
-          type: "hostless-component",
-          componentName: "hostless-radix-dialog",
-          displayName: "Dialog",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-radix-tooltip",
-          displayName: "Tooltip",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-radix-popover",
-          displayName: "Popover Core",
-        },
         {
           type: "hostless-component",
           componentName: "hostless-connect-btn",
