@@ -271,7 +271,9 @@ const projectIdConfig = production
     }
   : {
       /// Add your local project id
-      TEMPLATE_PROJECT_ID_NFT_BUILDER: "",
+      TEMPLATE_PROJECT_ID_NFT_BUILDER:
+        process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER,
+
       HOST_LESS_PROJECT_ID_NFT: "",
       HOST_LESS_PROJECT_ID_ANTD: "",
       HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "",
@@ -445,7 +447,7 @@ const DEFAULT_DEVFLAGS = {
           type: "hostless-component",
           componentName: "AuthGlobalContext",
           displayName: "Auth Global Context",
-          hidden: true
+          hidden: true,
         },
         {
           type: "hostless-component",
