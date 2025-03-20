@@ -436,9 +436,91 @@ const DEFAULT_DEVFLAGS = {
           componentName: "hostless-radix-popover",
           displayName: "Popover Core",
         },
+        {
+          type: "hostless-component",
+          componentName: "hostless-connect-btn",
+          displayName: "Connect Wallet Button",
+        },
+        {
+          type: "hostless-component",
+          componentName: "AuthGlobalContext",
+          displayName: "Auth Global Context",
+          hidden: true
+        },
+        {
+          type: "hostless-component",
+          componentName: "hostless-user-avatar",
+          displayName: "User Avatar",
+        },
+        {
+          type: "hostless-component",
+          componentName: "hostless-user-avatar-group",
+          displayName: "User Avatar Group",
+        },
+        {
+          type: "hostless-component",
+          componentName: "hostless-nft-card",
+          displayName: "NFT Card",
+        },
+        {
+          type: "hostless-component",
+          componentName: "hostless-collection-card",
+          displayName: "Collection Card",
+        },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
+    // {
+    //   type: "hostless-package",
+    //   name: "NFT Marketplace",
+    //   sectionLabel: "NFT Marketplace",
+    //   codeName: "nft-builder",
+    //   codeLink:
+    //     "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+    //   items: [
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "hostless-radix-dialog",
+    //       displayName: "Dialog",
+    //     },
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "hostless-radix-tooltip",
+    //       displayName: "Tooltip",
+    //     },
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "hostless-radix-popover",
+    //       displayName: "Popover Core",
+    //     },
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "hostless-connect-wallet-btn",
+    //       displayName: "Connect Wallet Button",
+    //     },
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "AuthGlobalContext",
+    //       displayName: "Auth Global Context",
+    //     },
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "hostless-user-avatar",
+    //       displayName: "User Avatar",
+    //     },
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "hostless-user-avatar-group",
+    //       displayName: "User Avatar Group",
+    //     },
+    //     {
+    //       type: "hostless-component",
+    //       componentName: "hostless-nft-card",
+    //       displayName: "NFT Card",
+    //     },
+    //   ],
+    //   projectId: "xvCszXLpXuQVajBPfurDZb",
+    // },
     {
       sectionLabel: "Design systems",
       type: "hostless-package",
