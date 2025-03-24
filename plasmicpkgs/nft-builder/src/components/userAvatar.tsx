@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar } from "antd";
 import { usePlasmicLink } from "@plasmicapp/host";
-import { Registerable, registerComponentHelper } from "./reg-util";
+import { Registerable, registerComponentHelper } from "../reg-util";
 
 export function UserAvatar({
   letters,
@@ -53,7 +53,8 @@ export function registerUserAvatar(loader?: Registerable) {
       src: {
         type: "imageUrl",
         description: "Image to display",
-        defaultValue: "https://s3-alpha-sig.figma.com/img/9113/13b2/d79c0afb936279fe8427b823bc6218b6?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Xp6yKpimoicAZfFpVAD4Qk39aTBJ7by6QxcoD2eWyeqM9uyNi378e6OwcunC3keLpAR4Vez-3mjSuld7MJB280pEFweZCtN4K9GHWrmv2XmzK2WQCKJ3Hfv2FRBQpbj5MfolIoSb6L2peMlF-9CsiU2XthN11A4fCT5PINwAPW~S5vCY8PyD2gwhb39fh870a-tLm-j8vcX6S~Ihb8a1Q9Q-cuXpQ0vbgtMaWYT2JmxOMoPLp1vUhIgT-3AJ4tHQVDy-ZZxxIQ-2NliJnJBYiiijTYiYXLNeKDcQOqpOWjkDdiiYbjYZf4Bp0HqWNGV3ddB6iBCVEibB0s4KzvgI3g__"
+        defaultValue:
+          "https://s3-alpha-sig.figma.com/img/9113/13b2/d79c0afb936279fe8427b823bc6218b6?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Xp6yKpimoicAZfFpVAD4Qk39aTBJ7by6QxcoD2eWyeqM9uyNi378e6OwcunC3keLpAR4Vez-3mjSuld7MJB280pEFweZCtN4K9GHWrmv2XmzK2WQCKJ3Hfv2FRBQpbj5MfolIoSb6L2peMlF-9CsiU2XthN11A4fCT5PINwAPW~S5vCY8PyD2gwhb39fh870a-tLm-j8vcX6S~Ihb8a1Q9Q-cuXpQ0vbgtMaWYT2JmxOMoPLp1vUhIgT-3AJ4tHQVDy-ZZxxIQ-2NliJnJBYiiijTYiYXLNeKDcQOqpOWjkDdiiYbjYZf4Bp0HqWNGV3ddB6iBCVEibB0s4KzvgI3g__",
       },
       size: {
         type: "choice",
@@ -82,16 +83,21 @@ export function registerUserAvatarGroup(loader?: Registerable) {
       children: {
         type: "slot",
         defaultValue: [1, 2, 3, 4].map((user) => ({
+          // type: "component",
+          // name: "hostless-radix-tooltip",
+          // props: {
+          //   children: {
+          //     type: "component",
+          //     name: "hostless-user-avatar",
+          //     props: {
+          //       letters: `U${user}`,
+          //     },
+          //   },
+          // },
           type: "component",
-          name: "hostless-radix-tooltip",
+          name: "hostless-user-avatar",
           props: {
-            children: {
-              type: "component",
-              name: "hostless-user-avatar",
-              props: {
-                letters: `U${user}`,
-              },
-            },
+            letters: `U${user}`,
           },
         })),
       },

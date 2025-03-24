@@ -1,11 +1,23 @@
 import { ConnectButton } from "@mysten/dapp-kit";
-import React, { ButtonHTMLAttributes, ReactNode } from "react";
-import { Registerable, registerComponentHelper } from "./reg-util";
+import React, { ReactNode } from "react";
+import { Registerable, registerComponentHelper } from "../reg-util";
 
 type ConnectWalletButtonProps = {
+  className?: string;
   connectText?: ReactNode;
-  icon: ReactNode;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+  icon?: ReactNode;
+};
+
+const CSSClasses = {
+  connectWalletButton: "connect-wallet-button",
+  connectWalletText: "connect-wallet-text",
+};
+
+function minifyCss(input: string) {
+  return input
+    .replace(/\s{2,}|\n/g, "") //  Remove spaces
+    .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/g, ""); // Remove comments.
+}
 
 const WalletIcon = () => (
   <svg
@@ -39,25 +51,32 @@ const ConnectWalletButton = React.forwardRef<
   HTMLDivElement,
   ConnectWalletButtonProps
 >(({ className, connectText, icon, ...props }, ref) => {
+  const cssStyles = React.useMemo(
+    () =>
+      minifyCss(`
+        .${CSSClasses.connectWalletButton} {
+          background-color: #2978D1 !important;
+          width: 200px;
+          height: 50px;
+          border-radius: 12px !important;
+        }
+  
+        .${CSSClasses.connectWalletText} {
+          color: white;
+          display: flex;
+          gap: 4px;
+          align-items: center;
+        }
+      `),
+    []
+  );
+
   return (
     <ConnectButton
-      style={{
-        backgroundColor: "#2978D1",
-        width: "200px",
-        height: "60px",
-        borderRadius: "16px",
-      }}
-      className={className}
+      className={`${CSSClasses.connectWalletButton} ${className}`}
       connectText={
-        <div
-          ref={ref}
-          style={{
-            color: "white",
-            display: "flex",
-            gap: 4,
-            alignItems: "center",
-          }}
-        >
+        <div ref={ref} className={CSSClasses.connectWalletText}>
+          <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
           {icon || <WalletIcon />}
           {connectText}
         </div>
