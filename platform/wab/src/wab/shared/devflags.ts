@@ -272,6 +272,7 @@ const projectIdConfig = {
   HOST_LESS_PROJECT_ID_REACT_SLICK: "iVuV4r27S7YWSG5evhRtXe",
   HOST_LESS_PROJECT_ID_PLASMIC_TAB: "bGGYchQJnRrBLGcc2YbKZk",
   HOST_LESS_PROJECT_ID_PLASMIC_NAV: "bfniEFpM4tZx8htC9kkukb",
+  HOST_LESS_PROJECT_ID_ANTD_4: "52gEZTt45jCUssnDaoibta",
 };
 
 const DEFAULT_DEVFLAGS = {
@@ -731,7 +732,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Upload",
         },
       ],
-      projectId: "66MC2d9B7YecVEphuUMtqF",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD,
     },
     {
       hidden: false,
@@ -819,7 +820,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd_rate.png",
         },
       ],
-      projectId: "28Ba3BDvRe7EiWdfFNnLB6",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD_4,
     },
     {
       hidden: false,
@@ -840,7 +841,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd.png",
         },
       ],
-      projectId: "28Ba3BDvRe7EiWdfFNnLB6",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD_4,
     },
     {
       sectionLabel: "APIs",
