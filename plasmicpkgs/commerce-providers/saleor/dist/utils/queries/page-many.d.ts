@@ -1,1 +1,0 @@
-export declare const PageMany = "\n  query PageMany($first: Int = 100) {\n    pages(first: $first) {\n      edges {\n        node {\n          id\n          title\n          slug\n        }\n      }\n    }\n  }\n";

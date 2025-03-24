@@ -1,1 +1,0 @@
-export declare const AccountCreate = "\n  mutation AccountCreate($input: AccountRegisterInput!) {\n    accountRegister(input: $input) {\n      errors {\n        code\n        field\n        message\n      }\n      user {\n        email\n        isActive\n      }\n    }\n  }\n";

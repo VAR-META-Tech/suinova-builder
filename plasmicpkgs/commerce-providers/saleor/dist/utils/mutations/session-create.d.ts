@@ -1,1 +1,0 @@
-export declare const SessionCreate = "\n  mutation SessionCreate($email: String!, $password: String!) {\n    tokenCreate(email: $email, password: $password) {\n      token\n      refreshToken\n      csrfToken\n      errors {\n        code\n        field\n        message\n      }\n    }\n  }\n";

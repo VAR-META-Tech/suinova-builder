@@ -1,1 +1,0 @@
-export declare const CheckoutAttach = "\n  mutation CheckoutAttach($checkoutId: ID!) {\n    checkoutCustomerAttach(checkoutId: $checkoutId) {\n      errors {\n        message\n      }\n      checkout {\n        id\n      }\n    }\n  }\n";

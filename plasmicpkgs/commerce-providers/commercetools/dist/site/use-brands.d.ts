@@ -1,5 +1,0 @@
-import { SWRHook } from '@plasmicpkgs/commerce';
-import { GetBrandsHook } from "../types/site";
-declare const _default;
-export default _default;
-export declare const handler: SWRHook<GetBrandsHook>;

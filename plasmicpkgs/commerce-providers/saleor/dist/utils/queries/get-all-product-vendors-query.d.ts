@@ -1,1 +1,0 @@
-export declare const getAllProductVendors = "\n  query getAllProductVendors($cursor: String, $channel: String = \"default-channel\") {\n    products(first:100,channel: $channel, after: $cursor) {\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n      }\n      edges {\n        node {\n          slug\n        }\n        cursor\n      }\n    }\n  }\n";
