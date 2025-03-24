@@ -1,0 +1,14 @@
+import { ProductTypes } from "@plasmicpkgs/commerce";
+export declare type ProductImage = ProductTypes.ProductImage;
+export declare type ProductPrice = ProductTypes.ProductPrice;
+export declare type ProductOption = ProductTypes.ProductOption;
+export declare type ProductOptionValues = ProductTypes.ProductOptionValues;
+export declare type ProductVariant = ProductTypes.ProductVariant;
+export declare type Product = ProductTypes.Product;
+export declare type SearchProductsBody = ProductTypes.SearchProductsBody;
+export declare type ProductTypes = ProductTypes.ProductTypes;
+export declare type SearchProductsHook = ProductTypes.SearchProductsHook;
+export declare type ProductsSchema = ProductTypes.ProductsSchema;
+export declare type GetAllProductPathsOperation = ProductTypes.GetAllProductPathsOperation;
+export declare type GetAllProductsOperation = ProductTypes.GetAllProductsOperation;
+export declare type GetProductOperation = ProductTypes.GetProductOperation;

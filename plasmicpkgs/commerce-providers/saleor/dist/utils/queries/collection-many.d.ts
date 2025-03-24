@@ -1,0 +1,1 @@
+export declare const CollectionMany = "\n  query CollectionMany( $channel: String = \"default-channel\") {\n    collections(first:100, channel: $channel) {\n      edges {\n        node {\n          id\n          name\n          slug\n        }\n      }\n    }\n  }\n";
