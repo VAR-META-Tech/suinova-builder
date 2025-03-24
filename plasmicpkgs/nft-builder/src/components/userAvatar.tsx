@@ -82,6 +82,19 @@ export function registerUserAvatarGroup(loader?: Registerable) {
     props: {
       children: {
         type: "slot",
+        // defaultValue: [1, 2, 3, 4].map((user) => ({
+        //   type: "component",
+        //   name: "hostless-radix-tooltip",
+        //   props: {
+        //     children: {
+        //       type: "component",
+        //       name: "hostless-user-avatar",
+        //       props: {
+        //         letters: `U${user}`,
+        //       },
+        //     },
+        //   },
+        // })),
         defaultValue: [1, 2, 3, 4].map((user) => ({
           // type: "component",
           // name: "hostless-radix-tooltip",

@@ -1,5 +1,4 @@
 import { CodeComponentMeta } from "@plasmicapp/host";
-import { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 import { ReactElement, ReactNode, useState } from "react";
 import { omit, pick } from "remeda";
@@ -276,48 +275,6 @@ export const overlayStates = {
     variableType: "boolean",
   },
 } as const;
-
-export const overlayProps = ({
-  defaultSlotContent,
-  triggerSlotName,
-  openDisplay,
-}: {
-  defaultSlotContent: any;
-  triggerSlotName: string;
-  openDisplay?: string;
-  // Need to work around the typescript v3 or v4 used in root public-packages via tsdx
-}): CodeComponentMeta<DialogProps>["props"] => ({
-  open: {
-    type: "boolean",
-    displayName: openDisplay,
-    editOnly: true,
-    uncontrolledProp: "defaultOpen",
-  },
-  modal: {
-    type: "boolean",
-    advanced: true,
-    description:
-      "Disable interaction with outside elements. Only popover content will be visible to screen readers.",
-    defaultValueHint: true,
-  },
-  onOpenChange: {
-    type: "eventHandler",
-    argTypes: [
-      {
-        type: "boolean",
-        name: "open",
-      },
-    ],
-  },
-  [triggerSlotName]: {
-    type: "slot",
-    defaultValue: [defaultSlotContent],
-    ...({
-      mergeWithParent: true,
-    } as any),
-  },
-  themeResetClass: { type: "themeResetClass" },
-});
 
 export function prefixClasses(x: string) {
   return x

@@ -158,9 +158,6 @@ const clientConfigs = clientEntries.map(({ pkg, useSubJSXRuntime }) => ({
       "@plasmicapp/host": "__Sub",
       "@plasmicapp/query": "__Sub.PlasmicQuery",
       ...(pkg.includes("plasmic-rich-components") ? antdModules : {}),
-      ...(pkg.startsWith("commerce-")
-        ? { "@plasmicpkgs/commerce": "__PlasmicCommerceCommon" }
-        : {}),
       ...(useSubJSXRuntime
         ? {
             "react/jsx-runtime": "__Sub.jsxRuntime",
@@ -211,7 +208,6 @@ const clientConfigs = clientEntries.map(({ pkg, useSubJSXRuntime }) => ({
     ...(pkg.includes("plasmic-rich-components")
       ? Object.keys(antdModules)
       : []),
-    ...(pkg.startsWith("commerce-") ? ["@plasmicpkgs/commerce"] : []),
     ...(useSubJSXRuntime ? ["react/jsx-runtime", "react/jsx-dev-runtime"] : []),
   ],
   platform: "browser",

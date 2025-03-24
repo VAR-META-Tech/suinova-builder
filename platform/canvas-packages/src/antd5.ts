@@ -127,4 +127,4 @@ export function register() {
   });
 }
 
-register();
+// register();
