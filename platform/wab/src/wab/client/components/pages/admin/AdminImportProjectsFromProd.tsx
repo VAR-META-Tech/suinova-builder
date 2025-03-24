@@ -232,6 +232,16 @@ export function AdminImportProjectsFromProd() {
       <Button
         onClick={() =>
           nonAuthCtx.api.createHostLessProject({
+            name: "antd4",
+            npmPkg: ["@plasmicpkgs/antd"],
+          })
+        }
+      >
+        Ant Design Systen 4
+      </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
             name: "nft-builder",
             npmPkg: ["@plasmicpkgs/nft-builder"],
           })

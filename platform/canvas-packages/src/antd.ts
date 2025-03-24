@@ -5,4 +5,4 @@ export function register() {
   registerAll();
 }
 
-// register();
+register();
