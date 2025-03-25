@@ -232,7 +232,7 @@ export function AdminImportProjectsFromProd() {
       <Button
         onClick={() =>
           nonAuthCtx.api.createHostLessProject({
-            name: "antd4",
+            name: "antd",
             npmPkg: ["@plasmicpkgs/antd"],
           })
         }
