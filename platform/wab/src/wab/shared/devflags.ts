@@ -258,12 +258,11 @@ export function flattenInsertableIconGroups(
 }
 
 const production = process.env.NODE_ENV === "production";
-console.log("🚀 ~ production:", production);
 
 const projectIdConfig = {
   /// Add your local project id
   TEMPLATE_PROJECT_ID_NFT_BUILDER:
-    process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "w33vSkXPFMAmCgdKCNtAQj",
+    process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "pHhBGeu1NF9WPtShP6gtAM",
 
   HOST_LESS_PROJECT_ID_NFT:
     process.env.HOST_LESS_PROJECT_ID_NFT || "3YRsZHmU6M2Qk7WYDM9QQ4",
