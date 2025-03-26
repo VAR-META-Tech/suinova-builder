@@ -140,6 +140,7 @@ const ContextsList = observer(function ContextsList_(props: {
   const filteredContexts = contexts.filter((c) =>
     matcher.matches(getComponentDisplayName(c.component))
   );
+  console.log("🚀 ~ filteredContexts:", filteredContexts);
 
   const filteredTplComponents = props.tplComponents.filter((tpl) =>
     matcher.matches(getComponentDisplayName(tpl.component))

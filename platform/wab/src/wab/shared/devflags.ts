@@ -410,20 +410,17 @@ const DEFAULT_DEVFLAGS = {
     {
       type: "hostless-package",
       name: "Connect Wallet",
-      onlyShownIn: "new",
-      syntheticPackage: true,
-      codeName: "Connect Wallet",
       sectionLabel: "NFT Marketplace",
       codeLink:
         "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
       items: [
         {
           type: "hostless-component",
-          componentName: "hostless-connect-btn",
+          componentName: "hostless-connect-wallet-btn",
           displayName: "Connect Wallet Button",
         },
       ],
-      projectId: "5ueNeRddBtkXZdxL9SuQ3D",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       type: "hostless-package",
@@ -459,7 +456,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Section Two",
         },
       ],
-      projectId: "5ueNeRddBtkXZdxL9SuQ3D",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       type: "hostless-package",
@@ -489,7 +486,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Magnifying Icon",
         },
       ],
-      projectId: "5ueNeRddBtkXZdxL9SuQ3D",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       type: "hostless-package",
@@ -514,7 +511,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "User Info Card",
         },
       ],
-      projectId: "5ueNeRddBtkXZdxL9SuQ3D",
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
     // {
     //   type: "hostless-package",
@@ -590,10 +587,12 @@ const DEFAULT_DEVFLAGS = {
     },
     {
       sectionLabel: "Ant Design",
+      isInstallOnly: true,
       type: "hostless-package",
       name: "Ant Design System 5",
       imageUrl: "https://static1.plasmic.app/antd.png",
       codeName: "antd5",
+      onlyShownIn: "old",
       codeLink:
         "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/antd5",
       items: [
