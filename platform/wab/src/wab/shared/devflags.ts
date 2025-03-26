@@ -866,7 +866,7 @@ const DEFAULT_DEVFLAGS = {
         },
       ],
       showInstall: true,
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD,
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_PLASMIC_QUERY,
     },
     {
       type: "hostless-package",
