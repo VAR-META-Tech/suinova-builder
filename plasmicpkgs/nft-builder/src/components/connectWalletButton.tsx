@@ -86,8 +86,6 @@ const ConnectWalletButton = React.forwardRef<
   );
 });
 
-ConnectWalletButton.displayName = "Connect Wallet Button";
-
 export function registerConnectWalletButton(PLASMIC?: Registerable) {
   registerComponentHelper(PLASMIC, ConnectWalletButton, {
     name: "hostless-connect-wallet-btn",

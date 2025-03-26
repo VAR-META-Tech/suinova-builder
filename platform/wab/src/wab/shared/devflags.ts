@@ -435,32 +435,12 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Auth Global Context",
           hidden: true,
         },
-        {
-          type: "hostless-component",
-          componentName: "hostless-header",
-          displayName: "Header",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-hero",
-          displayName: "Hero",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-section-one",
-          displayName: "Section One",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-section-two",
-          displayName: "Section Two",
-        },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       type: "hostless-package",
-      name: "Collection Display",
+      name: "NFT Display",
       sectionLabel: "NFT Marketplace",
       codeLink:
         "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
@@ -472,18 +452,13 @@ const DEFAULT_DEVFLAGS = {
         },
         {
           type: "hostless-component",
-          componentName: "hostless-collection-card",
-          displayName: "Collection Card",
+          componentName: "hostless-video-player",
+          displayName: "Video Player",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-search-nft-input",
-          displayName: "Search NFT Input",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-magnifying-icon",
-          displayName: "Magnifying Icon",
+          componentName: "hostless-nft-carousel",
+          displayName: "NFT Carousel",
         },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
@@ -513,57 +488,6 @@ const DEFAULT_DEVFLAGS = {
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
-    // {
-    //   type: "hostless-package",
-    //   name: "NFT Marketplace",
-    //   sectionLabel: "NFT Marketplace",
-    //   codeName: "nft-builder",
-    //   codeLink:
-    //     "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
-    //   items: [
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-radix-dialog",
-    //       displayName: "Dialog",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-radix-tooltip",
-    //       displayName: "Tooltip",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-radix-popover",
-    //       displayName: "Popover Core",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-connect-wallet-btn",
-    //       displayName: "Connect Wallet Button",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "AuthGlobalContext",
-    //       displayName: "Auth Global Context",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-user-avatar",
-    //       displayName: "User Avatar",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-user-avatar-group",
-    //       displayName: "User Avatar Group",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-nft-card",
-    //       displayName: "NFT Card",
-    //     },
-    //   ],
-    //   projectId: "xvCszXLpXuQVajBPfurDZb",
-    // },
     {
       sectionLabel: "Design systems",
       type: "hostless-package",
