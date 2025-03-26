@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar } from "antd";
 import { usePlasmicLink } from "@plasmicapp/host";
-import { Registerable, registerComponentHelper } from "./reg-util";
+import { Registerable, registerComponentHelper } from "../reg-util";
 
 export function UserAvatar({
   letters,
@@ -96,6 +96,17 @@ export function registerUserAvatarGroup(loader?: Registerable) {
         //   },
         // })),
         defaultValue: [1, 2, 3, 4].map((user) => ({
+          // type: "component",
+          // name: "hostless-radix-tooltip",
+          // props: {
+          //   children: {
+          //     type: "component",
+          //     name: "hostless-user-avatar",
+          //     props: {
+          //       letters: `U${user}`,
+          //     },
+          //   },
+          // },
           type: "component",
           name: "hostless-user-avatar",
           props: {
