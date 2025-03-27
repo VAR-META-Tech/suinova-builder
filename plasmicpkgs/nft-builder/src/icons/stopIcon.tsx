@@ -65,7 +65,7 @@ export default function StopIcon({ className }: IStopIcon) {
 
 export function registerStopIcon(loader?: Registerable) {
   registerComponentHelper(loader, StopIcon, {
-    name: "hostless-stop-icon",
+    name: "nft-builder-stop-icon",
     displayName: "Stop Icon",
     props: {},
     importPath: "@plasmicpkgs/nft-builder",

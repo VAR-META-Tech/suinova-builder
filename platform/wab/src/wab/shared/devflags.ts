@@ -416,7 +416,7 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "hostless-connect-wallet-btn",
+          componentName: "nft-builder-connect-wallet-btn",
           displayName: "Connect Wallet Button",
         },
       ],
@@ -447,18 +447,23 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "hostless-nft-card",
+          componentName: "nft-builder-card",
           displayName: "NFT Card",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-video-player",
-          displayName: "Video Player",
+          componentName: "nft-builder-video-player",
+          displayName: "NFT Video Player",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-nft-carousel",
+          componentName: "nft-builder-carousel",
           displayName: "NFT Carousel",
+        },
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-carousel-item",
+          displayName: "NFT Carousel Item",
         },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
@@ -472,17 +477,17 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "hostless-user-avatar",
+          componentName: "nft-builder-user-avatar",
           displayName: "User Avatar",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-user-avatar-group",
+          componentName: "nft-builder-user-avatar-group",
           displayName: "User Avatar Group",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-user-info-card",
+          componentName: "nft-builder-user-info-card",
           displayName: "User Info Card",
         },
       ],

@@ -27,7 +27,7 @@ export default function PlayIcon({ className }: IPlayIcon) {
 
 export function registerPlayIcon(loader?: Registerable) {
   registerComponentHelper(loader, PlayIcon, {
-    name: "hostless-play-icon",
+    name: "nft-builder-play-icon",
     displayName: "Play Icon",
     props: {},
     importPath: "@plasmicpkgs/nft-builder",

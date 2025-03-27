@@ -45,7 +45,7 @@ export default function BackIcon({ className }: IBackIcon) {
 
 export function registerBackIcon(loader?: Registerable) {
   registerComponentHelper(loader, BackIcon, {
-    name: "hostless-back-icon",
+    name: "nft-builder-back-icon",
     displayName: "Back Icon",
     props: {},
     importPath: "@plasmicpkgs/nft-builder",

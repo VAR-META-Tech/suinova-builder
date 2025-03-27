@@ -34,7 +34,7 @@ export default function LeftArrowIcon({ className }: ILeftArrowIcon) {
 
 export function registerLeftArrowIcon(loader?: Registerable) {
   registerComponentHelper(loader, LeftArrowIcon, {
-    name: "hostless-left-arrow-icon",
+    name: "nft-builder-left-arrow-icon",
     displayName: "Left Arrow Icon",
     props: {},
     importPath: "@plasmicpkgs/nft-builder",

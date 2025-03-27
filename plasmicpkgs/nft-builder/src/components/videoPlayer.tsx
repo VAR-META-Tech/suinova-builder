@@ -274,15 +274,15 @@ export default VideoPlayer;
 
 export function registerVideoPlayer(loader?: Registerable) {
   registerComponentHelper(loader, VideoPlayer, {
-    name: "hostless-video-player",
-    displayName: "Video Player",
+    name: "nft-builder-video-player",
+    displayName: "NFT Video Player",
     props: {
       backwardIcon: {
         type: "slot",
         defaultValue: [
           {
             type: "component",
-            name: "hostless-back-icon",
+            name: "nft-builder-back-icon",
           },
         ],
       },
@@ -291,7 +291,7 @@ export function registerVideoPlayer(loader?: Registerable) {
         defaultValue: [
           {
             type: "component",
-            name: "hostless-forward-icon",
+            name: "nft-builder-forward-icon",
           },
         ],
       },
@@ -300,7 +300,7 @@ export function registerVideoPlayer(loader?: Registerable) {
         defaultValue: [
           {
             type: "component",
-            name: "hostless-play-icon",
+            name: "nft-builder-play-icon",
           },
         ],
       },
@@ -309,7 +309,7 @@ export function registerVideoPlayer(loader?: Registerable) {
         defaultValue: [
           {
             type: "component",
-            name: "hostless-stop-icon",
+            name: "nft-builder-stop-icon",
           },
         ],
       },

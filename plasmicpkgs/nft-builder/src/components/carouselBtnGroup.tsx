@@ -81,7 +81,7 @@ export default function CarouselBtnGroup({
 
 export function registerCarouselBtnGroup(loader?: Registerable) {
   registerComponentHelper(loader, CarouselBtnGroup, {
-    name: "hostless-carousel-btn-group",
+    name: "nft-builder-carousel-btn-group",
     displayName: "Carousel Button Group",
     props: {
       leftBtnChildren: {
@@ -89,7 +89,7 @@ export function registerCarouselBtnGroup(loader?: Registerable) {
         defaultValue: [
           {
             type: "component",
-            name: "hostless-left-arrow-icon",
+            name: "nft-builder-left-arrow-icon",
           },
         ],
       },
@@ -98,7 +98,7 @@ export function registerCarouselBtnGroup(loader?: Registerable) {
         defaultValue: [
           {
             type: "component",
-            name: "hostless-right-arrow-icon",
+            name: "nft-builder-right-arrow-icon",
           },
         ],
       },

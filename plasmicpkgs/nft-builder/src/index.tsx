@@ -16,6 +16,8 @@ import { registerRightArrowIcon } from "./icons/rightArrowIcon";
 import { registerVideoPlayer } from "./components/videoPlayer";
 import { registerNFTCarousel } from "./components/nftCarousel";
 import { registerCarouselBtnGroup } from "./components/carouselBtnGroup";
+import { registerWalletIcon } from "./icons/walletIcon";
+import { registerNFTCarouselItem } from "./components/nftCarouselItem";
 
 export function registerAll(loader?: Registerable) {
   // global provider
@@ -27,6 +29,7 @@ export function registerAll(loader?: Registerable) {
   registerForwardIcon(loader);
   registerPlayIcon(loader);
   registerStopIcon(loader);
+  registerWalletIcon(loader);
   // components
   registerVideoPlayer(loader);
   registerConnectWalletButton(loader);
@@ -36,6 +39,7 @@ export function registerAll(loader?: Registerable) {
   registerUserInfoCard(loader);
   registerNFTCarousel(loader);
   registerCarouselBtnGroup(loader);
+  registerNFTCarouselItem(loader);
 }
 
 export * from "./components/userAvatar";
@@ -52,5 +56,7 @@ export * from "./components/connectWalletButton";
 export * from "./components/videoPlayer";
 export * from "./components/nftCarousel";
 export * from "./components/carouselBtnGroup";
+export * from "./icons/walletIcon";
+export * from  "./components/nftCarouselItem";
 export { popoverProps } from "./util";
 export { PopoverExtraProps } from "./util";

@@ -45,7 +45,7 @@ export default function ForwardIcon({ className }: IForwardIcon) {
 
 export function registerForwardIcon(loader?: Registerable) {
   registerComponentHelper(loader, ForwardIcon, {
-    name: "hostless-forward-icon",
+    name: "nft-builder-forward-icon",
     displayName: "Forward Icon",
     props: {},
     importPath: "@plasmicpkgs/nft-builder",

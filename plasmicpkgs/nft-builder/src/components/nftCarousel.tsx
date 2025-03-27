@@ -7,15 +7,6 @@ import clsx from "clsx";
 const CSSClasses = {
   nftCarouselContainer: "nft-carousel-container",
   carousel: "nft-carousel",
-  carouselItem: "nft-carousel-item",
-  collectionCard: "nft-carousel-collection-card",
-  cardImageWrapper: "nft-carousel-card-image-wrapper",
-  cardImage: "nft-carousel-card-image",
-  cardContent: "nft-carousel-card-content",
-  cardTitle: "nft-carousel-card-title",
-  statsContainer: "nft-carousel-stats-container",
-  statLabel: "nft-carousel-stat-label",
-  statValue: "nft-carousel-stat-value",
 };
 // Minify CSS helper function
 const minifyCss = (css: string) => {
@@ -34,7 +25,6 @@ const collections = [
     image:
       "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
     floorPrice: "50 SUI",
-    totalVolume: "765K SUI",
   },
   {
     id: 2,
@@ -42,7 +32,6 @@ const collections = [
     image:
       "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
     floorPrice: "50 SUI",
-    totalVolume: "765K SUI",
   },
   {
     id: 3,
@@ -50,7 +39,6 @@ const collections = [
     image:
       "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
     floorPrice: "50 SUI",
-    totalVolume: "765K SUI",
   },
   {
     id: 4,
@@ -58,7 +46,6 @@ const collections = [
     image:
       "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
     floorPrice: "50 SUI",
-    totalVolume: "765K SUI",
   },
   {
     id: 5,
@@ -66,7 +53,6 @@ const collections = [
     image:
       "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
     floorPrice: "50 SUI",
-    totalVolume: "765K SUI",
   },
 ];
 
@@ -76,11 +62,13 @@ interface INFTCarousel extends CarouselProps {
   leftBtnChildren?: ReactNode;
   rightBtnChildren?: ReactNode;
   carouselBtnGroup?: ReactNode;
+  children?: ReactNode;
 }
 const NFTCarousel = ({
   className,
   slidesToShow,
   carouselBtnGroup,
+  children,
   ...props
 }: INFTCarousel) => {
   const carouselRef = React.useRef<CarouselRef | null>(null);
@@ -98,62 +86,6 @@ const NFTCarousel = ({
       minifyCss(`
           .${CSSClasses.nftCarouselContainer} {
             width: 1050px;
-          }
-    
-          .${CSSClasses.carouselItem} {
-            padding: 0 10px;
-            max-width: 240px;
-            width: 100%;
-          }
-    
-          .${CSSClasses.collectionCard} {
-            background-color: transparent;
-            border: none;
-            border-radius: 16px;
-            overflow: hidden;
-          }
-    
-          .${CSSClasses.cardImageWrapper} {
-            border-top-right-radius: 24px;
-            border-top-left-radius: 24px;
-            overflow: hidden;
-            height: 240px;
-          }
-    
-          .${CSSClasses.cardImage} {
-            max-width: 240px;
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-          }
-    
-          .${CSSClasses.cardContent} {
-            background-color: #1A2938;
-            border-bottom-right-radius: 24px;
-            border-bottom-left-radius: 24px;
-            padding: 12px 20px;
-          }
-    
-          .${CSSClasses.cardTitle} {
-            color: white;
-            text-align: start;
-            margin: 0 0 8px 0;
-            font-size: 16px;
-            font-weight: 500;
-            line-height: 140%;
-          }
-    
-          .${CSSClasses.statsContainer} {
-            display: flex;
-            justify-content: space-between;
-          }
-    
-          .${CSSClasses.statValue} {
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-            font-weight: 600;
-            line-height: 140%;
           }
         `),
     []
@@ -200,27 +132,7 @@ const NFTCarousel = ({
         className={clsx(CSSClasses.carousel)}
         {...props}
       >
-        {collections.map((collection) => {
-          return (
-            <div key={collection.id} className={CSSClasses.carouselItem}>
-              <div className={CSSClasses.cardImageWrapper}>
-                <img
-                  alt={collection.name}
-                  src={collection.image}
-                  className={CSSClasses.cardImage}
-                />
-              </div>
-              <div className={CSSClasses.cardContent}>
-                <div className={CSSClasses.cardTitle}>{collection.name}</div>
-                <div className={CSSClasses.statsContainer}>
-                  <div className={CSSClasses.statValue}>
-                    {collection.floorPrice}
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {children}
       </Carousel>
     </div>
   );
@@ -229,7 +141,7 @@ export default NFTCarousel;
 
 export function registerNFTCarousel(loader?: Registerable) {
   registerComponentHelper(loader, NFTCarousel, {
-    name: "hostless-nft-carousel",
+    name: "nft-builder-carousel",
     displayName: "NFT Carousel",
     props: {
       autoplay: {
@@ -259,12 +171,26 @@ export function registerNFTCarousel(loader?: Registerable) {
       },
       carouselBtnGroup: {
         type: "slot",
+        hidePlaceholder: true,
         defaultValue: [
           {
             type: "component",
-            name: "hostless-carousel-btn-group",
+            name: "nft-builder-carousel-btn-group",
           },
         ],
+      },
+      children: {
+        type: "slot",
+        defaultValue: collections.map((collection) => ({
+          type: "component",
+          name: "nft-builder-carousel-item",
+          props: {
+            id: collection.id,
+            name: collection.name,
+            image: collection.image,
+            floorPrice: collection.floorPrice,
+          },
+        })),
       },
     },
     importPath: "@plasmicpkgs/nft-builder",
