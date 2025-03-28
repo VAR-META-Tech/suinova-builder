@@ -1,5 +1,5 @@
 import { Registerable } from "./reg-util";
-import { registerGlobalContextProvider } from "./globalContextProvider";
+import { registerWeb3Provider } from "./globalContextProvider";
 import { registerUserInfoCard } from "./components/userInfoCard";
 import { registerLeftArrowIcon } from "./icons/leftArrowIcon";
 import { registerConnectWalletButton } from "./components/connectWalletButton";
@@ -21,7 +21,7 @@ import { registerNFTCarouselItem } from "./components/nftCarouselItem";
 
 export function registerAll(loader?: Registerable) {
   // global provider
-  registerGlobalContextProvider();
+  registerWeb3Provider();
   // icons
   registerLeftArrowIcon(loader);
   registerRightArrowIcon(loader);
