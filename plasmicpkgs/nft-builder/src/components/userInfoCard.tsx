@@ -158,7 +158,7 @@ export default function UserInfoCard({ className }: IUserInfoCard) {
 
 export function registerUserInfoCard(loader?: Registerable) {
   registerComponentHelper(loader, UserInfoCard, {
-    name: "hostless-user-info-card",
+    name: "nft-builder-user-info-card",
     displayName: "User Info Card",
     props: {
       //   image: {

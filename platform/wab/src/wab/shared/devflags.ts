@@ -421,7 +421,7 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "hostless-connect-wallet-btn",
+          componentName: "nft-builder-connect-wallet-btn",
           displayName: "Connect Wallet Button",
         },
       ],
@@ -440,55 +440,35 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Web3 Global Context",
           hidden: true,
         },
-        {
-          type: "hostless-component",
-          componentName: "hostless-header",
-          displayName: "Header",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-hero",
-          displayName: "Hero",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-section-one",
-          displayName: "Section One",
-        },
-        {
-          type: "hostless-component",
-          componentName: "hostless-section-two",
-          displayName: "Section Two",
-        },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       type: "hostless-package",
-      name: "Collection Display",
+      name: "NFT Display",
       sectionLabel: "NFT Marketplace",
       codeLink:
         "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
       items: [
         {
           type: "hostless-component",
-          componentName: "hostless-nft-card",
+          componentName: "nft-builder-card",
           displayName: "NFT Card",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-collection-card",
-          displayName: "Collection Card",
+          componentName: "nft-builder-video-player",
+          displayName: "NFT Video Player",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-search-nft-input",
-          displayName: "Search NFT Input",
+          componentName: "nft-builder-carousel",
+          displayName: "NFT Carousel",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-magnifying-icon",
-          displayName: "Magnifying Icon",
+          componentName: "nft-builder-carousel-item",
+          displayName: "NFT Carousel Item",
         },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
@@ -502,73 +482,22 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "hostless-user-avatar",
+          componentName: "nft-builder-user-avatar",
           displayName: "User Avatar",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-user-avatar-group",
+          componentName: "nft-builder-user-avatar-group",
           displayName: "User Avatar Group",
         },
         {
           type: "hostless-component",
-          componentName: "hostless-user-info-card",
+          componentName: "nft-builder-user-info-card",
           displayName: "User Info Card",
         },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
     },
-    // {
-    //   type: "hostless-package",
-    //   name: "NFT Marketplace",
-    //   sectionLabel: "NFT Marketplace",
-    //   codeName: "nft-builder",
-    //   codeLink:
-    //     "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
-    //   items: [
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-radix-dialog",
-    //       displayName: "Dialog",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-radix-tooltip",
-    //       displayName: "Tooltip",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-radix-popover",
-    //       displayName: "Popover Core",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-connect-wallet-btn",
-    //       displayName: "Connect Wallet Button",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "AuthGlobalContext",
-    //       displayName: "Auth Global Context",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-user-avatar",
-    //       displayName: "User Avatar",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-user-avatar-group",
-    //       displayName: "User Avatar Group",
-    //     },
-    //     {
-    //       type: "hostless-component",
-    //       componentName: "hostless-nft-card",
-    //       displayName: "NFT Card",
-    //     },
-    //   ],
-    //   projectId: "xvCszXLpXuQVajBPfurDZb",
-    // },
     {
       sectionLabel: "Design systems",
       type: "hostless-package",

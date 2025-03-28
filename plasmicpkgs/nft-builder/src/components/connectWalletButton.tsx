@@ -86,11 +86,9 @@ const ConnectWalletButton = React.forwardRef<
   );
 });
 
-ConnectWalletButton.displayName = "Connect Wallet Button";
-
 export function registerConnectWalletButton(PLASMIC?: Registerable) {
   registerComponentHelper(PLASMIC, ConnectWalletButton, {
-    name: "hostless-connect-wallet-btn",
+    name: "nft-builder-connect-wallet-btn",
     displayName: "Connect Wallet Button",
     importPath: "@plasmicpkgs/nft-builder",
     importName: "ConnectWalletButton",
