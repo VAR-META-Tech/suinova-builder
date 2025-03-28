@@ -32,19 +32,43 @@ import { XDraggable } from "@/wab/commons/components/XDraggable";
 import {
   cx,
   ensure,
+  isOneOf,
+  maybe,
   spawn,
+  swallow,
   spawnWrapper,
   switchType,
 } from "@/wab/shared/common";
-import { getComponentDisplayName } from "@/wab/shared/core/components";
+import {
+  getComponentDisplayName,
+  isHostLessCodeComponent,
+  getRealParams,
+  findVariantGroupForParam,
+} from "@/wab/shared/core/components";
 import { extractComponentUsages } from "@/wab/shared/core/sites";
 import { extractTokenUsages } from "@/wab/shared/core/styles";
-import { Component, StyleToken } from "@/wab/shared/model/classes";
+import {
+  CONTRACT_PACKAGE_ID,
+  CONTRACT_PACKAGE_ID_PARAM_NAME,
+  WEB3_GLOBAL_CONTEXT_COMP_NAME,
+} from "@/wab/shared/devflags";
+import { Component, isKnownExpr, StyleToken } from "@/wab/shared/model/classes";
 import { LeftTabKey } from "@/wab/shared/ui-config-utils";
 import L from "lodash";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useLocalStorage } from "react-use";
+import { resolveTemplatedString } from "@/wab/client/components/sidebar-tabs/ComponentProps/TemplatedTextEditor";
+import { codeLit, tryExtractJson, asCode } from "@/wab/shared/core/exprs";
+import { Descendant } from "slate";
+import {
+  getPropTypeType,
+  isPlainObjectPropType,
+} from "@/wab/shared/code-components/code-components";
+import { ComponentPropOrigin } from "@/wab/shared/core/lang";
+import { tryGetTplOwnerComponent } from "@/wab/shared/core/tpls";
+import { isSlot } from "@/wab/shared/SlotUtils";
+import { paramToVarName } from "@/wab/shared/codegen/util";
 
 interface LeftPaneProps {
   studioCtx: StudioCtx;
@@ -54,7 +78,11 @@ interface LeftPaneProps {
 const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const { studioCtx } = props;
   const dbCtx = studioCtx.dbCtx();
+  const tplMgr = studioCtx.tplMgr();
   // const [hover, setHover] = React.useState(false);
+  const web3GlobalContextTpl = studioCtx.site.globalContexts.find(
+    (item) => item.component.name === WEB3_GLOBAL_CONTEXT_COMP_NAME
+  );
 
   const wrapTab = (
     tabKey: LeftTabKey,
@@ -126,6 +154,97 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     setHighlightPane(true);
     setTimeout(() => setHighlightPane(false), 2000);
   });
+
+  React.useEffect(() => {
+    const nodes: Descendant[] = [
+      {
+        children: [{ text: CONTRACT_PACKAGE_ID }],
+        type: "paragraph",
+      },
+    ];
+    const expr = resolveTemplatedString(nodes);
+
+    if (!web3GlobalContextTpl) {
+      return;
+    }
+
+    const component = tryGetTplOwnerComponent(web3GlobalContextTpl) ?? null;
+
+    const componentProps = Object.fromEntries(
+      web3GlobalContextTpl.vsettings[0].args
+        .filter(
+          (arg) =>
+            !isSlot(arg.param) &&
+            !findVariantGroupForParam(web3GlobalContextTpl.component, arg.param)
+        )
+        .map((arg) => [
+          paramToVarName(web3GlobalContextTpl.component, arg.param),
+          tryExtractJson(
+            asCode(arg.expr, {
+              projectFlags: studioCtx.projectFlags(),
+              component,
+              inStudio: true,
+            })
+          ),
+        ])
+    );
+
+    const params = getRealParams(web3GlobalContextTpl.component).filter(
+      (param) => {
+        const propType = (
+          isHostLessCodeComponent(web3GlobalContextTpl.component)
+            ? studioCtx.getHostLessContextsMap()
+            : studioCtx.getRegisteredContextsMap()
+        ).get(web3GlobalContextTpl.component.name)?.meta.props[
+          param.variable.name
+        ];
+        const propTypeType = getPropTypeType(propType);
+        if (
+          propTypeType &&
+          isOneOf(propTypeType, [
+            "styleScopeClass",
+            "themeResetClass",
+            "themeStyles",
+          ])
+        ) {
+          return false;
+        }
+        if (isPlainObjectPropType(propType) && propType.type !== "slot") {
+          const objPropType = propType;
+          return !swallow(() =>
+            objPropType.hidden?.(componentProps, null, { path: [] })
+          );
+        }
+        return param.origin !== ComponentPropOrigin.ReactHTMLAttributes;
+      }
+    );
+
+    const p = params.find(
+      (item) => item.variable.name === CONTRACT_PACKAGE_ID_PARAM_NAME
+    );
+    if (!p) {
+      return;
+    }
+
+    const arg = web3GlobalContextTpl.vsettings[0].args.find(
+      (_arg) => _arg.param === p
+    );
+    const curExpr = maybe(arg, (x) => x.expr) || p.defaultExpr || undefined;
+    const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
+    if (expr == null && exprLit == null) {
+      return;
+    }
+    const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+    void studioCtx.change(({ success }) => {
+      tplMgr.setArg(
+        web3GlobalContextTpl,
+        web3GlobalContextTpl.vsettings[0],
+        p.variable,
+        newExpr
+      );
+      return success();
+    });
+  }, [web3GlobalContextTpl]);
 
   return providesSidebarPopupSetting({ left: true })(
     <SidebarModalProvider containerSelector={".canvas-editor__left-pane"}>

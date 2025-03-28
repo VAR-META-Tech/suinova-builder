@@ -140,7 +140,6 @@ const ContextsList = observer(function ContextsList_(props: {
   const filteredContexts = contexts.filter((c) =>
     matcher.matches(getComponentDisplayName(c.component))
   );
-  console.log("🚀 ~ filteredContexts:", filteredContexts);
 
   const filteredTplComponents = props.tplComponents.filter((tpl) =>
     matcher.matches(getComponentDisplayName(tpl.component))
@@ -356,6 +355,9 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
     }
     return param.origin !== ComponentPropOrigin.ReactHTMLAttributes;
   });
+
+  const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
+
   const contextDescription =
     tpl.component.codeComponentMeta?.description ?? undefined;
 
@@ -386,7 +388,6 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
                 label
               );
 
-              const tplMgr = studioCtx.tplMgr();
               const arg = tpl.vsettings[0].args.find(
                 (_arg) => _arg.param === p
               );
@@ -495,17 +496,20 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
                     <pre>
                       <code>
                         {`
-<PlasmicRootProvider
-  globalContextsProps={{
-    ${makeGlobalContextPropName(tpl.component)}: {
-      // prop overrides here
-${tpl.component.params
-  .filter((p) => !isRenderFuncParam(p))
-  .map((p) => `      ${paramToVarName(tpl.component, p)}: ...,`)
-  .join("\n")}
-    }
-  }}
->
+                        <PlasmicRootProvider
+                          globalContextsProps={{
+                            ${makeGlobalContextPropName(tpl.component)}: {
+                              // prop overrides here
+                        ${tpl.component.params
+                          .filter((p) => !isRenderFuncParam(p))
+                          .map(
+                            (p) =>
+                              `      ${paramToVarName(tpl.component, p)}: ...,`
+                          )
+                          .join("\n")}
+                            }
+                          }}
+                        >
                       `.trim()}
                       </code>
                     </pre>

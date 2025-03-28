@@ -684,7 +684,7 @@ function parseTemplatedStringToSlateNodes(
       ];
 }
 
-function resolveTemplatedString(nodes: Descendant[]): TemplatedString {
+export function resolveTemplatedString(nodes: Descendant[]): TemplatedString {
   const traverseTree = (_nodes: Descendant[]) => {
     return _nodes.flatMap((node, idx) =>
       node["type"] === "code-tag"

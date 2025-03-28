@@ -274,6 +274,11 @@ const projectIdConfig = {
   HOST_LESS_PROJECT_ID_ANTD_4: "gzny5sU7cPH2nhvEqzdB2m",
 };
 
+export const CONTRACT_PACKAGE_ID =
+  "0x8372201a47f77c209c4d56bfae19fae5c1120cc723eca5670ff42f7f569a4677";
+export const WEB3_GLOBAL_CONTEXT_COMP_NAME = "Web3GlobalContext";
+export const CONTRACT_PACKAGE_ID_PARAM_NAME = "contractPackageId";
+
 const DEFAULT_DEVFLAGS = {
   appContentBaseUrl: "https://docs.plasmic.app/app-content",
   artboardEval: true,
@@ -431,8 +436,8 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "AuthGlobalContext",
-          displayName: "Auth Global Context",
+          componentName: "Web3GlobalContext",
+          displayName: "Web3 Global Context",
           hidden: true,
         },
         {

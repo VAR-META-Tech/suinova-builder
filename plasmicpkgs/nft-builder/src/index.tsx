@@ -1,5 +1,5 @@
 import { Registerable } from "./reg-util";
-import { registerGlobalContextProvider } from "./globalContextProvider";
+import { registerWeb3Provider } from "./globalContextProvider";
 import { registerUserInfoCard } from "./components/userInfoCard";
 import { registerHeader } from "./homePageSections/header";
 import { registerMagnifyingIcon } from "./icons/magnifyingIcon";
@@ -13,7 +13,10 @@ import { registerHeroAuthor } from "./components/heroAuthor";
 import { registerRightArrowIcon } from "./icons/rightArrowIcon";
 import { registerLeftArrowIcon } from "./icons/leftArrowIcon";
 import { registerConnectWalletButton } from "./components/connectWalletButton";
-import { registerUserAvatar, registerUserAvatarGroup } from "./components/userAvatar";
+import {
+  registerUserAvatar,
+  registerUserAvatarGroup,
+} from "./components/userAvatar";
 import { registerNFTCard } from "./components/nftCard";
 import { registerCollectionCard } from "./components/collectionCard";
 import { registerSearchNftInput } from "./components/searchNftInput";
@@ -28,15 +31,15 @@ import { registerCollectionIcon } from "./icons/collectionIcon";
 
 export function registerAll(loader?: Registerable) {
   // global provider
-  registerGlobalContextProvider();
+  registerWeb3Provider();
   // icons
   registerMagnifyingIcon(loader);
-  registerRightArrowIcon(loader)
-  registerLeftArrowIcon(loader)
+  registerRightArrowIcon(loader);
+  registerLeftArrowIcon(loader);
   registerRocketIcon(loader);
-  registerHomeIcon(loader)
-  registerBrushIcon(loader)
-  registerCollectionIcon(loader)
+  registerHomeIcon(loader);
+  registerBrushIcon(loader);
+  registerCollectionIcon(loader);
   // components
   registerConnectWalletButton(loader);
   registerUserAvatar(loader);
@@ -48,16 +51,16 @@ export function registerAll(loader?: Registerable) {
   registerHeroRightIllustration(loader);
   registerGetStartedButton(loader);
   registerHeroIllusImage(loader);
-  registerHeroAuthor(loader)
-  registerHeroAuthorAvatar(loader)
-  registerCarouselLeftButton(loader)
-  registerCarouselRightButton(loader)
-  registerNFTCarousel(loader)
+  registerHeroAuthor(loader);
+  registerHeroAuthorAvatar(loader);
+  registerCarouselLeftButton(loader);
+  registerCarouselRightButton(loader);
+  registerNFTCarousel(loader);
   // homePage sections
   registerHeader(loader);
   registerHero(loader);
   registerSectionOne(loader);
-  registerSectionTwo(loader)
+  registerSectionTwo(loader);
 }
 
 export * from "./components/userAvatar";
@@ -79,11 +82,11 @@ export * from "./components/heroIllusImage";
 export * from "./components/heroAuthor";
 export * from "./components/heroAuthorAvatar";
 export * from "./homePageSections/sectionOne/components/carouselLeftBtn";
-export * from "./homePageSections/sectionOne/components/carouselRightBtn"
-export * from "./homePageSections/sectionOne/components/nftCarousel"
-export * from  "./homePageSections/sectionTwo"
-export * from "./icons/homeIcon"
-export * from "./icons/brushIcon"
-export * from "./icons/collectionIcon"
+export * from "./homePageSections/sectionOne/components/carouselRightBtn";
+export * from "./homePageSections/sectionOne/components/nftCarousel";
+export * from "./homePageSections/sectionTwo";
+export * from "./icons/homeIcon";
+export * from "./icons/brushIcon";
+export * from "./icons/collectionIcon";
 export { popoverProps } from "./util";
 export { PopoverExtraProps } from "./util";

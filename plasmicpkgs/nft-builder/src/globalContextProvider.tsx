@@ -10,33 +10,43 @@ import {
   registerGlobalContext,
 } from "@plasmicapp/host";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Registerable } from "./reg-util";
 import "@mysten/dapp-kit/dist/index.css";
 
 const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
+  devnet: { url: getFullnodeUrl("devnet") },
   mainnet: { url: getFullnodeUrl("mainnet") },
 });
 const queryClient = new QueryClient();
 
-const initialContext = { init: "initial context" };
+interface Web3GlobalContextProps {
+  contractPackageId: string;
+  importedCollections: { packageId: string }[];
+}
+interface Web3GlobalContextData extends Web3GlobalContextProps {}
 
-const initialAction = () => console.log("initial action");
-
-interface AuthGlobalContextProps {}
-
-export const GlobalContextProvider = ({
+export const Web3GlobalContext = ({
   children,
-}: React.PropsWithChildren<AuthGlobalContextProps>) => {
+  ...rest
+}: React.PropsWithChildren<Web3GlobalContextProps>) => {
+  const [data, setData] = useState<Web3GlobalContextData>();
+
+  useEffect(() => {
+    setData(rest);
+  }, [rest]);
+
+  const initialAction = () => console.log("initial action");
+
   return (
     <GlobalActionsProvider
-      contextName="AuthGlobalContext"
+      contextName="Web3GlobalContext"
       actions={{ initialAction }}
     >
-      <DataProvider name="auth" data={initialContext}>
+      <DataProvider name="web3GlobalData" data={data}>
         <QueryClientProvider client={queryClient}>
-          <SuiClientProvider networks={networkConfig} defaultNetwork="localnet">
+          <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
             <WalletProvider>{children}</WalletProvider>
           </SuiClientProvider>
         </QueryClientProvider>
@@ -45,18 +55,24 @@ export const GlobalContextProvider = ({
   );
 };
 
-export function registerGlobalContextProvider(loader?: Registerable) {
+export function registerWeb3Provider(loader?: Registerable) {
   const doRegisterComponent: typeof registerGlobalContext = (...args) =>
     loader
       ? loader.registerGlobalContext(...args)
       : registerGlobalContext(...args);
 
-  doRegisterComponent(GlobalContextProvider, {
-    name: "AuthGlobalContext",
-    displayName: "Auth Global Context",
-    props: {},
+  doRegisterComponent(Web3GlobalContext, {
+    name: "Web3GlobalContext",
+    displayName: "Web3GlobalContext",
+    props: {
+      contractPackageId: "string",
+      importedCollections: {
+        type: "array",
+        itemType: { type: "object" },
+      },
+    },
     providesData: true,
     importPath: "@plasmicpkgs/nft-builder",
-    importName: "AuthGlobalContext",
+    importName: "Web3GlobalContext",
   });
 }
