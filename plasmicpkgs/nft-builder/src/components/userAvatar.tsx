@@ -32,7 +32,7 @@ export function UserAvatarGroup(
 
 export function registerUserAvatar(loader?: Registerable) {
   registerComponentHelper(loader, UserAvatar, {
-    name: "hostless-user-avatar",
+    name: "nft-builder-user-avatar",
     displayName: "User Avatar",
     props: {
       href: {
@@ -77,38 +77,14 @@ export function registerUserAvatar(loader?: Registerable) {
 
 export function registerUserAvatarGroup(loader?: Registerable) {
   registerComponentHelper(loader, UserAvatarGroup, {
-    name: "hostless-user-avatar-group",
+    name: "nft-builder-user-avatar-group",
     displayName: "User Avatar Group",
     props: {
       children: {
         type: "slot",
-        // defaultValue: [1, 2, 3, 4].map((user) => ({
-        //   type: "component",
-        //   name: "hostless-radix-tooltip",
-        //   props: {
-        //     children: {
-        //       type: "component",
-        //       name: "hostless-user-avatar",
-        //       props: {
-        //         letters: `U${user}`,
-        //       },
-        //     },
-        //   },
-        // })),
         defaultValue: [1, 2, 3, 4].map((user) => ({
-          // type: "component",
-          // name: "hostless-radix-tooltip",
-          // props: {
-          //   children: {
-          //     type: "component",
-          //     name: "hostless-user-avatar",
-          //     props: {
-          //       letters: `U${user}`,
-          //     },
-          //   },
-          // },
           type: "component",
-          name: "hostless-user-avatar",
+          name: "nft-builder-user-avatar",
           props: {
             letters: `U${user}`,
           },

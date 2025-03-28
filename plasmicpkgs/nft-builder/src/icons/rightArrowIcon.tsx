@@ -33,7 +33,7 @@ export default function RightArrowIcon({ className }: IRightArrowIcon) {
 
 export function registerRightArrowIcon(loader?: Registerable) {
   registerComponentHelper(loader, RightArrowIcon, {
-    name: "hostless-right-arrow-icon",
+    name: "nft-builder-right-arrow-icon",
     displayName: "Right Arrow Icon",
     props: {},
     importPath: "@plasmicpkgs/nft-builder",

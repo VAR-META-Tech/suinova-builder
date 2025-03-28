@@ -144,7 +144,7 @@ export default function NFTCard({
 
 export function registerNFTCard(loader?: Registerable) {
   registerComponentHelper(loader, NFTCard, {
-    name: "hostless-nft-card",
+    name: "nft-builder-card",
     displayName: "NFT Card",
     props: {
       image: {
