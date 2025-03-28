@@ -173,14 +173,16 @@ const ContextsList = observer(function ContextsList_(props: {
       customDragHandle
     >
       {filteredContexts.map((c, idx) => (
-        <ContextRow
-          key={filteredTplComponents[idx].uuid}
-          studioCtx={studioCtx}
-          context={c}
-          tplComponent={filteredTplComponents[idx]}
-          matcher={matcher}
-          readOnly={readOnly}
-        />
+        <>
+          <ContextRow
+            key={filteredTplComponents[idx].uuid}
+            studioCtx={studioCtx}
+            context={c}
+            tplComponent={filteredTplComponents[idx]}
+            matcher={matcher}
+            readOnly={readOnly}
+          />
+        </>
       ))}
     </SimpleReorderableList>
   );
@@ -477,6 +479,10 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
                 ),
               };
             }),
+            // {
+            //   collapsible: true,
+            //   content: <div></div>
+            // },
             {
               collapsible: true,
               content: (

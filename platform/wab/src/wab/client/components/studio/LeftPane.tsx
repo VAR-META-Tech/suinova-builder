@@ -222,6 +222,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     const p = params.find(
       (item) => item.variable.name === CONTRACT_PACKAGE_ID_PARAM_NAME
     );
+
     if (!p) {
       return;
     }
@@ -230,7 +231,14 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
       (_arg) => _arg.param === p
     );
     const curExpr = maybe(arg, (x) => x.expr) || p.defaultExpr || undefined;
+    console.log("🚀 ~ React.useEffect ~ arg:", curExpr);
+
     const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
+
+    if (!!exprLit) {
+      return;
+    }
+
     if (expr == null && exprLit == null) {
       return;
     }
