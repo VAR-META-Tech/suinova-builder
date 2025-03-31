@@ -69,7 +69,6 @@ import { Redirect, Route, Switch, useHistory, useLocation } from "react-router";
 import ConnectWallet from "@/wab/client/components/pages/ConnectWallet";
 import { ConnectWalletLayout } from "@/wab/client/components/connect-wallet-layout";
 import {
-  ConnectButton,
   createNetworkConfig,
   SuiClientProvider,
   WalletProvider,
@@ -91,6 +90,7 @@ interface LoggedInContainerProps {
 // Config options for the networks you want to connect to
 const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
+  devnet: { url: getFullnodeUrl("devnet") },
   mainnet: { url: getFullnodeUrl("mainnet") },
 });
 const queryClient = new QueryClient();

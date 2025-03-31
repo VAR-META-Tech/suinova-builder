@@ -1,0 +1,136 @@
+.collectionForm {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.formTitle {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.formGroup {
+  margin-bottom: 4px;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 4px;
+  color: var(--token-0IloF6TmFvF);
+  white-space: pre-wrap;
+}
+
+.errorMessage {
+  display: block;
+  color: #e53e3e;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* React Select customization */
+.collectionTypeSelect {
+  z-index: 10;
+}
+
+.collectionTypeSelect :global(.select__control) {
+  border-radius: 5px;
+  box-shadow: none;
+  font-size: 12px;
+  min-height: 32px;
+  height: 32px;
+  color: rgb(27, 27, 24);
+  background-color: rgb(243, 243, 242);
+  border: none;
+  margin-bottom: 4px;
+}
+
+.collectionTypeSelect :global(.select__control:hover) {
+}
+
+.collectionTypeSelect :global(.select__placeholder) {
+  color: rgb(144, 144, 140);
+  font-size: 12px;
+}
+
+.collectionTypeSelect :global(.select__menu) {
+  z-index: 100;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.collectionTypeSelect :global(.select__option) {
+  padding: 10px 12px;
+}
+
+.collectionTypeSelect :global(.select__option--is-focused) {
+  background-color: #ebf8ff;
+}
+
+.collectionTypeSelect :global(.select__option--is-selected) {
+  background-color: #3182ce;
+  color: white;
+}
+
+.collectionTypeSelect :global(.select__indicator) {
+  padding: 0 8px;
+}
+
+.collectionTypeSelect :global(.select__indicator-separator) {
+  display: none;
+}
+
+
+/* Royalty input styling */
+.royaltyInputWrapper {
+  position: relative;
+}
+
+.royaltyInput {
+  width: 100%;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  background-color: rgb(243, 243, 242);
+  margin-bottom: 4px;
+}
+
+.royaltyInput:focus {
+}
+
+.royaltyInput::placeholder {
+  color: rgb(27, 27, 24);
+}
+
+.percentageSymbol {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #85858B;
+  font-size: 12px;
+}
+
+/* Import button styling */
+.importButton {
+  background-color: #2b6cb0;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.importButton:hover {
+  background-color: #2c5282;
+}
+
+.importButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+

@@ -155,42 +155,36 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     setTimeout(() => setHighlightPane(false), 2000);
   });
 
-  React.useEffect(() => {
-    const nodes: Descendant[] = [
-      {
-        children: [{ text: CONTRACT_PACKAGE_ID }],
-        type: "paragraph",
-      },
-    ];
-    const expr = resolveTemplatedString(nodes);
+  const component = web3GlobalContextTpl
+    ? tryGetTplOwnerComponent(web3GlobalContextTpl) ?? null
+    : null;
 
-    if (!web3GlobalContextTpl) {
-      return;
-    }
+  const componentProps = web3GlobalContextTpl
+    ? Object.fromEntries(
+        web3GlobalContextTpl.vsettings[0].args
+          .filter(
+            (arg) =>
+              !isSlot(arg.param) &&
+              !findVariantGroupForParam(
+                web3GlobalContextTpl.component,
+                arg.param
+              )
+          )
+          .map((arg) => [
+            paramToVarName(web3GlobalContextTpl.component, arg.param),
+            tryExtractJson(
+              asCode(arg.expr, {
+                projectFlags: studioCtx.projectFlags(),
+                component,
+                inStudio: true,
+              })
+            ),
+          ])
+      )
+    : null;
 
-    const component = tryGetTplOwnerComponent(web3GlobalContextTpl) ?? null;
-
-    const componentProps = Object.fromEntries(
-      web3GlobalContextTpl.vsettings[0].args
-        .filter(
-          (arg) =>
-            !isSlot(arg.param) &&
-            !findVariantGroupForParam(web3GlobalContextTpl.component, arg.param)
-        )
-        .map((arg) => [
-          paramToVarName(web3GlobalContextTpl.component, arg.param),
-          tryExtractJson(
-            asCode(arg.expr, {
-              projectFlags: studioCtx.projectFlags(),
-              component,
-              inStudio: true,
-            })
-          ),
-        ])
-    );
-
-    const params = getRealParams(web3GlobalContextTpl.component).filter(
-      (param) => {
+  const params = web3GlobalContextTpl
+    ? getRealParams(web3GlobalContextTpl.component).filter((param) => {
         const propType = (
           isHostLessCodeComponent(web3GlobalContextTpl.component)
             ? studioCtx.getHostLessContextsMap()
@@ -216,10 +210,23 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
           );
         }
         return param.origin !== ComponentPropOrigin.ReactHTMLAttributes;
-      }
-    );
+      })
+    : null;
 
-    const p = params.find(
+  React.useEffect(() => {
+    if (!web3GlobalContextTpl) {
+      return;
+    }
+
+    const nodes: Descendant[] = [
+      {
+        children: [{ text: CONTRACT_PACKAGE_ID }],
+        type: "paragraph",
+      },
+    ];
+    const expr = resolveTemplatedString(nodes);
+
+    const p = params?.find(
       (item) => item.variable.name === CONTRACT_PACKAGE_ID_PARAM_NAME
     );
 
@@ -231,7 +238,6 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
       (_arg) => _arg.param === p
     );
     const curExpr = maybe(arg, (x) => x.expr) || p.defaultExpr || undefined;
-    console.log("🚀 ~ React.useEffect ~ arg:", curExpr);
 
     const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
 

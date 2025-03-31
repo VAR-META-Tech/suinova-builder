@@ -279,6 +279,7 @@ export const CONTRACT_PACKAGE_ID =
   "0x8372201a47f77c209c4d56bfae19fae5c1120cc723eca5670ff42f7f569a4677";
 export const WEB3_GLOBAL_CONTEXT_COMP_NAME = "Web3GlobalContext";
 export const CONTRACT_PACKAGE_ID_PARAM_NAME = "contractPackageId";
+export const IMPORTED_COLLECTIONS_PARAM_NAME = "importedCollections";
 
 const DEFAULT_DEVFLAGS = {
   appContentBaseUrl: "https://docs.plasmic.app/app-content",
