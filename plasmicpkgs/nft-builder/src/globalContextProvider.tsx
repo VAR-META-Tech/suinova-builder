@@ -10,7 +10,7 @@ import {
   registerGlobalContext,
 } from "@plasmicapp/host";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import React, { useEffect } from "react";
 import { Registerable } from "./reg-util";
 import "@mysten/dapp-kit/dist/index.css";
 
@@ -27,26 +27,51 @@ interface Web3GlobalContextProps {
 }
 // interface Web3GlobalContextData extends Web3GlobalContextProps {}
 
+export const InternalContext = React.createContext<{
+  login: (loginSession: any) => void;
+  logout: () => void;
+}>({ login: () => {}, logout: () => {} });
+
 export const Web3GlobalContext = ({
   children,
   contractPackageId,
+  importedCollections,
 }: React.PropsWithChildren<Web3GlobalContextProps>) => {
-  const initialAction = () => console.log("initial action");
+  const [session, setSession] = React.useState<any>();
+
+  useEffect(() => {
+    const sessionStorage = localStorage.getItem("session");
+    if (sessionStorage) {
+      setSession(sessionStorage);
+    }
+  });
+
+  const login = (loginSession: any) => {
+    setSession(loginSession);
+    localStorage.setItem("session", JSON.stringify(loginSession));
+  };
+
+  const logout = () => {
+    setSession(null);
+  };
 
   return (
-    <GlobalActionsProvider
-      contextName="Web3GlobalContext"
-      actions={{ initialAction }}
-    >
+    <GlobalActionsProvider contextName="Web3GlobalContext" actions={{ logout }}>
       <DataProvider
         name="web3GlobalData"
         data={{
           contractPackageId,
+          importedCollections,
+          session: session,
         }}
       >
         <QueryClientProvider client={queryClient}>
           <SuiClientProvider networks={networkConfig} defaultNetwork="devnet">
-            <WalletProvider>{children}</WalletProvider>
+            <WalletProvider>
+              <InternalContext.Provider value={{ login, logout }}>
+                {children}
+              </InternalContext.Provider>
+            </WalletProvider>
           </SuiClientProvider>
         </QueryClientProvider>
       </DataProvider>

@@ -1,6 +1,12 @@
-import { ConnectButton } from "@mysten/dapp-kit";
-import React, { ReactNode } from "react";
+import {
+  ConnectButton,
+  useCurrentAccount,
+  useSignPersonalMessage,
+} from "@mysten/dapp-kit";
+import React, { ReactNode, useContext, useEffect } from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
+import { useMutation } from "@tanstack/react-query";
+import { InternalContext } from "../globalContextProvider";
 
 type ConnectWalletButtonProps = {
   className?: string;
@@ -51,6 +57,52 @@ const ConnectWalletButton = React.forwardRef<
   HTMLDivElement,
   ConnectWalletButtonProps
 >(({ className, connectText, icon, ...props }, ref) => {
+  const { login: loginContext } = useContext(InternalContext);
+  const currentAccount = useCurrentAccount();
+  const { mutateAsync: signPersonalMessage } = useSignPersonalMessage({});
+  const { mutateAsync: loginMutate } = useMutation<
+    any,
+    any,
+    { signature: string }
+  >({
+    mutationFn: async ({ signature }) => {
+      await fetch(
+        "https://market.suinova.var-meta.com/api/v1/auth/wallet/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            address: currentAccount?.address,
+            signature: signature,
+            nonce: new Date().getTime(),
+          }),
+        }
+      );
+    },
+  });
+
+  useEffect(() => {
+    if (currentAccount) {
+      login();
+    }
+  }, [currentAccount]);
+
+  const login = async () => {
+    const signature = await signPersonalMessage({
+      message: new TextEncoder().encode(
+        "Welcome to SuiNova! By signing this message, you'll securely authenticate your wallet."
+      ),
+    });
+
+    const loginRes = await loginMutate({
+      signature: signature.signature,
+    });
+
+    loginContext(loginRes);
+  };
+
   const cssStyles = React.useMemo(
     () =>
       minifyCss(`
