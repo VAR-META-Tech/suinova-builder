@@ -272,6 +272,7 @@ const projectIdConfig = {
   HOST_LESS_PROJECT_ID_PLASMIC_TAB: "bGGYchQJnRrBLGcc2YbKZk",
   HOST_LESS_PROJECT_ID_PLASMIC_NAV: "bfniEFpM4tZx8htC9kkukb",
   HOST_LESS_PROJECT_ID_ANTD_4: "gzny5sU7cPH2nhvEqzdB2m",
+  HOST_LESS_PROJECT_ID_CHAKRA: process.env.HOST_LESS_PROJECT_ID_CHAKRA || "",
 };
 
 export const CONTRACT_PACKAGE_ID =
@@ -518,6 +519,27 @@ const DEFAULT_DEVFLAGS = {
         },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD,
+    },
+    {
+      sectionLabel: "Design systems",
+      type: "hostless-package",
+      name: "Chakra UI System",
+      isHeaderLess: true,
+      isInstallOnly: true,
+      imageUrl: "https://static1.plasmic.app/chakra.png",
+      codeName: "plasmic-chakra-ui",
+      codeLink:
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/chakra-ui",
+      onlyShownIn: "new",
+      items: [
+        {
+          type: "hostless-component",
+          componentName: "Chakra-UI",
+          displayName: "Chakra UI System",
+          imageUrl: "https://static1.plasmic.app/chakra.png",
+        },
+      ],
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_CHAKRA,
     },
     {
       sectionLabel: "Ant Design",

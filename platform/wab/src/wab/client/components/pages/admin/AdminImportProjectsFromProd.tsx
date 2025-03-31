@@ -249,6 +249,16 @@ export function AdminImportProjectsFromProd() {
       >
         NFT Builder
       </Button>
+      <Button
+        onClick={() =>
+          nonAuthCtx.api.createHostLessProject({
+            name: "plasmic-chakra-ui",
+            npmPkg: ["@plasmicpkgs/chakra-ui"],
+          })
+        }
+      >
+        Charka
+      </Button>
       <p>This will override your current devflags</p>
     </div>
   );
