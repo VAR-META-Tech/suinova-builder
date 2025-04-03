@@ -1058,7 +1058,6 @@ const PropValueEditor_ = (
         <ObjectPropEditor
           data-plasmic-prop={attr}
           onChange={(newValue) => {
-            console.log("🚀 ~ newValue:", newValue);
             onChange(clone(serCompositeExprMaybe(newValue)));
           }}
           compositeValue={

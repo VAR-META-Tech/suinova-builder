@@ -92,6 +92,7 @@ const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
   devnet: { url: getFullnodeUrl("devnet") },
   mainnet: { url: getFullnodeUrl("mainnet") },
+  testnet: { url: getFullnodeUrl("testnet") },
 });
 const queryClient = new QueryClient();
 
@@ -541,7 +542,7 @@ export function Root() {
   };
   return (
     <QueryClientProvider client={queryClient}>
-      <SuiClientProvider networks={networkConfig} defaultNetwork="localnet">
+      <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
         <WalletProvider>
           <AppView
             contents={(app) => {

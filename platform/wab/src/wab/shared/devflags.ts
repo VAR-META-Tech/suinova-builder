@@ -276,7 +276,7 @@ const projectIdConfig = {
 };
 
 export const CONTRACT_PACKAGE_ID =
-  "0x8372201a47f77c209c4d56bfae19fae5c1120cc723eca5670ff42f7f569a4677";
+  "0xe1ab6ca2bb5de9682aaf0c4bc2742c1d80779c381685d9c164597518d9427667";
 export const WEB3_GLOBAL_CONTEXT_COMP_NAME = "Web3GlobalContext";
 export const CONTRACT_PACKAGE_ID_PARAM_NAME = "contractPackageId";
 export const IMPORTED_COLLECTIONS_PARAM_NAME = "importedCollections";

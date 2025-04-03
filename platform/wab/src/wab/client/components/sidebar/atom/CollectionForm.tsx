@@ -7,17 +7,22 @@ import styles from "@/wab/client/components/sidebar/atom/CollectionForm.module.c
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
+  useSuiClient,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
-import { Param, TplComponent } from "@/wab/shared/model/classes";
-import { maybe, spawn } from "@/wab/shared/common";
+import { Param, TplComponent, isKnownExpr } from "@/wab/shared/model/classes";
+import { maybe } from "@/wab/shared/common";
 import { StudioCtx } from "@/wab/client/studio-ctx/StudioCtx";
 import { codeLit, tryExtractJson } from "@/wab/shared/core/exprs";
+import { Descendant } from "slate";
+import { resolveTemplatedString } from "@/wab/client/components/sidebar-tabs/ComponentProps/TemplatedTextEditor";
+import { CONTRACT_PACKAGE_ID } from "@/wab/shared/devflags";
 
 // Define the form data type
 type FormData = {
-  collectionType: { value: string; label: string } | null;
+  collectionId: { value: string; label: string } | null;
   royalty: string;
+  publisher: string;
 };
 
 // Define the option type for react-select
@@ -40,23 +45,28 @@ export default function CollectionForm({
   const [isLoading, setIsLoading] = useState(false);
   const [digest, setDigest] = useState<string>("");
   const currentWalletAccount = useCurrentAccount();
+
   const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction({
-    onSuccess: (result) => {
+    onSuccess(data, variables, context) {
       console.log("🚀 ~ result:", result);
       updateImportedCollections();
     },
+    onError(error, variables, context) {},
   });
   const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
+  const suiClient = useSuiClient();
 
   // Initialize react-hook-form
   const {
     control,
     handleSubmit,
     formState: { errors },
+    getValues,
   } = useForm<FormData>({
     defaultValues: {
-      collectionType: null,
+      collectionId: null,
       royalty: "",
+      publisher: "",
     },
   });
 
@@ -81,8 +91,10 @@ export default function CollectionForm({
         // Fallback options in case API fails
         setCollectionOptions([
           {
-            value: "0xd2197b1ce2096e...99f1d7::nft::NFT",
-            label: "0xd2197b1ce2096e...99f1d7::nft::NFT",
+            value:
+              "0x847d5967dccc496ef9f5dc3673f1e7d174743fbd9d9e29e8c54c33eb74d912d5",
+            label:
+              "0x847d5967dccc496ef9f5dc3673f1e7d174743fbd9d9e29e8c54c33eb74d912d5",
           },
           {
             value: "0x73dbf60e99add5...dd69d8::nft::NFT",
@@ -98,59 +110,92 @@ export default function CollectionForm({
   }, []);
 
   const updateImportedCollections = () => {
-    const newCollection = "0xd2197b1ce1345e...99f1d7::nft::NFT";
+    const { collectionId } = getValues();
 
-    if (!newCollection) {
+    if (!collectionId) {
       return;
     }
 
-    let expr = [{ packageId: newCollection }];
+    const nodes: Descendant[] = [
+      {
+        children: [{ text: collectionId.value }],
+        type: "paragraph",
+      },
+    ];
+    const expr = resolveTemplatedString(nodes);
 
     const arg = tpl.vsettings[0].args.find((_arg) => _arg.param === param);
     const curExpr = maybe(arg, (x) => x.expr) || param.defaultExpr || undefined;
     const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
 
-    if (
-      Array.isArray(exprLit) &&
-      exprLit.every((item) => typeof item === "object" && item !== null)
-    ) {
-      if (!exprLit.find((item) => item.packageId === newCollection)) {
-        expr = [...exprLit, expr];
-      }
+    if (!!exprLit) {
+      return;
     }
 
-    const newExpr = codeLit(expr);
-
-    spawn(
-      studioCtx.change(({ success }) => {
-        tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
-        return success();
-      })
-    );
+    if (expr == null && exprLit == null) {
+      return;
+    }
+    const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+    void studioCtx.change(({ success }) => {
+      tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
+      return success();
+    });
   };
 
   // Handle form submission
-  const onSubmit = (data: FormData) => {
-    if (!currentWalletAccount) {
+  const onSubmit = async (data: FormData) => {
+    // if (!currentWalletAccount || !data.collectionId || !data.royalty) {
+    //   return;
+    // }
+
+    const collectionObject = await suiClient.getObject({
+      id: data?.collectionId?.value || "",
+      options: {
+        showType: true,
+        showOwner: true,
+        showContent: true,
+      },
+    });
+    console.log("🚀 ~ onSubmit ~ collectionObject:", collectionObject);
+
+    if (!collectionObject?.data?.type) {
       return;
     }
+
+    // const publisher = (
+    //   await suiClient.getOwnedObjects({
+    //     owner:
+    //       "0x7c484896d088f2eb3012cac48de62fd4ec02c54540cbb1cd5e312e02216d055a",
+    //   })
+    // )?.data.find(
+    //   (item) =>
+    //     item.data?.type === "0x2::package::Publisher" &&
+    //     (item.data?.content as any)?.fields?.module_name === "collection" &&
+    //     (item.data?.content as any)?.fields?.package === "collection"
+    // );
 
     console.log("Form submitted:", data);
     const tx = new Transaction();
 
-    tx.moveCall({
-      target:
-        "0x8372201a47f77c209c4d56bfae19fae5c1120cc723eca5670ff42f7f569a4677::example",
-      function: "Import_collection",
-      arguments: [],
-      typeArguments: [],
+    const txResult = tx.moveCall({
+      target: CONTRACT_PACKAGE_ID,
+      module: "marketplace",
+      function: "import-collection",
+      arguments: [
+        tx.object(data?.collectionId?.value || ""),
+        tx.object(
+          "0x486ae873bc05746f6ab4565938aafd77835e5b411a90c1d143097e0875cda8e1"
+        ),
+        tx.object(data.royalty),
+      ],
+      typeArguments: [collectionObject.data?.type],
     });
 
     // Process the form data here
-    signAndExecuteTransaction(
+    await signAndExecuteTransaction(
       {
         transaction: tx,
-        chain: "sui:devnet",
+        chain: "sui:testnet",
       },
       {
         onSuccess: (result) => {
@@ -159,83 +204,119 @@ export default function CollectionForm({
         },
       }
     );
+    console.log(
+      "🚀 ~ onSubmit ~ signAndExecuteTransaction:",
+      signAndExecuteTransaction
+    );
+
+    updateImportedCollections();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.collectionForm}>
-      <p className={styles.formTitle}>Import collection</p>
-      <div className={styles.formGroup}>
-        <label htmlFor="collectionType">Collection Type</label>
-        <Controller
-          name="collectionType"
-          control={control}
-          rules={{ required: "Collection type is required" }}
-          render={({ field }) => (
-            <CreatableSelect
-              {...field}
-              inputId="collectionType"
-              options={collectionOptions}
-              isLoading={isLoading}
-              className={styles.collectionTypeSelect}
-              classNamePrefix="select"
-              placeholder="Enter collection type"
-              isClearable
-              isSearchable
-              formatCreateLabel={(inputValue) => `Add "${inputValue}"`}
-              onCreateOption={(inputValue) => {
-                const newOption = {
-                  value: inputValue.toLowerCase(),
-                  label: inputValue,
-                };
-                setCollectionOptions([...collectionOptions, newOption]);
-                field.onChange(newOption);
-              }}
-            />
-          )}
-        />
-        {errors.collectionType && (
-          <span className={styles.errorMessage}>
-            {errors.collectionType.message as string}
-          </span>
-        )}
-      </div>
-
-      <div className={styles.formGroup}>
-        <label htmlFor="royalty">Royalty</label>
-        <div className={styles.royaltyInputWrapper}>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.collectionForm}>
+        <p className={styles.formTitle}>Import collection</p>
+        <div className={styles.formGroup}>
+          <label htmlFor="collectionType">Collection Type</label>
           <Controller
-            name="royalty"
+            name="collectionId"
             control={control}
-            rules={{
-              required: "Royalty is required",
-              pattern: {
-                value: /^(100(\.0{1,2})?|[1-9]?\d(\.\d{1,2})?)$/,
-                message: "Please enter a valid percentage (0-100)",
-              },
-            }}
+            rules={{ required: "Collection type is required" }}
             render={({ field }) => (
-              <input
+              <CreatableSelect
                 {...field}
-                value={field.value as string}
-                id="royalty"
-                type="text"
-                placeholder="Enter the royalty"
-                className={styles.royaltyInput}
+                inputId="collectionType"
+                options={collectionOptions}
+                isLoading={isLoading}
+                className={styles.collectionTypeSelect}
+                classNamePrefix="select"
+                placeholder="Enter collection type"
+                isClearable
+                isSearchable
+                formatCreateLabel={(inputValue) => `Add "${inputValue}"`}
+                onCreateOption={(inputValue) => {
+                  const newOption = {
+                    value: inputValue.toLowerCase(),
+                    label: inputValue,
+                  };
+                  setCollectionOptions([...collectionOptions, newOption]);
+                  field.onChange(newOption);
+                }}
               />
             )}
           />
-          <span className={styles.percentageSymbol}>%</span>
+          {errors.collectionId && (
+            <span className={styles.errorMessage}>
+              {errors.collectionId.message as string}
+            </span>
+          )}
         </div>
-        {errors.royalty && (
-          <span className={styles.errorMessage}>
-            {errors.royalty.message as string}
-          </span>
-        )}
-      </div>
 
-      <button type="submit" className={styles.importButton}>
-        Import
-      </button>
-    </form>
+        <div className={styles.formGroup}>
+          <label htmlFor="royalty">Royalty</label>
+          <div className={styles.royaltyInputWrapper}>
+            <Controller
+              name="royalty"
+              control={control}
+              rules={{
+                required: "Royalty is required",
+                pattern: {
+                  value: /^(100(\.0{1,2})?|[1-9]?\d(\.\d{1,2})?)$/,
+                  message: "Please enter a valid percentage (0-100)",
+                },
+              }}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  value={field.value as string}
+                  id="royalty"
+                  type="text"
+                  placeholder="Enter the royalty"
+                  className={styles.royaltyInput}
+                />
+              )}
+            />
+            <span className={styles.percentageSymbol}>%</span>
+          </div>
+          {errors.royalty && (
+            <span className={styles.errorMessage}>
+              {errors.royalty.message as string}
+            </span>
+          )}
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="royalty">Publisher</label>
+          <div className={styles.royaltyInputWrapper}>
+            <Controller
+              name="publisher"
+              control={control}
+              rules={{
+                required: "Publisher is required",
+              }}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  value={field.value as string}
+                  id="royalty"
+                  type="text"
+                  placeholder="Enter the publisher"
+                  className={styles.royaltyInput}
+                />
+              )}
+            />
+          </div>
+          {errors.publisher && (
+            <span className={styles.errorMessage}>
+              {errors.publisher.message as string}
+            </span>
+          )}
+        </div>
+
+        <button type="submit" className={styles.importButton}>
+          Import
+        </button>
+      </form>
+    </>
   );
 }
