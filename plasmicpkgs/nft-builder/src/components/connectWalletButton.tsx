@@ -13,6 +13,7 @@ import React, {
 import { Registerable, registerComponentHelper } from "../reg-util";
 import { useMutation } from "@tanstack/react-query";
 import { InternalContext } from "../globalContextProvider";
+import { DEFAULT_API_URL } from "../const";
 
 type ConnectWalletButtonProps = {
   className?: string;
@@ -63,7 +64,7 @@ const ConnectWalletButton = React.forwardRef<
     user,
     logout: logoutContext,
     accessToken,
-    apiUrl,
+    apiUrl = DEFAULT_API_URL,
   } = useContext(InternalContext);
   const currentAccount = useCurrentAccount();
   const { mutateAsync: signPersonalMessage, isPending: isPendingSign } =
