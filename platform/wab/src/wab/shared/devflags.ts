@@ -263,6 +263,9 @@ const projectIdConfig = {
   /// Add your local project id
   TEMPLATE_PROJECT_ID_NFT_BUILDER:
     process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "pHhBGeu1NF9WPtShP6gtAM",
+  TEMPLATE_PROJECT_ID_NFT_BUILDER_TEST:
+    process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER_TEST ||
+    "vXTRYk9uRkHUcHXTL8TpYt",
 
   HOST_LESS_PROJECT_ID_NFT:
     process.env.HOST_LESS_PROJECT_ID_NFT || "3YRsZHmU6M2Qk7WYDM9QQ4",
@@ -979,6 +982,17 @@ const DEFAULT_DEVFLAGS = {
           projectId: null,
           baseProjectId: projectIdConfig.TEMPLATE_PROJECT_ID_NFT_BUILDER,
           name: "All-in-one NFT marketplace",
+          tag: "blank",
+          imageUrl:
+            "https://suinova.var-meta.com/static/img/nft-template-bg.png",
+          publishWizard: true,
+          hidden: true,
+          description: "",
+        },
+        {
+          projectId: null,
+          baseProjectId: projectIdConfig.TEMPLATE_PROJECT_ID_NFT_BUILDER_TEST,
+          name: "All-in-one NFT marketplace - Test",
           tag: "blank",
           imageUrl:
             "https://suinova.var-meta.com/static/img/nft-template-bg.png",
