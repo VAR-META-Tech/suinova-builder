@@ -295,6 +295,7 @@ import { isAdminTeamEmail } from "@/wab/shared/devflag-utils";
 import { DEVFLAGS } from "@/wab/shared/devflags";
 import { isStampedIgnoreError } from "@/wab/shared/error-handling";
 import fileUpload from "express-fileupload";
+import { importNftCollection } from "@/wab/server/routes/nft";
 
 const csrfFreeStaticRoutes = [
   "/api/v1/admin/user",
@@ -1703,6 +1704,7 @@ export function addMainAppServerRoutes(
     apiAuth,
     withNext(getProjectSyncMetadata)
   );
+  app.post("/api/v1/projects/:projectId/import-collection", withNext(importNftCollection));
   app.post(
     "/api/v1/projects/:projectId",
     cors(),

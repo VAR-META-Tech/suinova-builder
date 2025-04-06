@@ -1,18 +1,15 @@
 services:
   db:
-    image: us-central1-docker.pkg.dev/registries-442916/plasmic-prod-us-central1/postgres:15
+    image: postgres:15
     restart: always
     environment:
-      POSTGRES_PASSWORD: password
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U wab"]
-      interval: 5s
-      timeout: 10s
-      retries: 5
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: wab
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
-      - ./platform/wab/tools/docker-dev/db-setup.bash:/docker-entrypoint-initdb.d/db-setup.sh
+      - postgres_data:/var/lib/postgresql/data
 
   verdaccio:
     image: us-central1-docker.pkg.dev/registries-442916/plasmic-prod-us-central1/verdaccio:verdaccio
@@ -22,3 +19,6 @@ services:
       - 4873:4873
     volumes:
       - ./verdaccio-config.yaml:/verdaccio/conf/config.yaml
+
+volumes:
+  postgres_data:
