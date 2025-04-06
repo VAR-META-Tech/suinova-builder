@@ -8,6 +8,7 @@ import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
   useSuiClient,
+  useCurrentWallet,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { Param, TplComponent, isKnownExpr } from "@/wab/shared/model/classes";
@@ -17,6 +18,9 @@ import { codeLit, tryExtractJson } from "@/wab/shared/core/exprs";
 import { Descendant } from "slate";
 import { resolveTemplatedString } from "@/wab/client/components/sidebar-tabs/ComponentProps/TemplatedTextEditor";
 import { CONTRACT_PACKAGE_ID } from "@/wab/shared/devflags";
+import { useMutation } from "@tanstack/react-query";
+import { SharedApi } from "@/wab/shared/SharedApi";
+import { AppCtx } from "@/wab/client/app-ctx";
 
 // Define the form data type
 type FormData = {
@@ -32,28 +36,38 @@ type Option = {
 };
 
 export default function CollectionForm({
-  tpl,
-  studioCtx,
-  param,
+  onCancel,
+  appCtx,
 }: {
-  tpl: TplComponent;
-  studioCtx: StudioCtx;
-  param: Param;
+  onCancel: () => void;
+  appCtx: AppCtx;
 }) {
   // State for collection type options
   const [collectionOptions, setCollectionOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [digest, setDigest] = useState<string>("");
   const currentWalletAccount = useCurrentAccount();
+  const currentWallet = useCurrentWallet();
+  console.log("🚀 ~ CollectionForm ~ currentWallet:", currentWallet);
 
   const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction({
     onSuccess(data, variables, context) {
-      console.log("🚀 ~ result:", result);
-      updateImportedCollections();
+      console.log("🚀 ~ onSuccess ~ context:", context);
+      console.log("🚀 ~ onSuccess ~ variables:", variables);
+      console.log("🚀 ~ result:", data);
+      // updateImportedCollections();
     },
-    onError(error, variables, context) {},
+    onError(error, variables, context) {
+      console.log("🚀 ~ onError ~ context:", context);
+      console.log("🚀 ~ onError ~ variables:", variables);
+      console.log("🚀 ~ onError ~ error:", error);
+    },
   });
-  const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
+  const { mutate: importCollection, isPending: isPendingImportCollection } =
+    useMutation({
+      mutationFn: appCtx.api.importCollection,
+    });
+  // const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
   const suiClient = useSuiClient();
 
   // Initialize react-hook-form
@@ -96,10 +110,6 @@ export default function CollectionForm({
             label:
               "0x847d5967dccc496ef9f5dc3673f1e7d174743fbd9d9e29e8c54c33eb74d912d5",
           },
-          {
-            value: "0x73dbf60e99add5...dd69d8::nft::NFT",
-            label: "0x73dbf60e99add5...dd69d8::nft::NFT",
-          },
         ]);
       } finally {
         setIsLoading(false);
@@ -109,38 +119,38 @@ export default function CollectionForm({
     void fetchCollectionTypes();
   }, []);
 
-  const updateImportedCollections = () => {
-    const { collectionId } = getValues();
+  // const updateImportedCollections = () => {
+  //   const { collectionId } = getValues();
 
-    if (!collectionId) {
-      return;
-    }
+  //   if (!collectionId) {
+  //     return;
+  //   }
 
-    const nodes: Descendant[] = [
-      {
-        children: [{ text: collectionId.value }],
-        type: "paragraph",
-      },
-    ];
-    const expr = resolveTemplatedString(nodes);
+  //   const nodes: Descendant[] = [
+  //     {
+  //       children: [{ text: collectionId.value }],
+  //       type: "paragraph",
+  //     },
+  //   ];
+  //   const expr = resolveTemplatedString(nodes);
 
-    const arg = tpl.vsettings[0].args.find((_arg) => _arg.param === param);
-    const curExpr = maybe(arg, (x) => x.expr) || param.defaultExpr || undefined;
-    const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
+  //   const arg = tpl.vsettings[0].args.find((_arg) => _arg.param === param);
+  //   const curExpr = maybe(arg, (x) => x.expr) || param.defaultExpr || undefined;
+  //   const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
 
-    if (!!exprLit) {
-      return;
-    }
+  //   if (!!exprLit) {
+  //     return;
+  //   }
 
-    if (expr == null && exprLit == null) {
-      return;
-    }
-    const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
-    void studioCtx.change(({ success }) => {
-      tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
-      return success();
-    });
-  };
+  //   if (expr == null && exprLit == null) {
+  //     return;
+  //   }
+  //   const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+  //   void studioCtx.change(({ success }) => {
+  //     tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
+  //     return success();
+  //   });
+  // };
 
   // Handle form submission
   const onSubmit = async (data: FormData) => {
@@ -178,9 +188,7 @@ export default function CollectionForm({
     const tx = new Transaction();
 
     const txResult = tx.moveCall({
-      target: CONTRACT_PACKAGE_ID,
-      module: "marketplace",
-      function: "import-collection",
+      target: `${CONTRACT_PACKAGE_ID}::marketplace::import_collection`,
       arguments: [
         tx.object(data?.collectionId?.value || ""),
         tx.object(
@@ -190,6 +198,7 @@ export default function CollectionForm({
       ],
       typeArguments: [collectionObject.data?.type],
     });
+    console.log("🚀 ~ onSubmit ~ txResult:", txResult);
 
     // Process the form data here
     await signAndExecuteTransaction(
@@ -209,13 +218,34 @@ export default function CollectionForm({
       signAndExecuteTransaction
     );
 
-    updateImportedCollections();
+    // importCollection({
+    //   projectId: "",
+    //   packageId: "",
+    //   collectionId: "",
+    //   name: "",
+    //   creatorAddress: "",
+    //   collectionType: "",
+    //   royaltyFee: 0,
+    // });
+    // updateImportedCollections();
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.collectionForm}>
-        <p className={styles.formTitle}>Import collection</p>
+        <div className={styles.formGroup}>
+          <label htmlFor="royalty">Wallet Address</label>
+          <div className={styles.royaltyInputWrapper}>
+            <input
+              value={currentWalletAccount?.address}
+              id="wallet-address"
+              type="text"
+              readOnly
+              className={styles.royaltyInput}
+            />
+          </div>
+        </div>
+
         <div className={styles.formGroup}>
           <label htmlFor="collectionType">Collection Type</label>
           <Controller
@@ -285,7 +315,7 @@ export default function CollectionForm({
           )}
         </div>
 
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label htmlFor="royalty">Publisher</label>
           <div className={styles.royaltyInputWrapper}>
             <Controller
@@ -311,11 +341,15 @@ export default function CollectionForm({
               {errors.publisher.message as string}
             </span>
           )}
+        </div> */}
+        <div className={styles.buttonGroup}>
+          <button onClick={onCancel} className={styles.cancelButton}>
+            Cancel
+          </button>
+          <button type="submit" className={styles.importButton}>
+            Import
+          </button>
         </div>
-
-        <button type="submit" className={styles.importButton}>
-          Import
-        </button>
       </form>
     </>
   );
