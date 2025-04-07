@@ -24,6 +24,11 @@ export class CreateNftCollections1742000000000 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: "marketplaceId",
+            type: "varchar",
+            isNullable: true,
+          },
+          {
             name: "collectionId",
             type: "varchar",
             isNullable: false,

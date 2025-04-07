@@ -10637,6 +10637,14 @@ export class DbMgr implements MigrationDbMgr {
       updatedAt: collection.updatedAt.toISOString(),
     };
   }
+
+  async getNftCollectionsByProjectId(projectId: string) {
+    await this.checkProjectPerms(projectId, "viewer", "get project collections");
+    return this.entMgr.find(NftCollection, {
+      where: { projectId, isActive: true },
+      order: { createdAt: "DESC" }
+    });
+  }
 }
 
 const Includes = <T extends string | number>(value: T): FindOperator<T> =>
