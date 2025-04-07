@@ -3,9 +3,10 @@ import { Registerable, registerComponentHelper } from "../reg-util";
 
 interface IRightArrowIcon {
   className?: string;
+  iconColor?: string;
 }
 
-export default function RightArrowIcon({ className }: IRightArrowIcon) {
+export default function RightArrowIcon({ className, iconColor }: IRightArrowIcon) {
   return (
     <svg
       width="32"
@@ -19,13 +20,13 @@ export default function RightArrowIcon({ className }: IRightArrowIcon) {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M4 16C4 15.4477 4.44772 15 5 15H27C27.5523 15 28 15.4477 28 16C28 16.5523 27.5523 17 27 17H5C4.44772 17 4 16.5523 4 16Z"
-        fill="white"
+        fill={iconColor}
       />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M17.2929 6.29289C17.6834 5.90237 18.3166 5.90237 18.7071 6.29289L27.7071 15.2929C28.0976 15.6834 28.0976 16.3166 27.7071 16.7071L18.7071 25.7071C18.3166 26.0976 17.6834 26.0976 17.2929 25.7071C16.9024 25.3166 16.9024 24.6834 17.2929 24.2929L25.5858 16L17.2929 7.70711C16.9024 7.31658 16.9024 6.68342 17.2929 6.29289Z"
-        fill="white"
+        fill={iconColor}
       />
     </svg>
   );
@@ -35,7 +36,12 @@ export function registerRightArrowIcon(loader?: Registerable) {
   registerComponentHelper(loader, RightArrowIcon, {
     name: "nft-builder-right-arrow-icon",
     displayName: "Right Arrow Icon",
-    props: {},
+    props: {
+      iconColor: {
+        type: "color",
+        defaultValue: "#27273A"
+      }
+    },
     importPath: "@plasmicpkgs/nft-builder",
     importName: "RightArrowIcon",
   });

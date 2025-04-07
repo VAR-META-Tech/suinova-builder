@@ -275,7 +275,7 @@ const projectIdConfig = {
   HOST_LESS_PROJECT_ID_PLASMIC_TAB: "bGGYchQJnRrBLGcc2YbKZk",
   HOST_LESS_PROJECT_ID_PLASMIC_NAV: "bfniEFpM4tZx8htC9kkukb",
   HOST_LESS_PROJECT_ID_ANTD_4: "gzny5sU7cPH2nhvEqzdB2m",
-  HOST_LESS_PROJECT_ID_CHAKRA: process.env.HOST_LESS_PROJECT_ID_CHAKRA || "",
+  HOST_LESS_PROJECT_ID_CHAKRA: process.env.HOST_LESS_PROJECT_ID_CHAKRA || "2Pi4qcW8q34x5MEMyq2T6D",
 };
 
 export const CONTRACT_PACKAGE_ID =
@@ -419,21 +419,6 @@ const DEFAULT_DEVFLAGS = {
     },
     {
       type: "hostless-package",
-      name: "Connect Wallet",
-      sectionLabel: "NFT Marketplace",
-      codeLink:
-        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
-      items: [
-        {
-          type: "hostless-component",
-          componentName: "nft-builder-connect-wallet-btn",
-          displayName: "Connect Wallet Button",
-        },
-      ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
-    },
-    {
-      type: "hostless-package",
       name: "NFT Marketplace",
       sectionLabel: "NFT Marketplace",
       codeLink:
@@ -474,6 +459,31 @@ const DEFAULT_DEVFLAGS = {
           type: "hostless-component",
           componentName: "nft-builder-carousel-item",
           displayName: "NFT Carousel Item",
+        },
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-select",
+          displayName: "NFT Select",
+        },
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-input",
+          displayName: "NFT Input",
+        },
+      ],
+      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
+    },
+    {
+      type: "hostless-package",
+      name: "Connect Wallet",
+      sectionLabel: "NFT Marketplace",
+      codeLink:
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+      items: [
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-connect-wallet-btn",
+          displayName: "Connect Wallet Button",
         },
       ],
       projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
