@@ -10,13 +10,10 @@ import {
   useSuiClient,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
-import { Param, TplComponent, isKnownExpr } from "@/wab/shared/model/classes";
-import { maybe } from "@/wab/shared/common";
-import { StudioCtx } from "@/wab/client/studio-ctx/StudioCtx";
-import { codeLit, tryExtractJson } from "@/wab/shared/core/exprs";
-import { Descendant } from "slate";
-import { resolveTemplatedString } from "@/wab/client/components/sidebar-tabs/ComponentProps/TemplatedTextEditor";
 import { CONTRACT_PACKAGE_ID } from "@/wab/shared/devflags";
+import { useMutation } from "@tanstack/react-query";
+import { AppCtx } from "@/wab/client/app-ctx";
+import { notification } from "antd";
 
 // Define the form data type
 type FormData = {
@@ -32,28 +29,39 @@ type Option = {
 };
 
 export default function CollectionForm({
-  tpl,
-  studioCtx,
-  param,
+  onCancel,
+  appCtx,
+  projectId,
+  onImportSuccess,
 }: {
-  tpl: TplComponent;
-  studioCtx: StudioCtx;
-  param: Param;
+  onCancel: () => void;
+  onImportSuccess: () => void;
+  appCtx: AppCtx;
+  projectId: string;
 }) {
   // State for collection type options
   const [collectionOptions, setCollectionOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [digest, setDigest] = useState<string>("");
   const currentWalletAccount = useCurrentAccount();
 
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction({
-    onSuccess(data, variables, context) {
-      console.log("🚀 ~ result:", result);
-      updateImportedCollections();
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
+  const { mutateAsync: importCollection } = useMutation({
+    mutationFn: (data: any) =>
+      appCtx.api.importCollection(projectId, { ...data }),
+    onSuccess() {
+      reset();
+      onImportSuccess();
+      notification.success({
+        message: "Collection imported successfully",
+      });
     },
-    onError(error, variables, context) {},
+    onError() {
+      notification.error({
+        message: "Failed to import collection",
+      });
+    },
   });
-  const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
+  // const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
   const suiClient = useSuiClient();
 
   // Initialize react-hook-form
@@ -61,7 +69,7 @@ export default function CollectionForm({
     control,
     handleSubmit,
     formState: { errors },
-    getValues,
+    reset,
   } = useForm<FormData>({
     defaultValues: {
       collectionId: null,
@@ -96,10 +104,6 @@ export default function CollectionForm({
             label:
               "0x847d5967dccc496ef9f5dc3673f1e7d174743fbd9d9e29e8c54c33eb74d912d5",
           },
-          {
-            value: "0x73dbf60e99add5...dd69d8::nft::NFT",
-            label: "0x73dbf60e99add5...dd69d8::nft::NFT",
-          },
         ]);
       } finally {
         setIsLoading(false);
@@ -109,44 +113,44 @@ export default function CollectionForm({
     void fetchCollectionTypes();
   }, []);
 
-  const updateImportedCollections = () => {
-    const { collectionId } = getValues();
+  // const updateImportedCollections = () => {
+  //   const { collectionId } = getValues();
 
-    if (!collectionId) {
-      return;
-    }
+  //   if (!collectionId) {
+  //     return;
+  //   }
 
-    const nodes: Descendant[] = [
-      {
-        children: [{ text: collectionId.value }],
-        type: "paragraph",
-      },
-    ];
-    const expr = resolveTemplatedString(nodes);
+  //   const nodes: Descendant[] = [
+  //     {
+  //       children: [{ text: collectionId.value }],
+  //       type: "paragraph",
+  //     },
+  //   ];
+  //   const expr = resolveTemplatedString(nodes);
 
-    const arg = tpl.vsettings[0].args.find((_arg) => _arg.param === param);
-    const curExpr = maybe(arg, (x) => x.expr) || param.defaultExpr || undefined;
-    const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
+  //   const arg = tpl.vsettings[0].args.find((_arg) => _arg.param === param);
+  //   const curExpr = maybe(arg, (x) => x.expr) || param.defaultExpr || undefined;
+  //   const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
 
-    if (!!exprLit) {
-      return;
-    }
+  //   if (!!exprLit) {
+  //     return;
+  //   }
 
-    if (expr == null && exprLit == null) {
-      return;
-    }
-    const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
-    void studioCtx.change(({ success }) => {
-      tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
-      return success();
-    });
-  };
+  //   if (expr == null && exprLit == null) {
+  //     return;
+  //   }
+  //   const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+  //   void studioCtx.change(({ success }) => {
+  //     tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
+  //     return success();
+  //   });
+  // };
 
   // Handle form submission
   const onSubmit = async (data: FormData) => {
-    // if (!currentWalletAccount || !data.collectionId || !data.royalty) {
-    //   return;
-    // }
+    if (!currentWalletAccount || !data.collectionId || !data.royalty) {
+      return;
+    }
 
     const collectionObject = await suiClient.getObject({
       id: data?.collectionId?.value || "",
@@ -178,9 +182,7 @@ export default function CollectionForm({
     const tx = new Transaction();
 
     const txResult = tx.moveCall({
-      target: CONTRACT_PACKAGE_ID,
-      module: "marketplace",
-      function: "import-collection",
+      target: `${CONTRACT_PACKAGE_ID}::marketplace::import_collection`,
       arguments: [
         tx.object(data?.collectionId?.value || ""),
         tx.object(
@@ -190,6 +192,7 @@ export default function CollectionForm({
       ],
       typeArguments: [collectionObject.data?.type],
     });
+    console.log("🚀 ~ onSubmit ~ txResult:", txResult);
 
     // Process the form data here
     await signAndExecuteTransaction(
@@ -198,24 +201,38 @@ export default function CollectionForm({
         chain: "sui:testnet",
       },
       {
-        onSuccess: (result) => {
-          console.log("executed transaction", result);
-          setDigest(result.digest);
+        onSuccess: () => {
+          void importCollection({
+            // Current there wasn't a way to get the packageId, so I hard coded it
+            packageId:
+              "88b9d9095effb250679a66f736a7e69fb2f71e9514d22a979a0fcda453ea9c3",
+            collectionId: collectionObject.data?.objectId || "",
+            name: (collectionObject.data?.content as any)?.fields?.name,
+            creatorAddress: currentWalletAccount?.address || "",
+            collectionType: (collectionObject.data?.content as any)?.type,
+            royaltyFee: Number(data.royalty),
+          });
         },
       }
     );
-    console.log(
-      "🚀 ~ onSubmit ~ signAndExecuteTransaction:",
-      signAndExecuteTransaction
-    );
-
-    updateImportedCollections();
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.collectionForm}>
-        <p className={styles.formTitle}>Import collection</p>
+        <div className={styles.formGroup}>
+          <label htmlFor="royalty">Wallet Address</label>
+          <div className={styles.royaltyInputWrapper}>
+            <input
+              value={currentWalletAccount?.address}
+              id="wallet-address"
+              type="text"
+              readOnly
+              className={styles.royaltyInput}
+            />
+          </div>
+        </div>
+
         <div className={styles.formGroup}>
           <label htmlFor="collectionType">Collection Type</label>
           <Controller
@@ -285,7 +302,7 @@ export default function CollectionForm({
           )}
         </div>
 
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label htmlFor="royalty">Publisher</label>
           <div className={styles.royaltyInputWrapper}>
             <Controller
@@ -311,11 +328,21 @@ export default function CollectionForm({
               {errors.publisher.message as string}
             </span>
           )}
+        </div> */}
+        <div className={styles.buttonGroup}>
+          <button
+            onClick={() => {
+              onCancel();
+              reset();
+            }}
+            className={styles.cancelButton}
+          >
+            Cancel
+          </button>
+          <button type="submit" className={styles.importButton}>
+            Import
+          </button>
         </div>
-
-        <button type="submit" className={styles.importButton}>
-          Import
-        </button>
       </form>
     </>
   );
