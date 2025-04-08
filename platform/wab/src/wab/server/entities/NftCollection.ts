@@ -19,14 +19,10 @@ export class NftCollection {
   @Column({ name: "packageId", type: "varchar" })
   packageId: string;
 
-<<<<<<< Updated upstream
-  @Column({ name: "marketplace_id", type: "varchar", nullable: true })
+  @Column({ name: "marketplaceId", type: "varchar", nullable: true })
   marketplaceId: string;
 
-  @Column({ name: "collection_id", type: "varchar" })
-=======
   @Column({ name: "collectionId", type: "varchar" })
->>>>>>> Stashed changes
   collectionId: string;
 
   @Column({ name: "name", type: "varchar", nullable: true })

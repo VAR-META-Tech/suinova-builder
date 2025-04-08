@@ -8,7 +8,6 @@ import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
   useSuiClient,
-  useCurrentWallet,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { CONTRACT_PACKAGE_ID } from "@/wab/shared/devflags";
