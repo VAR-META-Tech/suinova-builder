@@ -79,7 +79,6 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const { studioCtx } = props;
   const dbCtx = studioCtx.dbCtx();
   const tplMgr = studioCtx.tplMgr();
-  // const [hover, setHover] = React.useState(false);
   const web3GlobalContextTpl = studioCtx.site.globalContexts.find(
     (item) => item.component.name === WEB3_GLOBAL_CONTEXT_COMP_NAME
   );

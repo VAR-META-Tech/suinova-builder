@@ -905,19 +905,21 @@ export abstract class SharedApi {
     return this.post("/teams", { name });
   }
 
-  async importCollection(data: {
-    projectId: string;
-    packageId: string;
-    collectionId: string;
-    name: string;
-    creatorAddress: string;
-    collectionType: string;
-    royaltyFee: number;
-    description?: string;
-    status?: string;
-    metadata?: Record<string, any>;
-  }): Promise<ApiNftCollection> {
-    return this.post("/nft/collections", data);
+  async importCollection(
+    projectId: string,
+    data: {
+      packageId: string;
+      collectionId: string;
+      name: string;
+      creatorAddress: string;
+      collectionType: string;
+      royaltyFee: number;
+      description?: string;
+      status?: string;
+      metadata?: Record<string, any>;
+    }
+  ): Promise<ApiNftCollection> {
+    return this.post(`/projects/${projectId}/import-collection`, data);
   }
 
   async updateTeam(

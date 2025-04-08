@@ -86,6 +86,7 @@ function ProjectListItem(props: ProjectListItemProps) {
   return (
     <>
       <Modal
+        destroyOnClose
         centered
         className={"ImportCollectionModal__Wrapper"}
         title="Collection Import"
@@ -112,6 +113,9 @@ function ProjectListItem(props: ProjectListItemProps) {
         )}
         {currentWallet.isConnected && (
           <CollectionForm
+            onImportSuccess={() => setOpenImportCollectionModal(false)}
+            projectId={project.id}
+            appCtx={appCtx}
             onCancel={() => setOpenImportCollectionModal(false)}
           />
         )}

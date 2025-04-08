@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, Index, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  Index,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity("nft_collections")
 @Index("idx_nft_collections_project_id", ["projectId"])
@@ -6,16 +13,20 @@ export class NftCollection {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ name: "project_id", type: "varchar" })
+  @Column({ name: "projectId", type: "varchar" })
   projectId: string;
 
-  @Column({ name: "package_id", type: "varchar" })
+  @Column({ name: "packageId", type: "varchar" })
   packageId: string;
 
+<<<<<<< Updated upstream
   @Column({ name: "marketplace_id", type: "varchar", nullable: true })
   marketplaceId: string;
 
   @Column({ name: "collection_id", type: "varchar" })
+=======
+  @Column({ name: "collectionId", type: "varchar" })
+>>>>>>> Stashed changes
   collectionId: string;
 
   @Column({ name: "name", type: "varchar", nullable: true })
@@ -24,24 +35,24 @@ export class NftCollection {
   @Column({ name: "description", type: "text", nullable: true })
   description: string | null;
 
-  @Column({ name: "creator_address", type: "varchar" })
+  @Column({ name: "creatorAddress", type: "varchar" })
   creatorAddress: string;
 
-  @Column({ name: "collection_type", type: "varchar" })
+  @Column({ name: "collectionType", type: "varchar" })
   collectionType: string;
 
-  @Column({ name: "royalty_fee", type: "decimal", precision: 5, scale: 2 })
+  @Column({ name: "royaltyFee", type: "decimal", precision: 5, scale: 2 })
   royaltyFee: number;
 
-  @Column({ name: "is_active", type: "boolean", default: true })
+  @Column({ name: "isActive", type: "boolean", default: true })
   isActive: boolean;
 
   @Column({ name: "metadata", type: "jsonb", nullable: true })
   metadata: Record<string, any> | null;
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "createdAt" })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: "updatedAt" })
   updatedAt: Date;
-} 
+}
