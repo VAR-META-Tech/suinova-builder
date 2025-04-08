@@ -220,6 +220,7 @@ import {
   getPkgVersionPublishStatus,
   getPlumePkg,
   getPlumePkgVersionStrings,
+  getProjectCollections,
   getProjectMeta,
   getProjectRev,
   getProjectRevWithoutData,
@@ -1705,6 +1706,7 @@ export function addMainAppServerRoutes(
     withNext(getProjectSyncMetadata)
   );
   app.post("/api/v1/projects/:projectId/import-collection", withNext(importNftCollection));
+  app.get("/api/v1/projects/:projectId/collections", withNext(getProjectCollections));
   app.post(
     "/api/v1/projects/:projectId",
     cors(),

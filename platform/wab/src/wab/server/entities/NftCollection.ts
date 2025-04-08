@@ -12,6 +12,9 @@ export class NftCollection {
   @Column({ name: "package_id", type: "varchar" })
   packageId: string;
 
+  @Column({ name: "marketplace_id", type: "varchar", nullable: true })
+  marketplaceId: string;
+
   @Column({ name: "collection_id", type: "varchar" })
   collectionId: string;
 
