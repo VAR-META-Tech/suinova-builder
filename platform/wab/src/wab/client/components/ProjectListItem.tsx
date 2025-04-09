@@ -34,6 +34,7 @@ import {
   useCurrentWallet,
 } from "@mysten/dapp-kit";
 import Button from "@/wab/client/components/widgets/Button";
+import { useQuery } from "@tanstack/react-query";
 
 interface ProjectListItemProps {
   // className prop is required for positioning instances of
@@ -59,6 +60,10 @@ function ProjectListItem(props: ProjectListItemProps) {
   const currentWalletAccount = useCurrentAccount();
   const currentWallet = useCurrentWallet();
   const { mutate } = useDisconnectWallet();
+  const { data: projectCollections, isFetched } = useQuery({
+    queryKey: ["projectCollections", project.id],
+    queryFn: () => appCtx.api.getProjectCollections(project.id),
+  });
 
   const projectAccessLevel = getAccessLevelToResource(
     { type: "project", resource: project },
@@ -80,6 +85,14 @@ function ProjectListItem(props: ProjectListItemProps) {
     () => appCtx.personalWorkspace,
     [appCtx.workspaces]
   );
+
+  const importedCollection = React.useMemo(() => {
+    return isFetched &&
+      projectCollections &&
+      (projectCollections?.collections?.length || 0) > 0
+      ? projectCollections.collections[0]
+      : null;
+  }, [projectCollections]);
 
   return (
     <>
@@ -115,6 +128,7 @@ function ProjectListItem(props: ProjectListItemProps) {
             projectId={project.id}
             appCtx={appCtx}
             onCancel={() => setOpenImportCollectionModal(false)}
+            importedCollection={importedCollection}
           />
         )}
       </Modal>
@@ -128,6 +142,14 @@ function ProjectListItem(props: ProjectListItemProps) {
             // }),
             onClick: (e) => {
               e.preventDefault();
+              if (!isFetched) {
+                return;
+              }
+
+              if (!importedCollection) {
+                setOpenImportCollectionModal(true);
+                return;
+              }
 
               document.location.href = U.project({
                 projectId: project.id,
@@ -238,7 +260,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                   </Menu.Item>
                 )} */}
                 <Menu.Item
-                  onClick={async () => {
+                  onClick={() => {
                     setOpenImportCollectionModal(true);
                   }}
                 >
