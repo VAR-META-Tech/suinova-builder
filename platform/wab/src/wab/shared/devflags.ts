@@ -413,21 +413,6 @@ const DEFAULT_DEVFLAGS = {
     },
     {
       type: "hostless-package",
-      name: "Connect Wallet",
-      sectionLabel: "NFT Marketplace",
-      codeLink:
-        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
-      items: [
-        {
-          type: "hostless-component",
-          componentName: "nft-builder-connect-wallet-btn",
-          displayName: "Connect Wallet Button",
-        },
-      ],
-      projectId: ENV.HOST_LESS_PROJECT_ID_NFT,
-    },
-    {
-      type: "hostless-package",
       name: "NFT Marketplace",
       sectionLabel: "NFT Marketplace",
       codeLink:
@@ -468,6 +453,31 @@ const DEFAULT_DEVFLAGS = {
           type: "hostless-component",
           componentName: "nft-builder-carousel-item",
           displayName: "NFT Carousel Item",
+        },
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-select",
+          displayName: "NFT Select",
+        },
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-input",
+          displayName: "NFT Input",
+        },
+      ],
+      projectId: ENV.HOST_LESS_PROJECT_ID_NFT,
+    },
+    {
+      type: "hostless-package",
+      name: "Connect Wallet",
+      sectionLabel: "NFT Marketplace",
+      codeLink:
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+      items: [
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-connect-wallet-btn",
+          displayName: "Connect Wallet Button",
         },
       ],
       projectId: ENV.HOST_LESS_PROJECT_ID_NFT,

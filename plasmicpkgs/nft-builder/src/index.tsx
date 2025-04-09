@@ -18,10 +18,14 @@ import { registerNFTCarousel } from "./components/nftCarousel";
 import { registerCarouselBtnGroup } from "./components/carouselBtnGroup";
 import { registerWalletIcon } from "./icons/walletIcon";
 import { registerNFTCarouselItem } from "./components/nftCarouselItem";
+import { registerNFTSelect } from "./components/nftSelect";
+import { registerNFTSelectOptGroup, registerNFTSelectOption } from "./components/nftSelectOption";
+import { registerArrowDown } from "./icons/arrowDown";
+import { registerNFTInput } from "./components/nftInput";
 
 export function registerAll(loader?: Registerable) {
   // global provider
-  registerWeb3Provider();
+  registerWeb3Provider(loader);
   // icons
   registerLeftArrowIcon(loader);
   registerRightArrowIcon(loader);
@@ -40,6 +44,11 @@ export function registerAll(loader?: Registerable) {
   registerNFTCarousel(loader);
   registerCarouselBtnGroup(loader);
   registerNFTCarouselItem(loader);
+  registerNFTSelectOption(loader);
+  registerNFTSelectOptGroup(loader);
+  registerNFTSelect(loader);
+  registerArrowDown(loader);
+  registerNFTInput(loader);
 }
 
 export * from "./components/userAvatar";
@@ -57,6 +66,10 @@ export * from "./components/videoPlayer";
 export * from "./components/nftCarousel";
 export * from "./components/carouselBtnGroup";
 export * from "./icons/walletIcon";
-export * from  "./components/nftCarouselItem";
+export * from "./components/nftCarouselItem";
+export * from "./components/nftSelect";
+export * from "./components/nftSelectOption";
+export * from "./icons/arrowDown";
+export * from "./components/nftInput";
 export { popoverProps } from "./util";
 export { PopoverExtraProps } from "./util";
