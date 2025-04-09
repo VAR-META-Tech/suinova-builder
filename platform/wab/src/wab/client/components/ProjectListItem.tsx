@@ -130,8 +130,9 @@ function ProjectListItem(props: ProjectListItemProps) {
         {currentWallet.isConnected && (
           <CollectionForm
             onImportSuccess={() => {
-              setOpenImportCollectionModal(false);
-              void refetchCollections();
+              document.location.href = U.project({
+                projectId: project.id,
+              });
             }}
             projectId={project.id}
             appCtx={appCtx}
