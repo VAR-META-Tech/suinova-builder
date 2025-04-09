@@ -19,6 +19,7 @@ import {
 } from "@/wab/client/constant/contract.constant";
 import { notification } from "antd";
 import { NOTIFICATION_MESSAGE } from "@/wab/client/constant/mesage.constant";
+import { NFTCollectionResponse } from "@/wab/shared/ApiSchema";
 
 // Define the form data type
 type FormData = {
@@ -37,11 +38,13 @@ export default function CollectionForm({
   onCancel,
   projectId,
   onImportSuccess,
+  importedCollection,
 }: {
   onCancel: () => void;
   onImportSuccess: () => void;
   appCtx: AppCtx;
   projectId: string;
+  importedCollection: NFTCollectionResponse | null;
 }) {
   // State for collection type options
   const [collectionOptions, setCollectionOptions] = useState<Option[]>([]);
@@ -69,8 +72,13 @@ export default function CollectionForm({
     reset,
   } = useForm<FormData>({
     defaultValues: {
-      collectionId: null,
-      royalty: "",
+      collectionId: importedCollection
+        ? {
+            value: importedCollection?.collectionId,
+            label: importedCollection.collectionId,
+          }
+        : null,
+      royalty: importedCollection?.royaltyFee?.toString() || "",
       publisher: "",
     },
   });
@@ -180,13 +188,15 @@ export default function CollectionForm({
 
     const tx = new Transaction();
 
+    // Can not find how to get the publisher yet so I hardcoded it
+    const HARDCODED_PUBLISHER =
+      "0x486ae873bc05746f6ab4565938aafd77835e5b411a90c1d143097e0875cda8e1";
+
     tx.moveCall({
       target: `${ENV.CONTRACT_PACKAGE_ID}::${MARKETPLACE_MODULE}::${CONTRACT_METHOD.IMPORT_COLLECTION}`,
       arguments: [
         tx.object(data?.collectionId?.value || ""),
-        tx.object(
-          "0x486ae873bc05746f6ab4565938aafd77835e5b411a90c1d143097e0875cda8e1"
-        ),
+        tx.object(HARDCODED_PUBLISHER),
         tx.pure.string(projectId),
         tx.object(data.royalty),
       ],
