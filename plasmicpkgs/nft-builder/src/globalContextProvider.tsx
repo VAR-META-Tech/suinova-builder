@@ -53,7 +53,6 @@ export const Web3GlobalContext = ({
   const [accessToken, setAccessToken] = React.useState<string | null>(null);
   const [refreshToken, setRefreshToken] = React.useState<string | null>(null);
   const [user, setUser] = React.useState<any>(null);
-  console.log("🚀 ~ user:", user);
 
   useEffect(() => {
     const accessTokenStorage = localStorage.getItem("accessToken");

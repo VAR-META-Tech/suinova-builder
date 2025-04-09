@@ -171,8 +171,8 @@ export default defineConfig({
   },
   source: {
     entry: {
-      index: "src/wab/client/main.tsx"
-    }
+      index: "src/wab/client/main.tsx",
+    },
   },
   output: {
     distPath: {
@@ -257,6 +257,23 @@ export default defineConfig({
           DEPLOYENV: JSON.stringify(buildEnv),
           "process.env": JSON.stringify({
             NODE_ENV: "production",
+            CONTRACT_PACKAGE_ID: process.env.CONTRACT_PACKAGE_ID,
+            TEMPLATE_PROJECT_ID_NFT_BUILDER:
+              process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER,
+            HOST_LESS_PROJECT_ID_NFT: process.env.HOST_LESS_PROJECT_ID_NFT,
+            HOST_LESS_PROJECT_ID_ANTD: process.env.HOST_LESS_PROJECT_ID_ANTD,
+            HOST_LESS_PROJECT_ID_PLASMIC_QUERY:
+              process.env.HOST_LESS_PROJECT_ID_PLASMIC_QUERY,
+            HOST_LESS_PROJECT_ID_REACT_SLICK:
+              process.env.HOST_LESS_PROJECT_ID_REACT_SLICK,
+            HOST_LESS_PROJECT_ID_PLASMIC_TAB:
+              process.env.HOST_LESS_PROJECT_ID_PLASMIC_TAB,
+            HOST_LESS_PROJECT_ID_PLASMIC_NAV:
+              process.env.HOST_LESS_PROJECT_ID_PLASMIC_NAV,
+            HOST_LESS_PROJECT_ID_ANTD_4:
+              process.env.HOST_LESS_PROJECT_ID_ANTD_4,
+            HOST_LESS_PROJECT_ID_CHAKRA:
+              process.env.HOST_LESS_PROJECT_ID_CHAKRA,
           }),
         }),
         new MonacoWebpackPlugin(),

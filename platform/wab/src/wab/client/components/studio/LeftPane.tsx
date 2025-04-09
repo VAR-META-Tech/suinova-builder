@@ -47,16 +47,12 @@ import {
 } from "@/wab/shared/core/components";
 import { extractComponentUsages } from "@/wab/shared/core/sites";
 import { extractTokenUsages } from "@/wab/shared/core/styles";
-import {
-  CONTRACT_PACKAGE_ID,
-  CONTRACT_PACKAGE_ID_PARAM_NAME,
-  WEB3_GLOBAL_CONTEXT_COMP_NAME,
-} from "@/wab/shared/devflags";
+import { ENV } from "@/wab/shared/devflags";
 import { Component, isKnownExpr, StyleToken } from "@/wab/shared/model/classes";
 import { LeftTabKey } from "@/wab/shared/ui-config-utils";
 import L from "lodash";
 import { observer } from "mobx-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocalStorage } from "react-use";
 import { resolveTemplatedString } from "@/wab/client/components/sidebar-tabs/ComponentProps/TemplatedTextEditor";
 import { codeLit, tryExtractJson, asCode } from "@/wab/shared/core/exprs";
@@ -69,6 +65,12 @@ import { ComponentPropOrigin } from "@/wab/shared/core/lang";
 import { tryGetTplOwnerComponent } from "@/wab/shared/core/tpls";
 import { isSlot } from "@/wab/shared/SlotUtils";
 import { paramToVarName } from "@/wab/shared/codegen/util";
+import {
+  CONTRACT_PACKAGE_ID_PARAM_NAME,
+  IMPORTED_COLLECTIONS_PARAM_NAME,
+  WEB3_GLOBAL_CONTEXT_COMP_NAME,
+} from "@/wab/client/constant/contract.constant";
+import { NFTCollectionResponse } from "@/wab/shared/ApiSchema";
 
 interface LeftPaneProps {
   studioCtx: StudioCtx;
@@ -124,6 +126,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   // revision number of latest published version
   const [latestPublishedRevNum, setLatestPublishedRevNum] = useState<number>();
   const latestPublishedVersion = L.head(studioCtx.releases);
+  const [collection, setCollection] = useState<NFTCollectionResponse>();
 
   // Check if we need to fetch latest data
   React.useEffect(() => {
@@ -137,6 +140,24 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
       })()
     );
   }, [studioCtx, latestPublishedVersion]);
+
+  React.useEffect(() => {
+    spawn(
+      (async () => {
+        if (!studioCtx.siteInfo?.id) {
+          return;
+        }
+        const { collections } =
+          await studioCtx.appCtx.api.getProjectCollections(
+            studioCtx.siteInfo?.id || ""
+          );
+
+        if (collections.length > 0) {
+          setCollection(collections[0]);
+        }
+      })()
+    );
+  }, [studioCtx.siteInfo.id]);
 
   const useVersionsCTA =
     !dismissVersionsCTA &&
@@ -212,22 +233,33 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
       })
     : null;
 
-  React.useEffect(() => {
-    if (!web3GlobalContextTpl) {
+  useEffect(() => {
+    updateTextTemplate(CONTRACT_PACKAGE_ID_PARAM_NAME, ENV.CONTRACT_PACKAGE_ID);
+  }, [web3GlobalContextTpl]);
+
+  useEffect(() => {
+    if (collection?.collectionId) {
+      updateTextTemplate(
+        IMPORTED_COLLECTIONS_PARAM_NAME,
+        collection.collectionId
+      );
+    }
+  }, [collection?.collectionId]);
+
+  const updateTextTemplate = (name: string, value?: string) => {
+    if (!web3GlobalContextTpl || !value) {
       return;
     }
 
     const nodes: Descendant[] = [
       {
-        children: [{ text: CONTRACT_PACKAGE_ID }],
+        children: [{ text: value }],
         type: "paragraph",
       },
     ];
     const expr = resolveTemplatedString(nodes);
 
-    const p = params?.find(
-      (item) => item.variable.name === CONTRACT_PACKAGE_ID_PARAM_NAME
-    );
+    const p = params?.find((item) => item.variable.name === name);
 
     if (!p) {
       return;
@@ -257,7 +289,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
       );
       return success();
     });
-  }, [web3GlobalContextTpl]);
+  };
 
   return providesSidebarPopupSetting({ left: true })(
     <SidebarModalProvider containerSelector={".canvas-editor__left-pane"}>

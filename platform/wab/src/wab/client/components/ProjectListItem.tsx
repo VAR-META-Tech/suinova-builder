@@ -2,7 +2,6 @@ import { U } from "@/wab/client/cli-routes";
 import { promptMoveToWorkspace } from "@/wab/client/components/dashboard/dashboard-actions";
 import EditableResourceName from "@/wab/client/components/EditableResourceName";
 import { HostConfig } from "@/wab/client/components/HostConfig";
-import { maybeShowPaywall } from "@/wab/client/components/modals/PricingModal";
 import { PublicLink } from "@/wab/client/components/PublicLink";
 import { reactConfirm } from "@/wab/client/components/quick-modals";
 import { Matcher } from "@/wab/client/components/view-common";
@@ -14,7 +13,6 @@ import { ensure } from "@/wab/shared/common";
 import { InlineEdit } from "@/wab/commons/components/InlineEdit";
 import { OnClickAway } from "@/wab/commons/components/OnClickAway";
 import { Stated } from "@/wab/commons/components/Stated";
-import { DEVFLAGS } from "@/wab/shared/devflags";
 import { ApiPermission, ApiProject } from "@/wab/shared/ApiSchema";
 import { accessLevelRank } from "@/wab/shared/EntUtil";
 import { PERSONAL_WORKSPACE } from "@/wab/shared/Labels";
@@ -22,13 +20,13 @@ import {
   getAccessLevelToParent,
   getAccessLevelToResource,
 } from "@/wab/shared/perms";
-import { Menu, notification } from "antd";
+import { Menu } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Modal } from "@/wab/client/components/widgets/Modal";
 import "@/wab/client/components/ProjectListItem.sass";
-import CollectionForm from "@/wab/client/components/sidebar/atom/CollectionForm";
+import CollectionForm from "@/wab/client/components/custom-components/CollectionForm/CollectionForm";
 import {
   ConnectButton,
   useCurrentAccount,

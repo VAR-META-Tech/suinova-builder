@@ -3,17 +3,22 @@
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
-import styles from "@/wab/client/components/sidebar/atom/CollectionForm.module.css";
+import styles from "@/wab/client/components/custom-components/CollectionForm/CollectionForm.module.css";
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
   useSuiClient,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
-import { CONTRACT_PACKAGE_ID } from "@/wab/shared/devflags";
-import { useMutation } from "@tanstack/react-query";
+import { ENV } from "@/wab/shared/devflags";
 import { AppCtx } from "@/wab/client/app-ctx";
+import {
+  CHAIN,
+  CONTRACT_METHOD,
+  MARKETPLACE_MODULE,
+} from "@/wab/client/constant/contract.constant";
 import { notification } from "antd";
+import { NOTIFICATION_MESSAGE } from "@/wab/client/constant/mesage.constant";
 
 // Define the form data type
 type FormData = {
@@ -30,7 +35,6 @@ type Option = {
 
 export default function CollectionForm({
   onCancel,
-  appCtx,
   projectId,
   onImportSuccess,
 }: {
@@ -44,24 +48,17 @@ export default function CollectionForm({
   const [isLoading, setIsLoading] = useState(false);
   const currentWalletAccount = useCurrentAccount();
 
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction();
-  const { mutateAsync: importCollection } = useMutation({
-    mutationFn: (data: any) =>
-      appCtx.api.importCollection(projectId, { ...data }),
-    onSuccess() {
-      reset();
-      onImportSuccess();
-      notification.success({
-        message: "Collection imported successfully",
-      });
-    },
-    onError() {
-      notification.error({
-        message: "Failed to import collection",
-      });
-    },
-  });
-  // const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
+  const { mutateAsync: signAndExecuteTransaction, isPending } =
+    useSignAndExecuteTransaction({
+      onSuccess: () => {
+        onImportSuccess();
+        notification.success({
+          message: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.MESSAGE,
+          description: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.DESCRIPTION,
+        });
+      },
+    });
+
   const suiClient = useSuiClient();
 
   // Initialize react-hook-form
@@ -160,11 +157,14 @@ export default function CollectionForm({
         showContent: true,
       },
     });
-    console.log("🚀 ~ onSubmit ~ collectionObject:", collectionObject);
 
     if (!collectionObject?.data?.type) {
       return;
     }
+
+    notification.info({
+      message: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.WAITING,
+    });
 
     // const publisher = (
     //   await suiClient.getOwnedObjects({
@@ -178,43 +178,26 @@ export default function CollectionForm({
     //     (item.data?.content as any)?.fields?.package === "collection"
     // );
 
-    console.log("Form submitted:", data);
     const tx = new Transaction();
 
-    const txResult = tx.moveCall({
-      target: `${CONTRACT_PACKAGE_ID}::marketplace::import_collection`,
+    tx.moveCall({
+      target: `${ENV.CONTRACT_PACKAGE_ID}::${MARKETPLACE_MODULE}::${CONTRACT_METHOD.IMPORT_COLLECTION}`,
       arguments: [
         tx.object(data?.collectionId?.value || ""),
         tx.object(
           "0x486ae873bc05746f6ab4565938aafd77835e5b411a90c1d143097e0875cda8e1"
         ),
+        tx.pure.string(projectId),
         tx.object(data.royalty),
       ],
       typeArguments: [collectionObject.data?.type],
     });
-    console.log("🚀 ~ onSubmit ~ txResult:", txResult);
 
     // Process the form data here
-    await signAndExecuteTransaction(
-      {
-        transaction: tx,
-        chain: "sui:testnet",
-      },
-      {
-        onSuccess: () => {
-          void importCollection({
-            // Current there wasn't a way to get the packageId, so I hard coded it
-            packageId:
-              "88b9d9095effb250679a66f736a7e69fb2f71e9514d22a979a0fcda453ea9c3",
-            collectionId: collectionObject.data?.objectId || "",
-            name: (collectionObject.data?.content as any)?.fields?.name,
-            creatorAddress: currentWalletAccount?.address || "",
-            collectionType: (collectionObject.data?.content as any)?.type,
-            royaltyFee: Number(data.royalty),
-          });
-        },
-      }
-    );
+    await signAndExecuteTransaction({
+      transaction: tx,
+      chain: CHAIN,
+    });
   };
 
   return (
@@ -339,8 +322,22 @@ export default function CollectionForm({
           >
             Cancel
           </button>
-          <button type="submit" className={styles.importButton}>
-            Import
+          <button
+            type="submit"
+            className={`${styles.importButton} ${
+              isPending ? styles.loading : ""
+            }`}
+            disabled={isPending}
+          >
+            {isPending && (
+              <svg
+                className={styles.spinner}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              ></svg>
+            )}
+            <span className={styles.buttonText}>Import</span>
           </button>
         </div>
       </form>
