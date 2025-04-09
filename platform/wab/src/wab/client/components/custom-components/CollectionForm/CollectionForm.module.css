@@ -129,6 +129,29 @@
   transition: background-color 0.2s;
   height: 30px;
   flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.importButton .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.importButton .buttonText {
+  transition: opacity 0.2s;
 }
 
 .importButton:disabled,
@@ -163,3 +186,30 @@
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
 }
 
+.spinnerWrapper {
+  margin-right: 8px;
+  animation: spin 1s linear infinite;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.spinnerTrack {
+  opacity: 0.25;
+}
+
+.spinnerHead {
+  opacity: 0.75;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
