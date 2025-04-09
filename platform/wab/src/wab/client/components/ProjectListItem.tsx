@@ -60,7 +60,12 @@ function ProjectListItem(props: ProjectListItemProps) {
   const currentWalletAccount = useCurrentAccount();
   const currentWallet = useCurrentWallet();
   const { mutate } = useDisconnectWallet();
-  const { data: projectCollections, isFetched } = useQuery({
+  const {
+    data: projectCollections,
+    isFetched,
+    isFetching,
+    refetch: refetchCollections,
+  } = useQuery({
     queryKey: ["projectCollections", project.id],
     queryFn: () => appCtx.api.getProjectCollections(project.id),
   });
@@ -124,7 +129,10 @@ function ProjectListItem(props: ProjectListItemProps) {
         )}
         {currentWallet.isConnected && (
           <CollectionForm
-            onImportSuccess={() => setOpenImportCollectionModal(false)}
+            onImportSuccess={() => {
+              setOpenImportCollectionModal(false);
+              void refetchCollections();
+            }}
             projectId={project.id}
             appCtx={appCtx}
             onCancel={() => setOpenImportCollectionModal(false)}
@@ -142,7 +150,7 @@ function ProjectListItem(props: ProjectListItemProps) {
             // }),
             onClick: (e) => {
               e.preventDefault();
-              if (!isFetched) {
+              if (!isFetched || isFetching) {
                 return;
               }
 
