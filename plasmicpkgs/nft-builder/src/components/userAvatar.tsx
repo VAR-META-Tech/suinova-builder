@@ -54,7 +54,7 @@ export function registerUserAvatar(loader?: Registerable) {
         type: "imageUrl",
         description: "Image to display",
         defaultValue:
-          "https://s3-alpha-sig.figma.com/img/9113/13b2/d79c0afb936279fe8427b823bc6218b6?Expires=1743379200&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Xp6yKpimoicAZfFpVAD4Qk39aTBJ7by6QxcoD2eWyeqM9uyNi378e6OwcunC3keLpAR4Vez-3mjSuld7MJB280pEFweZCtN4K9GHWrmv2XmzK2WQCKJ3Hfv2FRBQpbj5MfolIoSb6L2peMlF-9CsiU2XthN11A4fCT5PINwAPW~S5vCY8PyD2gwhb39fh870a-tLm-j8vcX6S~Ihb8a1Q9Q-cuXpQ0vbgtMaWYT2JmxOMoPLp1vUhIgT-3AJ4tHQVDy-ZZxxIQ-2NliJnJBYiiijTYiYXLNeKDcQOqpOWjkDdiiYbjYZf4Bp0HqWNGV3ddB6iBCVEibB0s4KzvgI3g__",
+          "https://suinova.var-meta.com/static/img/avatar.png",
       },
       size: {
         type: "choice",
