@@ -260,6 +260,8 @@ export default defineConfig({
             CONTRACT_PACKAGE_ID: process.env.CONTRACT_PACKAGE_ID,
             TEMPLATE_PROJECT_ID_NFT_BUILDER:
               process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER,
+            TEMPLATE_PROJECT_ID_NFT_MINTING:
+              process.env.TEMPLATE_PROJECT_ID_NFT_MINTING,
             HOST_LESS_PROJECT_ID_NFT: process.env.HOST_LESS_PROJECT_ID_NFT,
             HOST_LESS_PROJECT_ID_ANTD: process.env.HOST_LESS_PROJECT_ID_ANTD,
             HOST_LESS_PROJECT_ID_PLASMIC_QUERY:

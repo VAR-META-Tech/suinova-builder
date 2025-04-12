@@ -263,6 +263,8 @@ export const ENV = {
   CONTRACT_PACKAGE_ID: process.env.CONTRACT_PACKAGE_ID || "",
   TEMPLATE_PROJECT_ID_NFT_BUILDER:
     process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "",
+  TEMPLATE_PROJECT_ID_NFT_MINTING:
+    process.env.TEMPLATE_PROJECT_ID_NFT_MINTING || "gw2A7Ri3ZPzQgHsj9mouUX",
 
   HOST_LESS_PROJECT_ID_NFT: process.env.HOST_LESS_PROJECT_ID_NFT || "",
   HOST_LESS_PROJECT_ID_ANTD: process.env.HOST_LESS_PROJECT_ID_ANTD || "",
@@ -988,7 +990,18 @@ const DEFAULT_DEVFLAGS = {
           name: "All-in-one NFT marketplace",
           tag: "blank",
           imageUrl:
-            "https://suinova.var-meta.com/static/img/nft-template-bg.png",
+            "https://suinova.var-meta.com/static/img/nft-marketplace-thumb.jpg",
+          publishWizard: true,
+          hidden: true,
+          description: "",
+        },
+        {
+          projectId: null,
+          baseProjectId: ENV.TEMPLATE_PROJECT_ID_NFT_MINTING,
+          name: "NFT Minting Website",
+          tag: "blank",
+          imageUrl:
+            "https://suinova.var-meta.com/static/img/minting-website-thumb.jpg",
           publishWizard: true,
           hidden: true,
           description: "",
@@ -1004,7 +1017,6 @@ const DEFAULT_DEVFLAGS = {
       "Your login session has expired. Please reload to log in again.",
   },
   showCopilot: true,
-
   loaderBundler: "esbuild",
   esbuildProjectIds: [] as string[],
   hostLessWorkspaceId: null as WorkspaceId | null,
