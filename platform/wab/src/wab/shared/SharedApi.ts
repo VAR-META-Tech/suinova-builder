@@ -102,6 +102,7 @@ import {
   GrantRevokeResponse,
   ImageUploadRequest,
   ImageUploadResponse,
+  ImportedCollectionResponse,
   JoinTeamRequest,
   JoinTeamResponse,
   ListAuthIntegrationsResponse,
@@ -123,6 +124,7 @@ import {
   NewGithubRepoResponse,
   NextPublishVersionRequest,
   NextPublishVersionResponse,
+  NFTCollectionResponse,
   PersonalApiToken,
   PlasmicHostingSettings,
   PostCommentResponse,
@@ -902,6 +904,12 @@ export abstract class SharedApi {
 
   async createTeam(name: string): Promise<CreateTeamResponse> {
     return this.post("/teams", { name });
+  }
+
+  async getProjectCollections(
+    projectId: string
+  ): Promise<ImportedCollectionResponse> {
+    return this.get(`/projects/${projectId}/collections`);
   }
 
   async updateTeam(

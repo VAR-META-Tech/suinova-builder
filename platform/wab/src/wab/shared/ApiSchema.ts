@@ -2143,3 +2143,24 @@ export interface SendEmailsResponse {
 export enum StudioRoomMessageTypes {
   commentsUpdate = "commentsUpdate",
 }
+
+export interface NFTCollectionResponse {
+  id: string;
+  projectId: string;
+  packageId: string;
+  marketplaceId: string | null;
+  collectionId: string;
+  name: string | null;
+  description: string | null;
+  creatorAddress: string;
+  collectionType: string;
+  royaltyFee: number;
+  isActive: boolean;
+  metadata: Record<string, any> | null;
+  createdAt: Date | string | null;
+  updatedAt: Date | string | null;
+}
+
+export interface ImportedCollectionResponse {
+  collections: NFTCollectionResponse[];
+}

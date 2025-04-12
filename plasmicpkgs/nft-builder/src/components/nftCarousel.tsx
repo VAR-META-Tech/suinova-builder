@@ -23,36 +23,36 @@ const collections = [
     id: 1,
     name: "Happy Robots",
     image:
-      "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
-    floorPrice: "50 SUI",
+      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    price: "50 SUI",
   },
   {
     id: 2,
     name: "Magic Mushrooms",
     image:
-      "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
-    floorPrice: "50 SUI",
+      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    price: "50 SUI",
   },
   {
     id: 3,
     name: "Disco Machines",
     image:
-      "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
-    floorPrice: "50 SUI",
+      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    price: "50 SUI",
   },
   {
     id: 4,
     name: "Disco Machines",
     image:
-      "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
-    floorPrice: "50 SUI",
+      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    price: "50 SUI",
   },
   {
     id: 5,
     name: "Disco Machines",
     image:
-      "https://s3-alpha-sig.figma.com/img/95d7/4adf/5e22f84c9cd16dedd040bb5691acd5ec?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=kZiU6y5iJZ03xClz-XxUUhvYiaBn9RBcEKqhGU6RG4AgmxFvrlxOLrn4Kgg3KHh~x0A7iyQcZa55Lz~mKxJ4jBiMf3sGQGgENAP7-Gom3GNgCr7GFPkYnpc3VSTDVIgdCxq3LqxDXo5qlxDS7UafhIrGK8eZEHpupbJYCqRB2gShQSuawYBOjz-a5rl1Aac3zzMHgpUud7t1AHwhAB21f0QZNdiUiulyZRk0bZnmcuD4XjsI3Og07YLlg2Fj3s3dBGgqe8o9wurToR9RHDKL4sCKhkXNS2qvNX2T04uZgxPXlMq82H8rQKvY~MVamkQEBHeWWFhHq~xoKsK~VDba1w__",
-    floorPrice: "50 SUI",
+      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    price: "50 SUI",
   },
 ];
 
@@ -107,6 +107,7 @@ const NFTCarousel = ({
       <Carousel
         ref={carouselRef}
         slidesToShow={slidesToShow}
+        arrows={false}
         responsive={[
           {
             breakpoint: 1050,
@@ -188,7 +189,7 @@ export function registerNFTCarousel(loader?: Registerable) {
             id: collection.id,
             name: collection.name,
             image: collection.image,
-            floorPrice: collection.floorPrice,
+            price: collection.price,
           },
         })),
       },

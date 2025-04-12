@@ -277,6 +277,8 @@ import {
   SelectQueryBuilder,
 } from "typeorm";
 import * as uuid from "uuid";
+import { NftCollection } from "@/wab/server/entities/NftCollection";
+import { ApiNftCollection } from "@/wab/server/routes/nft";
 
 export const updatableUserFields = [
   "firstName",
@@ -450,7 +452,9 @@ export function ensureFound<T>(x: T | null | undefined, name: string): T {
   return x;
 }
 
-async function getOneOrFailIfTooMany<T>(queryBuilder: SelectQueryBuilder<T>) {
+async function getOneOrFailIfTooMany<T extends ObjectLiteral>(
+  queryBuilder: SelectQueryBuilder<T>
+) {
   return maybeOne(await queryBuilder.getMany());
 }
 
@@ -1040,6 +1044,10 @@ export class DbMgr implements MigrationDbMgr {
 
   private discourseInfos() {
     return this.entMgr.getRepository(TeamDiscourseInfo);
+  }
+
+  private nftCollections() {
+    return this.entMgr.getRepository(NftCollection);
   }
 
   //
@@ -10596,6 +10604,45 @@ export class DbMgr implements MigrationDbMgr {
       where: {
         teamId: In(teamIds),
       },
+    });
+  }
+
+  async createNftCollection(data: {
+    projectId: string;
+    packageId: string;
+    collectionId: string;
+    creatorAddress: string;
+    collectionType: string;
+    royaltyFee: number;
+  }): Promise<ApiNftCollection> {
+    const collection = new NftCollection();
+    collection.projectId = data.projectId;
+    collection.packageId = data.packageId;
+    collection.collectionId = data.collectionId;
+    collection.creatorAddress = data.creatorAddress;
+    collection.collectionType = data.collectionType;
+    collection.royaltyFee = data.royaltyFee;
+
+    await this.entMgr.save(collection);
+
+    return {
+      id: collection.id,
+      projectId: collection.projectId,
+      packageId: collection.packageId,
+      collectionId: collection.collectionId,
+      creatorAddress: collection.creatorAddress,
+      collectionType: collection.collectionType,
+      royaltyFee: collection.royaltyFee,
+      createdAt: collection.createdAt.toISOString(),
+      updatedAt: collection.updatedAt.toISOString(),
+    };
+  }
+
+  async getNftCollectionsByProjectId(projectId: string) {
+    await this.checkProjectPerms(projectId, "viewer", "get project collections");
+    return this.entMgr.find(NftCollection, {
+      where: { projectId, isActive: true },
+      order: { createdAt: "DESC" }
     });
   }
 }

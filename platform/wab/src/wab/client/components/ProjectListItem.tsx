@@ -2,7 +2,6 @@ import { U } from "@/wab/client/cli-routes";
 import { promptMoveToWorkspace } from "@/wab/client/components/dashboard/dashboard-actions";
 import EditableResourceName from "@/wab/client/components/EditableResourceName";
 import { HostConfig } from "@/wab/client/components/HostConfig";
-import { maybeShowPaywall } from "@/wab/client/components/modals/PricingModal";
 import { PublicLink } from "@/wab/client/components/PublicLink";
 import { reactConfirm } from "@/wab/client/components/quick-modals";
 import { Matcher } from "@/wab/client/components/view-common";
@@ -14,7 +13,6 @@ import { ensure } from "@/wab/shared/common";
 import { InlineEdit } from "@/wab/commons/components/InlineEdit";
 import { OnClickAway } from "@/wab/commons/components/OnClickAway";
 import { Stated } from "@/wab/commons/components/Stated";
-import { DEVFLAGS } from "@/wab/shared/devflags";
 import { ApiPermission, ApiProject } from "@/wab/shared/ApiSchema";
 import { accessLevelRank } from "@/wab/shared/EntUtil";
 import { PERSONAL_WORKSPACE } from "@/wab/shared/Labels";
@@ -22,10 +20,21 @@ import {
   getAccessLevelToParent,
   getAccessLevelToResource,
 } from "@/wab/shared/perms";
-import { Menu, notification } from "antd";
+import { Menu } from "antd";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Modal } from "@/wab/client/components/widgets/Modal";
+import "@/wab/client/components/ProjectListItem.sass";
+import CollectionForm from "@/wab/client/components/custom-components/CollectionForm/CollectionForm";
+import {
+  ConnectButton,
+  useCurrentAccount,
+  useDisconnectWallet,
+  useCurrentWallet,
+} from "@mysten/dapp-kit";
+import Button from "@/wab/client/components/widgets/Button";
+import { useQuery } from "@tanstack/react-query";
 
 interface ProjectListItemProps {
   // className prop is required for positioning instances of
@@ -46,6 +55,20 @@ function ProjectListItem(props: ProjectListItemProps) {
   const history = useHistory();
   const appOps = ensure(appCtx.ops, "Unexpected nullish AppOps");
   const [configProjectId, setConfigProjectId] = React.useState<string>();
+  const [openImportCollectionModal, setOpenImportCollectionModal] =
+    useState(false);
+  const currentWalletAccount = useCurrentAccount();
+  const currentWallet = useCurrentWallet();
+  const { mutate } = useDisconnectWallet();
+  const {
+    data: projectCollections,
+    isFetched,
+    isFetching,
+    refetch: refetchCollections,
+  } = useQuery({
+    queryKey: ["projectCollections", project.id],
+    queryFn: () => appCtx.api.getProjectCollections(project.id),
+  });
 
   const projectAccessLevel = getAccessLevelToResource(
     { type: "project", resource: project },
@@ -68,16 +91,79 @@ function ProjectListItem(props: ProjectListItemProps) {
     [appCtx.workspaces]
   );
 
+  const importedCollection = React.useMemo(() => {
+    return isFetched &&
+      projectCollections &&
+      (projectCollections?.collections?.length || 0) > 0
+      ? projectCollections.collections[0]
+      : null;
+  }, [projectCollections]);
+
   return (
     <>
+      <Modal
+        destroyOnClose
+        centered
+        className={"ImportCollectionModal__Wrapper"}
+        title="Collection Import"
+        open={openImportCollectionModal}
+        onCancel={() => setOpenImportCollectionModal(false)}
+        footer={null}
+      >
+        <div className={"ImportCollectionModal__InstructionText"}>
+          Connect your wallet to verify ownership and set up collection details
+          for importing and customizing your collection in SuiNova.
+        </div>
+        {!currentWalletAccount ? (
+          <ConnectButton
+            className="ImportCollectionModal__ConnectButton"
+            connectText="Connect Wallet"
+          />
+        ) : (
+          <Button
+            className="ImportCollectionModal__ConnectButton"
+            onClick={() => mutate()}
+          >
+            Disconnect Wallet
+          </Button>
+        )}
+        {currentWallet.isConnected && (
+          <CollectionForm
+            onImportSuccess={() => {
+              document.location.href = U.project({
+                projectId: project.id,
+              });
+            }}
+            projectId={project.id}
+            appCtx={appCtx}
+            onCancel={() => setOpenImportCollectionModal(false)}
+            importedCollection={importedCollection}
+          />
+        )}
+      </Modal>
       <PlasmicProjectListItem
         root={{
           as: PublicLink,
           props: {
             className: props.className,
-            href: U.project({
-              projectId: project.id,
-            }),
+            // href: U.project({
+            //   projectId: project.id,
+            // }),
+            onClick: (e) => {
+              e.preventDefault();
+              if (!isFetched || isFetching) {
+                return;
+              }
+
+              if (!importedCollection) {
+                setOpenImportCollectionModal(true);
+                return;
+              }
+
+              document.location.href = U.project({
+                projectId: project.id,
+              });
+            },
           },
         }}
         showWorkspace={
@@ -182,6 +268,13 @@ function ProjectListItem(props: ProjectListItemProps) {
                     <strong>Configure</strong> project
                   </Menu.Item>
                 )} */}
+                <Menu.Item
+                  onClick={() => {
+                    setOpenImportCollectionModal(true);
+                  }}
+                >
+                  <strong>Configure</strong> project
+                </Menu.Item>
                 <Menu.Item
                   onClick={async () => {
                     const response = await promptMoveToWorkspace(

@@ -54,11 +54,10 @@ import { autorun } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
-import CollectionForm from "@/wab/client/components/sidebar/atom/CollectionForm";
 import {
   CONTRACT_PACKAGE_ID_PARAM_NAME,
   IMPORTED_COLLECTIONS_PARAM_NAME,
-} from "@/wab/shared/devflags";
+} from "@/wab/client/constant/contract.constant";
 
 type ComponentDependency = {
   component: Component;
@@ -489,15 +488,6 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
                         />
                       </LabeledItemRow>
                     </PropValueEditorContext.Provider>
-                    {p.variable.name === IMPORTED_COLLECTIONS_PARAM_NAME && (
-                      <div className="panel-row">
-                        <CollectionForm
-                          studioCtx={studioCtx}
-                          tpl={tpl}
-                          param={p}
-                        />
-                      </div>
-                    )}
                   </>
                 ),
               };

@@ -259,30 +259,26 @@ export function flattenInsertableIconGroups(
 
 const production = process.env.NODE_ENV === "production";
 
-const projectIdConfig = {
-  /// Add your local project id
+export const ENV = {
+  CONTRACT_PACKAGE_ID: process.env.CONTRACT_PACKAGE_ID || "",
   TEMPLATE_PROJECT_ID_NFT_BUILDER:
-    process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "pHhBGeu1NF9WPtShP6gtAM",
-  TEMPLATE_PROJECT_ID_NFT_BUILDER_TEST:
-    process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER_TEST ||
-    "vXTRYk9uRkHUcHXTL8TpYt",
+    process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "",
+  TEMPLATE_PROJECT_ID_NFT_MINTING:
+    process.env.TEMPLATE_PROJECT_ID_NFT_MINTING || "gw2A7Ri3ZPzQgHsj9mouUX",
 
-  HOST_LESS_PROJECT_ID_NFT:
-    process.env.HOST_LESS_PROJECT_ID_NFT || "3YRsZHmU6M2Qk7WYDM9QQ4",
-  HOST_LESS_PROJECT_ID_ANTD: "66MC2d9B7YecVEphuUMtqF",
-  HOST_LESS_PROJECT_ID_PLASMIC_QUERY: "wvY5dZS3doGb4WJWJKhqhH",
-  HOST_LESS_PROJECT_ID_REACT_SLICK: "iVuV4r27S7YWSG5evhRtXe",
-  HOST_LESS_PROJECT_ID_PLASMIC_TAB: "bGGYchQJnRrBLGcc2YbKZk",
-  HOST_LESS_PROJECT_ID_PLASMIC_NAV: "bfniEFpM4tZx8htC9kkukb",
-  HOST_LESS_PROJECT_ID_ANTD_4: "gzny5sU7cPH2nhvEqzdB2m",
+  HOST_LESS_PROJECT_ID_NFT: process.env.HOST_LESS_PROJECT_ID_NFT || "",
+  HOST_LESS_PROJECT_ID_ANTD: process.env.HOST_LESS_PROJECT_ID_ANTD || "",
+  HOST_LESS_PROJECT_ID_PLASMIC_QUERY:
+    process.env.HOST_LESS_PROJECT_ID_PLASMIC_QUERY || "",
+  HOST_LESS_PROJECT_ID_REACT_SLICK:
+    process.env.HOST_LESS_PROJECT_ID_REACT_SLICK || "",
+  HOST_LESS_PROJECT_ID_PLASMIC_TAB:
+    process.env.HOST_LESS_PROJECT_ID_PLASMIC_TAB || "",
+  HOST_LESS_PROJECT_ID_PLASMIC_NAV:
+    process.env.HOST_LESS_PROJECT_ID_PLASMIC_NAV || "",
+  HOST_LESS_PROJECT_ID_ANTD_4: process.env.HOST_LESS_PROJECT_ID_ANTD_4 || "",
   HOST_LESS_PROJECT_ID_CHAKRA: process.env.HOST_LESS_PROJECT_ID_CHAKRA || "",
 };
-
-export const CONTRACT_PACKAGE_ID =
-  "0xe1ab6ca2bb5de9682aaf0c4bc2742c1d80779c381685d9c164597518d9427667";
-export const WEB3_GLOBAL_CONTEXT_COMP_NAME = "Web3GlobalContext";
-export const CONTRACT_PACKAGE_ID_PARAM_NAME = "contractPackageId";
-export const IMPORTED_COLLECTIONS_PARAM_NAME = "importedCollections";
 
 const DEFAULT_DEVFLAGS = {
   appContentBaseUrl: "https://docs.plasmic.app/app-content",
@@ -419,21 +415,6 @@ const DEFAULT_DEVFLAGS = {
     },
     {
       type: "hostless-package",
-      name: "Connect Wallet",
-      sectionLabel: "NFT Marketplace",
-      codeLink:
-        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
-      items: [
-        {
-          type: "hostless-component",
-          componentName: "nft-builder-connect-wallet-btn",
-          displayName: "Connect Wallet Button",
-        },
-      ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
-    },
-    {
-      type: "hostless-package",
       name: "NFT Marketplace",
       sectionLabel: "NFT Marketplace",
       codeLink:
@@ -446,7 +427,7 @@ const DEFAULT_DEVFLAGS = {
           hidden: true,
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
+      projectId: ENV.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       type: "hostless-package",
@@ -475,8 +456,33 @@ const DEFAULT_DEVFLAGS = {
           componentName: "nft-builder-carousel-item",
           displayName: "NFT Carousel Item",
         },
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-select",
+          displayName: "NFT Select",
+        },
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-input",
+          displayName: "NFT Input",
+        },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
+      projectId: ENV.HOST_LESS_PROJECT_ID_NFT,
+    },
+    {
+      type: "hostless-package",
+      name: "Connect Wallet",
+      sectionLabel: "NFT Marketplace",
+      codeLink:
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+      items: [
+        {
+          type: "hostless-component",
+          componentName: "nft-builder-connect-wallet-btn",
+          displayName: "Connect Wallet Button",
+        },
+      ],
+      projectId: ENV.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       type: "hostless-package",
@@ -501,7 +507,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "User Info Card",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_NFT,
+      projectId: ENV.HOST_LESS_PROJECT_ID_NFT,
     },
     {
       sectionLabel: "Design systems",
@@ -522,7 +528,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd.png",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD,
+      projectId: ENV.HOST_LESS_PROJECT_ID_ANTD,
     },
     {
       sectionLabel: "Design systems",
@@ -543,7 +549,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/chakra.png",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_CHAKRA,
+      projectId: ENV.HOST_LESS_PROJECT_ID_CHAKRA,
     },
     {
       sectionLabel: "Ant Design",
@@ -757,7 +763,7 @@ const DEFAULT_DEVFLAGS = {
           displayName: "Upload",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD,
+      projectId: ENV.HOST_LESS_PROJECT_ID_ANTD,
     },
     {
       hidden: false,
@@ -845,7 +851,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd_rate.png",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD_4,
+      projectId: ENV.HOST_LESS_PROJECT_ID_ANTD_4,
     },
     {
       hidden: false,
@@ -866,7 +872,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/antd.png",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_ANTD_4,
+      projectId: ENV.HOST_LESS_PROJECT_ID_ANTD_4,
     },
     {
       sectionLabel: "APIs",
@@ -892,7 +898,7 @@ const DEFAULT_DEVFLAGS = {
         },
       ],
       showInstall: true,
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_PLASMIC_QUERY,
+      projectId: ENV.HOST_LESS_PROJECT_ID_PLASMIC_QUERY,
     },
     {
       type: "hostless-package",
@@ -923,7 +929,7 @@ const DEFAULT_DEVFLAGS = {
           },
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_REACT_SLICK,
+      projectId: ENV.HOST_LESS_PROJECT_ID_REACT_SLICK,
     },
     {
       type: "hostless-package",
@@ -940,7 +946,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/insertables/tabs.svg",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_PLASMIC_TAB,
+      projectId: ENV.HOST_LESS_PROJECT_ID_PLASMIC_TAB,
     },
     {
       type: "hostless-package",
@@ -957,7 +963,7 @@ const DEFAULT_DEVFLAGS = {
           imageUrl: "https://static1.plasmic.app/plasmic-nav-thumbnail.svg",
         },
       ],
-      projectId: projectIdConfig.HOST_LESS_PROJECT_ID_PLASMIC_NAV,
+      projectId: ENV.HOST_LESS_PROJECT_ID_PLASMIC_NAV,
     },
   ]),
   // Turns on PlasmicImg for all
@@ -980,22 +986,22 @@ const DEFAULT_DEVFLAGS = {
       projects: [
         {
           projectId: null,
-          baseProjectId: projectIdConfig.TEMPLATE_PROJECT_ID_NFT_BUILDER,
+          baseProjectId: ENV.TEMPLATE_PROJECT_ID_NFT_BUILDER,
           name: "All-in-one NFT marketplace",
           tag: "blank",
           imageUrl:
-            "https://suinova.var-meta.com/static/img/nft-template-bg.png",
+            "https://suinova.var-meta.com/static/img/nft-marketplace-thumb.jpg",
           publishWizard: true,
           hidden: true,
           description: "",
         },
         {
           projectId: null,
-          baseProjectId: projectIdConfig.TEMPLATE_PROJECT_ID_NFT_BUILDER_TEST,
-          name: "All-in-one NFT marketplace - Test",
+          baseProjectId: ENV.TEMPLATE_PROJECT_ID_NFT_MINTING,
+          name: "NFT Minting Website",
           tag: "blank",
           imageUrl:
-            "https://suinova.var-meta.com/static/img/nft-template-bg.png",
+            "https://suinova.var-meta.com/static/img/minting-website-thumb.jpg",
           publishWizard: true,
           hidden: true,
           description: "",
@@ -1011,7 +1017,6 @@ const DEFAULT_DEVFLAGS = {
       "Your login session has expired. Please reload to log in again.",
   },
   showCopilot: true,
-
   loaderBundler: "esbuild",
   esbuildProjectIds: [] as string[],
   hostLessWorkspaceId: null as WorkspaceId | null,

@@ -3,20 +3,23 @@
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import CreatableSelect from "react-select/creatable";
-import styles from "@/wab/client/components/sidebar/atom/CollectionForm.module.css";
+import styles from "@/wab/client/components/custom-components/CollectionForm/CollectionForm.module.css";
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
   useSuiClient,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
-import { Param, TplComponent, isKnownExpr } from "@/wab/shared/model/classes";
-import { maybe } from "@/wab/shared/common";
-import { StudioCtx } from "@/wab/client/studio-ctx/StudioCtx";
-import { codeLit, tryExtractJson } from "@/wab/shared/core/exprs";
-import { Descendant } from "slate";
-import { resolveTemplatedString } from "@/wab/client/components/sidebar-tabs/ComponentProps/TemplatedTextEditor";
-import { CONTRACT_PACKAGE_ID } from "@/wab/shared/devflags";
+import { ENV } from "@/wab/shared/devflags";
+import { AppCtx } from "@/wab/client/app-ctx";
+import {
+  CHAIN,
+  CONTRACT_METHOD,
+  MARKETPLACE_MODULE,
+} from "@/wab/client/constant/contract.constant";
+import { notification } from "antd";
+import { NOTIFICATION_MESSAGE } from "@/wab/client/constant/mesage.constant";
+import { NFTCollectionResponse } from "@/wab/shared/ApiSchema";
 
 // Define the form data type
 type FormData = {
@@ -32,28 +35,33 @@ type Option = {
 };
 
 export default function CollectionForm({
-  tpl,
-  studioCtx,
-  param,
+  onCancel,
+  projectId,
+  onImportSuccess,
+  importedCollection,
 }: {
-  tpl: TplComponent;
-  studioCtx: StudioCtx;
-  param: Param;
+  onCancel: () => void;
+  onImportSuccess: () => void;
+  appCtx: AppCtx;
+  projectId: string;
+  importedCollection: NFTCollectionResponse | null;
 }) {
   // State for collection type options
   const [collectionOptions, setCollectionOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [digest, setDigest] = useState<string>("");
   const currentWalletAccount = useCurrentAccount();
 
-  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction({
-    onSuccess(data, variables, context) {
-      console.log("🚀 ~ result:", result);
-      updateImportedCollections();
-    },
-    onError(error, variables, context) {},
-  });
-  const tplMgr = React.useMemo(() => studioCtx.tplMgr(), []);
+  const { mutateAsync: signAndExecuteTransaction, isPending } =
+    useSignAndExecuteTransaction({
+      onSuccess: () => {
+        onImportSuccess();
+        notification.success({
+          message: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.MESSAGE,
+          description: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.DESCRIPTION,
+        });
+      },
+    });
+
   const suiClient = useSuiClient();
 
   // Initialize react-hook-form
@@ -61,11 +69,16 @@ export default function CollectionForm({
     control,
     handleSubmit,
     formState: { errors },
-    getValues,
+    reset,
   } = useForm<FormData>({
     defaultValues: {
-      collectionId: null,
-      royalty: "",
+      collectionId: importedCollection
+        ? {
+            value: importedCollection?.collectionId,
+            label: importedCollection.collectionId,
+          }
+        : null,
+      royalty: importedCollection?.royaltyFee?.toString() || "",
       publisher: "",
     },
   });
@@ -96,10 +109,6 @@ export default function CollectionForm({
             label:
               "0x847d5967dccc496ef9f5dc3673f1e7d174743fbd9d9e29e8c54c33eb74d912d5",
           },
-          {
-            value: "0x73dbf60e99add5...dd69d8::nft::NFT",
-            label: "0x73dbf60e99add5...dd69d8::nft::NFT",
-          },
         ]);
       } finally {
         setIsLoading(false);
@@ -109,44 +118,44 @@ export default function CollectionForm({
     void fetchCollectionTypes();
   }, []);
 
-  const updateImportedCollections = () => {
-    const { collectionId } = getValues();
+  // const updateImportedCollections = () => {
+  //   const { collectionId } = getValues();
 
-    if (!collectionId) {
-      return;
-    }
+  //   if (!collectionId) {
+  //     return;
+  //   }
 
-    const nodes: Descendant[] = [
-      {
-        children: [{ text: collectionId.value }],
-        type: "paragraph",
-      },
-    ];
-    const expr = resolveTemplatedString(nodes);
+  //   const nodes: Descendant[] = [
+  //     {
+  //       children: [{ text: collectionId.value }],
+  //       type: "paragraph",
+  //     },
+  //   ];
+  //   const expr = resolveTemplatedString(nodes);
 
-    const arg = tpl.vsettings[0].args.find((_arg) => _arg.param === param);
-    const curExpr = maybe(arg, (x) => x.expr) || param.defaultExpr || undefined;
-    const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
+  //   const arg = tpl.vsettings[0].args.find((_arg) => _arg.param === param);
+  //   const curExpr = maybe(arg, (x) => x.expr) || param.defaultExpr || undefined;
+  //   const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
 
-    if (!!exprLit) {
-      return;
-    }
+  //   if (!!exprLit) {
+  //     return;
+  //   }
 
-    if (expr == null && exprLit == null) {
-      return;
-    }
-    const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
-    void studioCtx.change(({ success }) => {
-      tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
-      return success();
-    });
-  };
+  //   if (expr == null && exprLit == null) {
+  //     return;
+  //   }
+  //   const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+  //   void studioCtx.change(({ success }) => {
+  //     tplMgr.setArg(tpl, tpl.vsettings[0], param.variable, newExpr);
+  //     return success();
+  //   });
+  // };
 
   // Handle form submission
   const onSubmit = async (data: FormData) => {
-    // if (!currentWalletAccount || !data.collectionId || !data.royalty) {
-    //   return;
-    // }
+    if (!currentWalletAccount || !data.collectionId || !data.royalty) {
+      return;
+    }
 
     const collectionObject = await suiClient.getObject({
       id: data?.collectionId?.value || "",
@@ -156,11 +165,14 @@ export default function CollectionForm({
         showContent: true,
       },
     });
-    console.log("🚀 ~ onSubmit ~ collectionObject:", collectionObject);
 
     if (!collectionObject?.data?.type) {
       return;
     }
+
+    notification.info({
+      message: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.WAITING,
+    });
 
     // const publisher = (
     //   await suiClient.getOwnedObjects({
@@ -174,48 +186,46 @@ export default function CollectionForm({
     //     (item.data?.content as any)?.fields?.package === "collection"
     // );
 
-    console.log("Form submitted:", data);
     const tx = new Transaction();
 
-    const txResult = tx.moveCall({
-      target: CONTRACT_PACKAGE_ID,
-      module: "marketplace",
-      function: "import-collection",
+    // Can not find how to get the publisher yet so I hardcoded it
+    const HARDCODED_PUBLISHER =
+      "0x486ae873bc05746f6ab4565938aafd77835e5b411a90c1d143097e0875cda8e1";
+
+    tx.moveCall({
+      target: `${ENV.CONTRACT_PACKAGE_ID}::${MARKETPLACE_MODULE}::${CONTRACT_METHOD.IMPORT_COLLECTION}`,
       arguments: [
         tx.object(data?.collectionId?.value || ""),
-        tx.object(
-          "0x486ae873bc05746f6ab4565938aafd77835e5b411a90c1d143097e0875cda8e1"
-        ),
+        tx.object(HARDCODED_PUBLISHER),
+        tx.pure.string(projectId),
         tx.object(data.royalty),
       ],
       typeArguments: [collectionObject.data?.type],
     });
 
     // Process the form data here
-    await signAndExecuteTransaction(
-      {
-        transaction: tx,
-        chain: "sui:testnet",
-      },
-      {
-        onSuccess: (result) => {
-          console.log("executed transaction", result);
-          setDigest(result.digest);
-        },
-      }
-    );
-    console.log(
-      "🚀 ~ onSubmit ~ signAndExecuteTransaction:",
-      signAndExecuteTransaction
-    );
-
-    updateImportedCollections();
+    await signAndExecuteTransaction({
+      transaction: tx,
+      chain: CHAIN,
+    });
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.collectionForm}>
-        <p className={styles.formTitle}>Import collection</p>
+        <div className={styles.formGroup}>
+          <label htmlFor="royalty">Wallet Address</label>
+          <div className={styles.royaltyInputWrapper}>
+            <input
+              value={currentWalletAccount?.address}
+              id="wallet-address"
+              type="text"
+              readOnly
+              className={styles.royaltyInput}
+            />
+          </div>
+        </div>
+
         <div className={styles.formGroup}>
           <label htmlFor="collectionType">Collection Type</label>
           <Controller
@@ -285,7 +295,7 @@ export default function CollectionForm({
           )}
         </div>
 
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label htmlFor="royalty">Publisher</label>
           <div className={styles.royaltyInputWrapper}>
             <Controller
@@ -311,11 +321,35 @@ export default function CollectionForm({
               {errors.publisher.message as string}
             </span>
           )}
+        </div> */}
+        <div className={styles.buttonGroup}>
+          <button
+            onClick={() => {
+              onCancel();
+              reset();
+            }}
+            className={styles.cancelButton}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className={`${styles.importButton} ${
+              isPending ? styles.loading : ""
+            }`}
+            disabled={isPending}
+          >
+            {isPending && (
+              <svg
+                className={styles.spinner}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              ></svg>
+            )}
+            <span className={styles.buttonText}>Import</span>
+          </button>
         </div>
-
-        <button type="submit" className={styles.importButton}>
-          Import
-        </button>
       </form>
     </>
   );
