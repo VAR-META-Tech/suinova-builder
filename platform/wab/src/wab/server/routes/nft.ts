@@ -18,6 +18,7 @@ export async function importNftCollection(req: Request, res: Response) {
   const { 
     packageId,
     collectionId,
+    marketplaceId,
     creatorAddress,
     collectionType,
     royaltyFee
@@ -45,9 +46,9 @@ export async function importNftCollection(req: Request, res: Response) {
   }
 
   // Create NFT collection
-  const collection = await dbMgr.createNftCollection({
-    projectId,
+  const collection = await dbMgr.upsertCollectionByProjectId(projectId, {
     packageId,
+    marketplaceId,
     collectionId,
     creatorAddress,
     collectionType,
