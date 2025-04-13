@@ -10613,6 +10613,7 @@ export class DbMgr implements MigrationDbMgr {
     collectionId: string;
     creatorAddress: string;
     collectionType: string;
+    marketplaceId: string;
     royaltyFee: number;
   }): Promise<ApiNftCollection> {
     const collection = new NftCollection();
@@ -10622,6 +10623,7 @@ export class DbMgr implements MigrationDbMgr {
     collection.creatorAddress = data.creatorAddress;
     collection.collectionType = data.collectionType;
     collection.royaltyFee = data.royaltyFee;
+    collection.marketplaceId = data.marketplaceId;
 
     await this.entMgr.save(collection);
 
@@ -10638,9 +10640,30 @@ export class DbMgr implements MigrationDbMgr {
     };
   }
 
+  async upsertCollectionByProjectId(projectId: string, data: {
+    packageId: string;
+    collectionId: string;
+    creatorAddress: string;
+    collectionType: string;
+    marketplaceId: string;
+    royaltyFee: number;
+  }) {
+    let collection = await this.getNftCollectionsByProjectId(projectId);
+    if (collection) {
+      assignAllowEmpty(collection, data);
+    } else {
+      collection = this.nftCollections().create({
+        projectId,
+        ...data,
+      });
+    }
+    await this.entMgr.save(collection);
+    return collection;
+  }
+
   async getNftCollectionsByProjectId(projectId: string) {
     await this.checkProjectPerms(projectId, "viewer", "get project collections");
-    return this.entMgr.find(NftCollection, {
+    return this.nftCollections().findOne({
       where: { projectId, isActive: true },
       order: { createdAt: "DESC" }
     });
