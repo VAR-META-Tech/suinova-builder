@@ -142,6 +142,7 @@ const NewProjectModal = observer(function NewProjectModal({
                 workspaceId={workspaceId}
               />
             )}
+            {/* NOTE: New Template Projects */}
             {appCtx.starters.templateAndExampleSections.map((section) => (
               <StarterGroup
                 key={section.tag}

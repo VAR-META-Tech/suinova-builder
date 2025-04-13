@@ -15,6 +15,16 @@ import {
 } from "@/wab/shared/devflags";
 import { Tooltip } from "antd";
 import * as React from "react";
+import { Modal } from "@/wab/client/components/widgets/Modal";
+import CollectionForm from "@/wab/client/components/custom-components/CollectionForm/CollectionForm";
+import {
+  ConnectButton,
+  useCurrentAccount,
+  useDisconnectWallet,
+  useCurrentWallet,
+} from "@mysten/dapp-kit";
+import Button from "@/wab/client/components/widgets/Button";
+import { U } from "@/wab/client/cli-routes";
 
 const iconMap = {
   JoystickIcon: <JoystickIcon style={{ width: 20, height: 20 }} />,
@@ -30,6 +40,7 @@ export interface StarterGroupProps
 }
 
 function StarterGroup(props: StarterGroupProps) {
+  const [selectedProjectId, setSelectedProjectId] = React.useState<string>();
   const appCtx = useAppCtx();
   const showPlasmicOnlyProjects = isAdminTeamEmail(
     appCtx.selfInfo?.email,
@@ -56,45 +67,94 @@ function StarterGroup(props: StarterGroupProps) {
         workspaceId={props.workspaceId}
         withDropShadow={proj.withDropShadow}
         cloneWithoutName={proj.cloneWithoutName}
+        onSelect={(projectId: string) => {
+          setSelectedProjectId(projectId);
+        }}
       />
     ));
 
+  const currentWalletAccount = useCurrentAccount();
+  const currentWallet = useCurrentWallet();
+  const { mutate } = useDisconnectWallet();
+
   return (
-    <PlasmicStarterGroup
-      root={{
-        // className prop needs to be piped to the root element of this
-        // component
-        className: props.className,
-      }}
-      heading={props.title}
-      // Only display if there's a tooltip
-      infoIcon={{
-        wrap: (node) =>
-          !props.infoTooltip ? null : (
-            <Tooltip title={props.infoTooltip}>
-              {node as React.ReactElement}
-            </Tooltip>
-          ),
-      }}
-      // Only display if there's a URL
-      viewDocs={{
-        props: {
-          href: props.docsUrl ?? "#",
-          text: "Docs",
-          hide: !props.docsUrl,
-        },
-      }}
-      // Only display if there's a URL
-      more={{
-        props: {
-          href: props.moreUrl ?? "#",
-          text: "See all...",
-          hide: !props.moreUrl,
-        },
-      }}
-      twoColumnGrid={props.twoColumnGrid}
-      container={projects}
-    />
+    <>
+      <Modal
+        destroyOnClose
+        centered
+        className={"ImportCollectionModal__Wrapper"}
+        title="Collection Import"
+        open={!!selectedProjectId}
+        onCancel={() => setSelectedProjectId("")}
+        footer={null}
+      >
+        <div className={"ImportCollectionModal__InstructionText"}>
+          Connect your wallet to verify ownership and set up collection details
+          for importing and customizing your collection in SuiNova.
+        </div>
+        {!currentWalletAccount ? (
+          <ConnectButton
+            className="ImportCollectionModal__ConnectButton"
+            connectText="Connect Wallet"
+          />
+        ) : (
+          <Button
+            className="ImportCollectionModal__ConnectButton"
+            onClick={() => mutate()}
+          >
+            Disconnect Wallet
+          </Button>
+        )}
+        {selectedProjectId && currentWallet.isConnected && (
+          <CollectionForm
+            onImportSuccess={() => {
+              location.href = U.project({
+                projectId: selectedProjectId,
+              });
+            }}
+            projectId={selectedProjectId}
+            appCtx={appCtx}
+            onCancel={() => setSelectedProjectId("")}
+            importedCollection={null}
+          />
+        )}
+      </Modal>
+      <PlasmicStarterGroup
+        root={{
+          // className prop needs to be piped to the root element of this
+          // component
+          className: props.className,
+        }}
+        heading={props.title}
+        // Only display if there's a tooltip
+        infoIcon={{
+          wrap: (node) =>
+            !props.infoTooltip ? null : (
+              <Tooltip title={props.infoTooltip}>
+                {node as React.ReactElement}
+              </Tooltip>
+            ),
+        }}
+        // Only display if there's a URL
+        viewDocs={{
+          props: {
+            href: props.docsUrl ?? "#",
+            text: "Docs",
+            hide: !props.docsUrl,
+          },
+        }}
+        // Only display if there's a URL
+        more={{
+          props: {
+            href: props.moreUrl ?? "#",
+            text: "See all...",
+            hide: !props.moreUrl,
+          },
+        }}
+        twoColumnGrid={props.twoColumnGrid}
+        container={projects}
+      />
+    </>
   );
 }
 

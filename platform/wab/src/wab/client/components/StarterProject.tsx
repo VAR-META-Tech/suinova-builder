@@ -44,6 +44,7 @@ interface StarterProjectProps {
   workspaceId?: WorkspaceId;
   withDropShadow?: boolean;
   cloneWithoutName?: boolean;
+  onSelect?: (projectId: string) => void;
 }
 
 function StarterProject(props: StarterProjectProps) {
@@ -185,10 +186,11 @@ function StarterProject(props: StarterProjectProps) {
                 })
               );
 
+              props.onSelect?.(newProjectId);
               // Perform a full page load so that we aren't using stale JS.
-              location.href = U.project({
-                projectId: newProjectId,
-              });
+              // location.href = U.project({
+              //   projectId: newProjectId,
+              // });
             } else if (props.baseProjectId) {
               const { projectId: newProjectId } = await appCtx.app.withSpinner(
                 appCtx.api.clonePublishedTemplate(
@@ -198,10 +200,11 @@ function StarterProject(props: StarterProjectProps) {
                 )
               );
 
+              props.onSelect?.(newProjectId);
               // Perform a full page load so that we aren't using stale JS.
-              location.href = U.project({
-                projectId: newProjectId,
-              });
+              // location.href = U.project({
+              //   projectId: newProjectId,
+              // });
             } else {
               unexpected();
             }

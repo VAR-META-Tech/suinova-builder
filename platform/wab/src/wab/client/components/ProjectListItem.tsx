@@ -64,7 +64,6 @@ function ProjectListItem(props: ProjectListItemProps) {
     data: projectCollections,
     isFetched,
     isFetching,
-    refetch: refetchCollections,
   } = useQuery({
     queryKey: ["projectCollections", project.id],
     queryFn: () => appCtx.api.getProjectCollections(project.id),
