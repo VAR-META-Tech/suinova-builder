@@ -1,4 +1,4 @@
-import { userDbMgr } from "@/wab/server/routes/util";
+import { superDbMgr, userDbMgr } from "@/wab/server/routes/util";
 import { BadRequestError } from "@/wab/shared/ApiErrors/errors";
 import { Request, Response } from "express";
 
@@ -32,12 +32,12 @@ export async function importNftCollection(req: Request, res: Response) {
   }
 
   // Validate royalty fee is between 0 and 100
-  if (royaltyFee < 0 || royaltyFee > 100) {
-    throw new BadRequestError("Royalty fee must be between 0 and 100");
+  if (royaltyFee < 0) {
+    throw new BadRequestError("Royalty fee must be greater than 0");
   }
 
   // Get database manager
-  const dbMgr = userDbMgr(req);
+  const dbMgr = superDbMgr(req);
 
   // Check if project exists
   const project = await dbMgr.getProjectById(projectId);

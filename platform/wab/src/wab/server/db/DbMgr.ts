@@ -10653,6 +10653,7 @@ export class DbMgr implements MigrationDbMgr {
       assignAllowEmpty(collection, data);
     } else {
       collection = this.nftCollections().create({
+        projectId,
         ...data,
       });
     }
