@@ -35,6 +35,7 @@ import {
 } from "@mysten/dapp-kit";
 import Button from "@/wab/client/components/widgets/Button";
 import { useQuery } from "@tanstack/react-query";
+import NFTMintingForm from "@/wab/client/components/custom-components/NFTMintingForm/NFTMintingForm";
 
 interface ProjectListItemProps {
   // className prop is required for positioning instances of
@@ -56,6 +57,8 @@ function ProjectListItem(props: ProjectListItemProps) {
   const appOps = ensure(appCtx.ops, "Unexpected nullish AppOps");
   const [configProjectId, setConfigProjectId] = React.useState<string>();
   const [openImportCollectionModal, setOpenImportCollectionModal] =
+    useState(false);
+  const [openLaunchPadSettingModal, setOpenLaunchPadSettingModal] =
     useState(false);
   const currentWalletAccount = useCurrentAccount();
   const currentWallet = useCurrentWallet();
@@ -140,6 +143,17 @@ function ProjectListItem(props: ProjectListItemProps) {
           />
         )}
       </Modal>
+      <Modal
+        destroyOnClose
+        centered
+        className={"ImportCollectionModal__Wrapper"}
+        title="Set up NFT Minting website"
+        open={openLaunchPadSettingModal}
+        onCancel={() => setOpenImportCollectionModal(false)}
+        footer={null}
+      >
+        <NFTMintingForm />
+      </Modal>
       <PlasmicProjectListItem
         root={{
           as: PublicLink,
@@ -168,7 +182,7 @@ function ProjectListItem(props: ProjectListItemProps) {
         showWorkspace={
           !!(
             accessLevelRank(workspaceAccessLevel) >=
-              accessLevelRank("viewer") &&
+            accessLevelRank("viewer") &&
             showWorkspace &&
             project.workspaceName
           )
@@ -180,9 +194,9 @@ function ProjectListItem(props: ProjectListItemProps) {
               project.workspaceId === personalWorkspace?.id
                 ? PERSONAL_WORKSPACE
                 : matcher?.boldSnippets(
-                    project.workspaceName || "",
-                    "yellow-snippet"
-                  ) || project.workspaceName,
+                  project.workspaceName || "",
+                  "yellow-snippet"
+                ) || project.workspaceName,
             onClick: () => {
               history.push(
                 project.workspaceId === personalWorkspace?.id
@@ -232,7 +246,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                     <EditableResourceName
                       {...editableNameProps}
                       {...(accessLevelRank(projectAccessLevel) <
-                      accessLevelRank("content")
+                        accessLevelRank("content")
                         ? { cantEdit: true }
                         : {})}
                       {...{
@@ -269,6 +283,13 @@ function ProjectListItem(props: ProjectListItemProps) {
                 )} */}
                 <Menu.Item
                   onClick={() => {
+                    setOpenLaunchPadSettingModal(true);
+                  }}
+                >
+                  <strong>Configure</strong>launch pad project
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
                     setOpenImportCollectionModal(true);
                   }}
                 >
@@ -293,9 +314,9 @@ function ProjectListItem(props: ProjectListItemProps) {
                           project.id,
                           response.result === "workspace"
                             ? {
-                                workspaceId: response.workspace.id,
-                                name: response.name,
-                              }
+                              workspaceId: response.workspace.id,
+                              name: response.name,
+                            }
                             : undefined
                         )
                       );
@@ -405,27 +426,27 @@ function ProjectListItem(props: ProjectListItemProps) {
                   )} */}
                 {accessLevelRank(projectAccessLevel) >=
                   accessLevelRank("owner") && (
-                  <Menu.Item
-                    onClick={async () => {
-                      const confirm = await reactConfirm({
-                        title: `Delete project`,
-                        message: (
-                          <>
-                            Are you sure you want to delete the project{" "}
-                            <strong>{project.name}</strong>?
-                          </>
-                        ),
-                      });
-                      if (!confirm) {
-                        return;
-                      }
-                      await appOps.deleteSite(project.id);
-                      await onUpdate?.();
-                    }}
-                  >
-                    <strong>Delete</strong> project
-                  </Menu.Item>
-                )}
+                    <Menu.Item
+                      onClick={async () => {
+                        const confirm = await reactConfirm({
+                          title: `Delete project`,
+                          message: (
+                            <>
+                              Are you sure you want to delete the project{" "}
+                              <strong>{project.name}</strong>?
+                            </>
+                          ),
+                        });
+                        if (!confirm) {
+                          return;
+                        }
+                        await appOps.deleteSite(project.id);
+                        await onUpdate?.();
+                      }}
+                    >
+                      <strong>Delete</strong> project
+                    </Menu.Item>
+                  )}
               </Menu>
             ),
           },
