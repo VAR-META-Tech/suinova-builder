@@ -234,10 +234,8 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     : null;
 
   useEffect(() => {
-    if (collection?.packageId) {
-      updateTextTemplate(CONTRACT_PACKAGE_ID_PARAM_NAME, collection?.packageId);
-    }
-  }, [collection?.packageId]);
+    updateTextTemplate(CONTRACT_PACKAGE_ID_PARAM_NAME, ENV.CONTRACT_PACKAGE_ID);
+  }, [web3GlobalContextTpl]);
 
   useEffect(() => {
     if (collection?.collectionId) {
