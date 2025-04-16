@@ -152,8 +152,8 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
             studioCtx.siteInfo?.id || ""
           );
 
-        if (collections.length > 0) {
-          setCollection(collections[0]);
+        if (collections) {
+          setCollection(collections);
         }
       })()
     );

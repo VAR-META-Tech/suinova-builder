@@ -521,7 +521,6 @@ export interface ApiBranch extends ApiEntityBase {
 }
 
 export interface ApiProject extends ApiEntityBase {
-  id: ProjectId;
   hostUrl: string | null;
   clonedFromProjectId: ProjectId | null;
   name: string;
@@ -2162,5 +2161,5 @@ export interface NFTCollectionResponse {
 }
 
 export interface ImportedCollectionResponse {
-  collections: NFTCollectionResponse[];
+  collections: NFTCollectionResponse;
 }

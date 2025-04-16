@@ -92,10 +92,7 @@ function ProjectListItem(props: ProjectListItemProps) {
 
   const importedCollection = React.useMemo(() => {
     return isFetched &&
-      projectCollections &&
-      (projectCollections?.collections?.length || 0) > 0
-      ? projectCollections.collections[0]
-      : null;
+      projectCollections && projectCollections.collections;
   }, [projectCollections]);
 
   return (
@@ -168,7 +165,7 @@ function ProjectListItem(props: ProjectListItemProps) {
         showWorkspace={
           !!(
             accessLevelRank(workspaceAccessLevel) >=
-              accessLevelRank("viewer") &&
+            accessLevelRank("viewer") &&
             showWorkspace &&
             project.workspaceName
           )
@@ -180,9 +177,9 @@ function ProjectListItem(props: ProjectListItemProps) {
               project.workspaceId === personalWorkspace?.id
                 ? PERSONAL_WORKSPACE
                 : matcher?.boldSnippets(
-                    project.workspaceName || "",
-                    "yellow-snippet"
-                  ) || project.workspaceName,
+                  project.workspaceName || "",
+                  "yellow-snippet"
+                ) || project.workspaceName,
             onClick: () => {
               history.push(
                 project.workspaceId === personalWorkspace?.id
@@ -232,7 +229,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                     <EditableResourceName
                       {...editableNameProps}
                       {...(accessLevelRank(projectAccessLevel) <
-                      accessLevelRank("content")
+                        accessLevelRank("content")
                         ? { cantEdit: true }
                         : {})}
                       {...{
@@ -293,9 +290,9 @@ function ProjectListItem(props: ProjectListItemProps) {
                           project.id,
                           response.result === "workspace"
                             ? {
-                                workspaceId: response.workspace.id,
-                                name: response.name,
-                              }
+                              workspaceId: response.workspace.id,
+                              name: response.name,
+                            }
                             : undefined
                         )
                       );
@@ -405,27 +402,27 @@ function ProjectListItem(props: ProjectListItemProps) {
                   )} */}
                 {accessLevelRank(projectAccessLevel) >=
                   accessLevelRank("owner") && (
-                  <Menu.Item
-                    onClick={async () => {
-                      const confirm = await reactConfirm({
-                        title: `Delete project`,
-                        message: (
-                          <>
-                            Are you sure you want to delete the project{" "}
-                            <strong>{project.name}</strong>?
-                          </>
-                        ),
-                      });
-                      if (!confirm) {
-                        return;
-                      }
-                      await appOps.deleteSite(project.id);
-                      await onUpdate?.();
-                    }}
-                  >
-                    <strong>Delete</strong> project
-                  </Menu.Item>
-                )}
+                    <Menu.Item
+                      onClick={async () => {
+                        const confirm = await reactConfirm({
+                          title: `Delete project`,
+                          message: (
+                            <>
+                              Are you sure you want to delete the project{" "}
+                              <strong>{project.name}</strong>?
+                            </>
+                          ),
+                        });
+                        if (!confirm) {
+                          return;
+                        }
+                        await appOps.deleteSite(project.id);
+                        await onUpdate?.();
+                      }}
+                    >
+                      <strong>Delete</strong> project
+                    </Menu.Item>
+                  )}
               </Menu>
             ),
           },
