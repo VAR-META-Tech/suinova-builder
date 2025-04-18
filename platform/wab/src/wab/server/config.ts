@@ -50,6 +50,7 @@ function parseConfigFromEnv(): Config {
   const envConfig = {
     host: process.env["HOST"],
     databaseUri: process.env["DATABASE_URI"],
+    databaseSync: process.env["DATABASE_SYNCHRONIZE"],
     sentryDSN: process.env["SENTRY_DSN"],
     sessionSecret: process.env["SESSION_SECRET"],
     mailFrom: mailConfig?.mailFrom,
