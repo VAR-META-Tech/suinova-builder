@@ -1416,6 +1416,9 @@ export class EndUser extends Base<"EndUserId"> {
 
   @Column("jsonb")
   properties: Record<string, any>;
+
+  @Column("text", { nullable: true })
+  walletAddress?: string;
 }
 
 /*

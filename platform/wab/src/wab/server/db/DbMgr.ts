@@ -1648,8 +1648,8 @@ export class DbMgr implements MigrationDbMgr {
     );
   }
 
-  async getUserByEmail(email: string) {
-    this.checkSuperUser();
+  async getUserByEmail(email: string, skipCheck = false) {
+    !skipCheck && this.checkSuperUser();
     email = email.toLowerCase();
     return ensureFound<User>(
       await this.users().findOne({
@@ -1803,6 +1803,30 @@ export class DbMgr implements MigrationDbMgr {
     userId: string,
     chainId: string
   ): Promise<UserWallet | undefined> {
+    const userWallet = await getOneOrFailIfTooMany(
+      this.userWallets()
+        .createQueryBuilder("userWallets")
+        .where(`lower(userWallets.userId) = lower(:userId)`, {
+          userId,
+        })
+        .andWhere(`lower(userWallets.chainId) = lower(:chainId)`, {
+          chainId,
+        })
+    );
+
+    if (!userWallet) {
+      return undefined;
+    }
+
+    return userWallet;
+  }
+
+  async tryGetUserWalletByEmail(
+    email: string,
+    chainId: string
+  ): Promise<UserWallet | undefined> {
+    const userId = await this.getUserByEmail(email, true).then((u) => u.id);
+
     const userWallet = await getOneOrFailIfTooMany(
       this.userWallets()
         .createQueryBuilder("userWallets")
@@ -10640,14 +10664,17 @@ export class DbMgr implements MigrationDbMgr {
     };
   }
 
-  async upsertCollectionByProjectId(projectId: string, data: {
-    packageId: string;
-    collectionId: string;
-    creatorAddress: string;
-    collectionType: string;
-    marketplaceId: string;
-    royaltyFee: number;
-  }) {
+  async upsertCollectionByProjectId(
+    projectId: string,
+    data: {
+      packageId: string;
+      collectionId: string;
+      creatorAddress: string;
+      collectionType: string;
+      marketplaceId: string;
+      royaltyFee: number;
+    }
+  ) {
     let collection = await this.getNftCollectionsByProjectId(projectId);
     if (collection) {
       assignAllowEmpty(collection, data);
@@ -10662,10 +10689,14 @@ export class DbMgr implements MigrationDbMgr {
   }
 
   async getNftCollectionsByProjectId(projectId: string) {
-    await this.checkProjectPerms(projectId, "viewer", "get project collections");
+    await this.checkProjectPerms(
+      projectId,
+      "viewer",
+      "get project collections"
+    );
     return this.nftCollections().findOne({
       where: { projectId, isActive: true },
-      order: { createdAt: "DESC" }
+      order: { createdAt: "DESC" },
     });
   }
 }

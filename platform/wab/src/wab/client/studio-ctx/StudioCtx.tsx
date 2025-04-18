@@ -420,7 +420,7 @@ interface PanningState {
 }
 
 export class FreestyleState {
-  constructor(readonly spec: AddTplItem) {}
+  constructor(readonly spec: AddTplItem) { }
 }
 
 export type PointerState =
@@ -432,7 +432,7 @@ export type PointerState =
   | "stack";
 
 export class DragInsertState {
-  constructor(readonly dragMgr: DragInsertManager, readonly spec: AddTplItem) {}
+  constructor(readonly dragMgr: DragInsertManager, readonly spec: AddTplItem) { }
 }
 
 interface ArenaViewInfo {
@@ -458,6 +458,7 @@ export type StudioAppUser = Pick<
   | "isLoggedIn"
   | "properties"
   | "customProperties"
+  | "walletAddress"
 >;
 
 export interface StudioChangeOpts {
@@ -811,40 +812,40 @@ export class StudioCtx extends WithDbCtx {
       ),
       ...(this.appCtx.appConfig.incrementalObservables
         ? [
-            autorun(
-              () => {
-                const currentArena = this.currentArena;
-                if (!currentArena) {
-                  return;
-                }
-                const componentsToObserve = isDedicatedArena(currentArena)
-                  ? [currentArena.component]
-                  : currentArena.children.map(
-                      (child) => child.container.component
-                    );
-                this.dbCtx().maybeObserveComponents(
-                  componentsToObserve,
-                  ComponentContext.Arena
+          autorun(
+            () => {
+              const currentArena = this.currentArena;
+              if (!currentArena) {
+                return;
+              }
+              const componentsToObserve = isDedicatedArena(currentArena)
+                ? [currentArena.component]
+                : currentArena.children.map(
+                  (child) => child.container.component
                 );
-              },
-              { name: "StudioCtx.observeCurrentArena" }
-            ),
-            autorun(
-              () => {
-                const currentViewCtxComponent =
-                  this.focusedViewCtx()?.currentComponent();
-                if (!currentViewCtxComponent) {
-                  return;
-                }
-                const componentsToObserve = [currentViewCtxComponent];
-                this.dbCtx().maybeObserveComponents(
-                  componentsToObserve,
-                  ComponentContext.View
-                );
-              },
-              { name: "StudioCtx.observeCurrentViewCtx" }
-            ),
-          ]
+              this.dbCtx().maybeObserveComponents(
+                componentsToObserve,
+                ComponentContext.Arena
+              );
+            },
+            { name: "StudioCtx.observeCurrentArena" }
+          ),
+          autorun(
+            () => {
+              const currentViewCtxComponent =
+                this.focusedViewCtx()?.currentComponent();
+              if (!currentViewCtxComponent) {
+                return;
+              }
+              const componentsToObserve = [currentViewCtxComponent];
+              this.dbCtx().maybeObserveComponents(
+                componentsToObserve,
+                ComponentContext.View
+              );
+            },
+            { name: "StudioCtx.observeCurrentViewCtx" }
+          ),
+        ]
         : []),
       autorun(() => {
         if (!isHostLessPackage(this.site)) {
@@ -1054,9 +1055,9 @@ export class StudioCtx extends WithDbCtx {
     this._dbCtx.recorder.setExtraListener(() =>
       assert(
         (this._isChanging && this.recorder.isRecording) ||
-          (this._isUndoing && this.recorder.isRecording) ||
-          (this._isRefreshing && this.recorder.isRecording) ||
-          this._isRestoring,
+        (this._isUndoing && this.recorder.isRecording) ||
+        (this._isRefreshing && this.recorder.isRecording) ||
+        this._isRestoring,
         "Invariant Failed: Unexpected model change"
       )
     );
@@ -2109,8 +2110,8 @@ export class StudioCtx extends WithDbCtx {
             const focusedMode = !this.canEditProject()
               ? false
               : isDedicatedArena(prevArena)
-              ? !!prevArena._focusedFrame
-              : this.focusPreference.get() ?? this.siteInfo.hasAppAuth;
+                ? !!prevArena._focusedFrame
+                : this.focusPreference.get() ?? this.siteInfo.hasAppAuth;
             if (focusedMode) {
               const newFocusedFrame = setFocusedFrame(this.site, arena);
               ensureActivatedScreenVariantsForFrameByWidth(
@@ -3268,8 +3269,8 @@ export class StudioCtx extends WithDbCtx {
       PLATFORM === "osx" || !e.shiftKey
         ? [e.deltaX, e.deltaY]
         : // If not on Mac OS and shift is pressed,
-          // we swap deltas to scroll horizontally
-          [e.deltaY * 0.5, e.deltaX * 0.5];
+        // we swap deltas to scroll horizontally
+        [e.deltaY * 0.5, e.deltaX * 0.5];
 
     this.viewportCtx!.scrollBy(new Pt(deltaX, deltaY));
 
@@ -3438,7 +3439,7 @@ export class StudioCtx extends WithDbCtx {
       frameElt &&
       frameElt.offsetParent &&
       $(frameElt).parents(".canvas-editor__frames").css("visibility") !==
-        "hidden"
+      "hidden"
     ) {
       return frameElt;
     } else {
@@ -3620,24 +3621,24 @@ export class StudioCtx extends WithDbCtx {
                   branchId: branchInfo ? branchInfo.id : null,
                   arena: this.currentArena
                     ? {
-                        type: getArenaType(this.currentArena),
-                        uuidOrName: getArenaUuidOrName(this.currentArena),
-                        focused: this.focusedMode,
-                      }
+                      type: getArenaType(this.currentArena),
+                      uuidOrName: getArenaUuidOrName(this.currentArena),
+                      focused: this.focusedMode,
+                    }
                     : null,
                   cursor:
                     cursor && this.editMode && !this.isLiveMode
                       ? {
-                          left: cursor.left,
-                          top: cursor.top,
-                        }
+                        left: cursor.left,
+                        top: cursor.top,
+                      }
                       : null,
                   selection:
                     frameUuid && this.editMode && !this.isLiveMode
                       ? {
-                          selectableFrameUuid: frameUuid,
-                          selectableKey,
-                        }
+                        selectableFrameUuid: frameUuid,
+                        selectableKey,
+                      }
                       : null,
                   position: position,
                 };
@@ -3846,8 +3847,8 @@ export class StudioCtx extends WithDbCtx {
     const selection = playerData?.viewInfo?.selectionInfo;
     const arenaFrame = selection
       ? getArenaFrames(arena).find(
-          (frame) => frame.uuid === selection.selectableFrameUuid
-        )
+        (frame) => frame.uuid === selection.selectableFrameUuid
+      )
       : undefined;
     if (!arenaFrame) {
       this.setStudioFocusOnFrameContents(undefined);
@@ -4150,8 +4151,8 @@ export class StudioCtx extends WithDbCtx {
       : arena &&
         curFocusedFrame &&
         getArenaFrames(arena).includes(curFocusedFrame)
-      ? curFocusedFrame
-      : undefined;
+        ? curFocusedFrame
+        : undefined;
     // If the element is invisible, then retain the focusedTpl.
     const nextFocusedTpl =
       (vc && vc.nextFocusedTpl()) ||
@@ -4162,12 +4163,12 @@ export class StudioCtx extends WithDbCtx {
     // is not enough
     const variantsStack = vc
       ? vc
-          .componentStackFrames()
-          .slice()
-          .map((f) => f.clone())
+        .componentStackFrames()
+        .slice()
+        .map((f) => f.clone())
       : frame
-      ? [new RootComponentVariantFrame(frame)]
-      : undefined;
+        ? [new RootComponentVariantFrame(frame)]
+        : undefined;
 
     return {
       focusedArena: arena,
@@ -4496,9 +4497,8 @@ export class StudioCtx extends WithDbCtx {
           .map((l, i) => ` * ${i === 0 ? `@returns ` : ""}${l}\n`)
           .join("");
       }
-      const prefix = `${documentation ? `/**\n${documentation}*/` : ""}${
-        customFunction.importName
-      }`;
+      const prefix = `${documentation ? `/**\n${documentation}*/` : ""}${customFunction.importName
+        }`;
       const untypedFn = `(...args: any[]): any`;
       if (!meta) {
         return `${prefix}${untypedFn}`;
@@ -4506,34 +4506,30 @@ export class StudioCtx extends WithDbCtx {
       if (meta.typescriptDeclaration) {
         return `${prefix}${meta.typescriptDeclaration}`;
       }
-      return `${prefix}(${
-        meta.params
-          ? meta.params
-              .map((p) =>
-                typeof p === "string"
-                  ? `${p}: any`
-                  : `${p.isRestParameter ? "..." : ""}${p.name}${
-                      p.isOptional ? "?" : ""
-                    }: ${registeredTypeToTs(p.type)}`
-              )
-              .join(", ")
-          : `...args: any[]`
-      }): ${
-        meta.returnValue?.type
+      return `${prefix}(${meta.params
+        ? meta.params
+          .map((p) =>
+            typeof p === "string"
+              ? `${p}: any`
+              : `${p.isRestParameter ? "..." : ""}${p.name}${p.isOptional ? "?" : ""
+              }: ${registeredTypeToTs(p.type)}`
+          )
+          .join(", ")
+        : `...args: any[]`
+        }): ${meta.returnValue?.type
           ? registeredTypeToTs(meta.returnValue?.type)
           : "any"
-      }`;
+        }`;
     };
     const getCodeLibraryDeclaration = (lib: classes.CodeLibrary): string => {
-      return `${lib.jsIdentifier}: typeof import("${lib.importPath}")${
-        lib.importType === "default"
-          ? lib.isSyntheticDefaultImport
-            ? ""
-            : ".default"
-          : lib.importType === "namespace"
+      return `${lib.jsIdentifier}: typeof import("${lib.importPath}")${lib.importType === "default"
+        ? lib.isSyntheticDefaultImport
+          ? ""
+          : ".default"
+        : lib.importType === "namespace"
           ? ""
           : `.${lib.namedImport}`
-      }`;
+        }`;
     };
     // Subscribe to changes to `installedHostLessPkgs` so the schema is updated
     // once the code is evaluated
@@ -4544,33 +4540,33 @@ export class StudioCtx extends WithDbCtx {
     return {
       $$: `{
         ${withoutNils([
-          ...[
-            ...allCustomFunctions(this.site)
-              .map(({ customFunction }) => customFunction)
-              .filter((f) => !f.namespace),
-            ...Object.values(
-              groupBy(
-                allCustomFunctions(this.site)
-                  .map(({ customFunction }) => customFunction)
-                  .filter((f) => !!f.namespace),
-                (f) => f.namespace
-              )
-            ),
-          ].map((functionOrGroup) =>
-            !Array.isArray(functionOrGroup)
-              ? getCustomFunctionDeclaration(functionOrGroup)
-              : `${functionOrGroup[0].namespace}: {
+        ...[
+          ...allCustomFunctions(this.site)
+            .map(({ customFunction }) => customFunction)
+            .filter((f) => !f.namespace),
+          ...Object.values(
+            groupBy(
+              allCustomFunctions(this.site)
+                .map(({ customFunction }) => customFunction)
+                .filter((f) => !!f.namespace),
+              (f) => f.namespace
+            )
+          ),
+        ].map((functionOrGroup) =>
+          !Array.isArray(functionOrGroup)
+            ? getCustomFunctionDeclaration(functionOrGroup)
+            : `${functionOrGroup[0].namespace}: {
                 ${functionOrGroup
-                  .map((customFunction) =>
-                    getCustomFunctionDeclaration(customFunction)
-                  )
-                  .join(";\n")}
+              .map((customFunction) =>
+                getCustomFunctionDeclaration(customFunction)
+              )
+              .join(";\n")}
               }`
-          ),
-          ...allCodeLibraries(this.site).map(({ codeLibrary }) =>
-            getCodeLibraryDeclaration(codeLibrary)
-          ),
-        ]).join(";\n")}}`,
+        ),
+        ...allCodeLibraries(this.site).map(({ codeLibrary }) =>
+          getCodeLibraryDeclaration(codeLibrary)
+        ),
+      ]).join(";\n")}}`,
       [extraTsFilesSymbol]: this.getRegisteredLibraries().flatMap(
         (lib) => lib.meta.files
       ),
@@ -4810,7 +4806,7 @@ export class StudioCtx extends WithDbCtx {
       );
       assert(
         this._changeRecords.length ===
-          changeCounterBeingSaved - this._savedChangeCounter,
+        changeCounterBeingSaved - this._savedChangeCounter,
         "changeRecords should have exactly the amount os changes since it was saved last"
       );
       const { changesBundle, toDeleteIids, allIids, modifiedComponentIids } =
@@ -5060,7 +5056,7 @@ export class StudioCtx extends WithDbCtx {
       assert(
         bundle.root === slowBundle.root,
         `Different root! Received: ${bundle.root},` +
-          ` Expected: ${slowBundle.root}`
+        ` Expected: ${slowBundle.root}`
       );
     } catch (e) {
       reportFastBundleError(
@@ -5438,10 +5434,10 @@ export class StudioCtx extends WithDbCtx {
   ) {
     return latestPublishedRevId
       ? await this.appCtx.api.getProjectRevWithoutData(
-          this.siteInfo.id,
-          ensure(latestPublishedRevId, "latestPublishedRevId must exist"),
-          branchId
-        )
+        this.siteInfo.id,
+        ensure(latestPublishedRevId, "latestPublishedRevId must exist"),
+        branchId
+      )
       : { rev: null };
   }
   /**
@@ -6650,6 +6646,7 @@ export class StudioCtx extends WithDbCtx {
         customProperties: undefined,
         roleName: undefined,
         roleIds: undefined,
+        walletAddress: undefined,
       },
     },
     {
@@ -6850,7 +6847,7 @@ function isContentEditor(user: ApiUser | null, project: SiteInfo) {
   );
   const accessLevel =
     accessLevelRank(project.defaultAccessLevel) >=
-    accessLevelRank(userAccessLevel)
+      accessLevelRank(userAccessLevel)
       ? project.defaultAccessLevel
       : userAccessLevel;
   return accessLevel === "content";
@@ -6962,14 +6959,14 @@ function viewCtxInfoChanged(
 ) {
   return (
     vcInfo.componentStackFrameLength !==
-      vcPreviousInfo.componentStackFrameLength ||
+    vcPreviousInfo.componentStackFrameLength ||
     vcInfo.lastComponentFrame.tplComponent !==
-      vcPreviousInfo.lastComponentFrame.tplComponent ||
+    vcPreviousInfo.lastComponentFrame.tplComponent ||
     vcInfo.viewMode !== vcPreviousInfo.viewMode ||
     vcInfo.showDefaultSlotContents !== vcPreviousInfo.showDefaultSlotContents ||
     !isEqual(vcInfo.pinnedVariants, vcPreviousInfo.pinnedVariants) ||
     makeSelectableFullKey(vcInfo.focusedSelectable) !==
-      makeSelectableFullKey(vcPreviousInfo.focusedSelectable) ||
+    makeSelectableFullKey(vcPreviousInfo.focusedSelectable) ||
     vcInfo.focusedTpl !== vcPreviousInfo.focusedTpl
   );
 }
@@ -6984,8 +6981,7 @@ export function logChangedNodes(
     uniq(
       changes.map(
         (change) =>
-          `${instUtil.getInstClassName(change.changeNode.inst)}${
-            includeUids ? `[${change.changeNode.inst.uid}]` : ""
+          `${instUtil.getInstClassName(change.changeNode.inst)}${includeUids ? `[${change.changeNode.inst.uid}]` : ""
           }.${change.changeNode.field}`
       )
     ).join(", ")
@@ -7018,8 +7014,8 @@ function emptyChanges(recordedChanges: RecordedChanges) {
 export function studioCtxKey<
   Method extends keyof StudioCtx,
   Args extends StudioCtx[Method] extends (..._args: any[]) => any
-    ? Parameters<StudioCtx[Method]>
-    : never
+  ? Parameters<StudioCtx[Method]>
+  : never
 >(method: Method, ...args: Args) {
   return invalidationKey(method, ...args);
 }

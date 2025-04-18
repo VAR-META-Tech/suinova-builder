@@ -1119,7 +1119,7 @@ const DEFAULT_DEVFLAGS = {
   disableBranching: false,
   branchingTeamIds: [] as TeamId[],
   commitsOnBranches: false,
-  appAuth: false,
+  appAuth: true,
   advancedAppAuth: false,
   serverPublishProjectIds: [] as ProjectId[],
   focusable: false,

@@ -228,6 +228,10 @@ export async function grantOauthToken(req: Request, res: Response) {
   }
 
   const plasmicUser = await mgr.getUserByEmail(codeMeta.user.email);
+  const walletAddress = await mgr.tryGetUserWalletByUserId(
+    plasmicUser.id as UserId,
+    "101"
+  );
 
   const endUser = await mgr.upsertEndUser(
     appAuthConfig.directoryId,
@@ -245,6 +249,7 @@ export async function grantOauthToken(req: Request, res: Response) {
       firstName: plasmicUser?.firstName,
       lastName: plasmicUser?.lastName,
       avatarUrl: plasmicUser?.avatarUrl,
+      walletAddress: walletAddress?.walletAddress,
     }
   );
 
@@ -361,12 +366,15 @@ export async function upsertEndUser(req: Request, res: Response) {
     return;
   }
 
-  const endUser = await mgr.upsertEndUser(
-    directory.id,
-    identifier,
-    undefined,
-    properties
+  const walletAddress = await mgr.tryGetUserWalletByEmail(
+    identifier.email || "",
+    "101"
   );
+
+  const endUser = await mgr.upsertEndUser(directory.id, identifier, undefined, {
+    ...properties,
+    walletAddress: walletAddress?.walletAddress || "",
+  });
   await mgr.upsertAppAccessRegistry(appId, endUser.id);
 
   const token = generateUserToken(appId, endUser.id);

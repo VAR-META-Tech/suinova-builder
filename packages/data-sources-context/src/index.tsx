@@ -11,6 +11,7 @@ export interface PlasmicDataSourceContextValue {
     roleName: string;
     roleIds: string[];
     roleNames: string[];
+    walletAddress?: string;
   } | null;
 }
 

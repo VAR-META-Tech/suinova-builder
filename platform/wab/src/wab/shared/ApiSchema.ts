@@ -1987,6 +1987,7 @@ export interface ApiAppUser {
   roleIds: string[];
   roleNames: string[];
   isLoggedIn: boolean;
+  walletAddress?: string;
 }
 
 export interface ApiAppAuthPublicConfig {

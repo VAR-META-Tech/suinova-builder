@@ -23,6 +23,7 @@ export interface PlasmicDataSourceContextValue {
         roleName: string;
         roleIds: string[];
         roleNames: string[];
+        walletAddress?: string;
     } | null;
     // (undocumented)
     userAuthToken?: string | null;
@@ -36,6 +37,7 @@ export function useCurrentUser(): {
     roleName: string;
     roleIds: string[];
     roleNames: string[];
+    walletAddress?: string | undefined;
 } | {
     isLoggedIn: boolean;
 };

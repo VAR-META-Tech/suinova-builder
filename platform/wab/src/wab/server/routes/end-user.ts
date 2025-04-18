@@ -1,3 +1,4 @@
+import { inc } from "@/../../../packages/cli/src/utils/semver";
 import { sortBy, withoutNils } from "@/wab/shared/common";
 import {
   executeDataSourceOperation,
@@ -42,6 +43,7 @@ import { Request, Response } from "express-serve-static-core";
 import { groupBy, isString, pick, uniq } from "lodash";
 import { Connection } from "typeorm";
 import validator from "validator";
+import { isSuiEmail } from "@/wab/shared/utils/email-utils";
 
 function mkApiEndUser(
   endUser: EndUser,
@@ -341,12 +343,19 @@ export async function getAppUserInfo(
   // Include all roles with order <= userRoleInApp.order
   const userRoles = appRoles.filter((r) => r.order <= userRoleInApp.order);
 
+  const userWallet = await mgr.tryGetUserWalletByEmail(
+    endUser.email || "",
+    "101"
+  );
+
   const extraProperties = includeCustomProperties
     ? await getCurrentUserDataProperties(dbCon, mgr, tokenInfo.appId, {
         email: endUser.email,
         externalId: endUser.externalId,
       })
-    : {};
+    : {
+        walletAddress: userWallet?.walletAddress,
+      };
 
   return {
     email: endUser.email,
@@ -359,6 +368,7 @@ export async function getAppUserInfo(
     properties: endUser.properties,
     customProperties: extraProperties ?? {},
     isLoggedIn: true,
+    walletAddress: userWallet?.walletAddress || "",
   };
 }
 
@@ -384,9 +394,16 @@ export async function buildFakeCurrentUser(
 
   const userRoles = roles.filter((r) => r.order <= userRole.order);
 
+  const userWallet = await mgr.tryGetUserWalletByEmail(
+    identifier.email || "",
+    "101"
+  );
+
   const extraProperties = includeCustomProperties
     ? await getCurrentUserDataProperties(dbCon, mgr, appId, identifier)
-    : {};
+    : {
+        walletAddress: userWallet?.walletAddress,
+      };
 
   return {
     email: identifier.email,
@@ -399,6 +416,7 @@ export async function buildFakeCurrentUser(
     // End user may not exist so we can only have properties from the data source op
     properties: {},
     customProperties: extraProperties,
+    walletAddress: userWallet?.walletAddress,
   };
 }
 
@@ -657,9 +675,10 @@ export async function createAccessRules(req: Request, res: Response) {
     roleId,
     notify,
   } = req.body;
+
   const validatedEmails = (emails ?? [])
     .map((email) => email.trim().toLowerCase())
-    .filter((email) => validator.isEmail(email));
+    .filter((email) => validator.isEmail(email) || isSuiEmail(email));
 
   const validatedDomains = (domains ?? [])
     .map((domain) => domain.trim())
@@ -690,12 +709,14 @@ export async function createAccessRules(req: Request, res: Response) {
       if (!url) {
         continue;
       }
-      await sendAppEndUserInviteEmail(req, {
-        sharer: getUser(req),
-        email: email,
-        url: url,
-        appName: project.name,
-      });
+      if (!isSuiEmail(email)) {
+        await sendAppEndUserInviteEmail(req, {
+          sharer: getUser(req),
+          email: email,
+          url: url,
+          appName: project.name,
+        });
+      }
     }
   }
   res.json(users.map((user) => mkApiAppEndUserAccess(user)));
@@ -857,6 +878,7 @@ async function buildCurrentUserFromEmail(
       skipDirectoryPermsCheck: true,
     }
   );
+  const userWallet = await mgr.tryGetUserWalletByEmail(userEmail || "", "101");
   const extraProperties = await getCurrentUserDataProperties(
     dbCon,
     mgr,
@@ -873,6 +895,7 @@ async function buildCurrentUserFromEmail(
     customProperties: extraProperties,
     ...getRolesFields(role, roles),
     isLoggedIn: true,
+    walletAddress: userWallet?.walletAddress || "",
   };
 }
 
