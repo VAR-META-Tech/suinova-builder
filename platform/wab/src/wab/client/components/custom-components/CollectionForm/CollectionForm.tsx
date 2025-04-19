@@ -105,9 +105,15 @@ export default function CollectionForm({
         setCollectionOptions([
           {
             value:
-              "0x847d5967dccc496ef9f5dc3673f1e7d174743fbd9d9e29e8c54c33eb74d912d5",
+              "0x041bd45b2c666e65caa228963c7986e10e622b27f28a187bc348452b9fc51a51",
             label:
-              "0x847d5967dccc496ef9f5dc3673f1e7d174743fbd9d9e29e8c54c33eb74d912d5",
+              "0x041bd45b2c666e65caa228963c7986e10e622b27f28a187bc348452b9fc51a51",
+          },
+          {
+            value:
+              "0x0718a9ff79bd8dad7ef4f073857d2a4403206598f00804273b757b8b62d566af",
+            label:
+              "0x0718a9ff79bd8dad7ef4f073857d2a4403206598f00804273b757b8b62d566af",
           },
         ]);
       } finally {
@@ -195,7 +201,7 @@ export default function CollectionForm({
     tx.moveCall({
       target: `${ENV.CONTRACT_PACKAGE_ID}::${MARKETPLACE_MODULE}::${CONTRACT_METHOD.IMPORT_COLLECTION}`,
       arguments: [
-        tx.object(data?.collectionId?.value || ""),
+        tx.object(ENV.MARKETPLACE_CAP_ID),
         tx.object(HARDCODED_PUBLISHER),
         tx.pure.string(projectId),
         tx.object(data.royalty),
