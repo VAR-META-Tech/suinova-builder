@@ -6,6 +6,7 @@ import { Registerable, registerComponentHelper } from "../reg-util";
 interface INFTInput extends InputProps {
   className?: string;
   placeholderColor?: string;
+  inputBackgroundColor?: string;
 }
 
 const CSSClasses = {
@@ -23,14 +24,17 @@ const minifyCss = (css: string) => {
     .trim();
 };
 
-const NFTInput = ({ className, placeholderColor, ...props }: INFTInput) => {
+const NFTInput = ({ className, placeholderColor, inputBackgroundColor, ...props }: INFTInput) => {
   const cssStyles = React.useMemo(
     () =>
       minifyCss(`
           .${CSSClasses.input}::placeholder {
             color: ${placeholderColor};
           }
-        `),
+          .${CSSClasses.input} {
+            background-color: ${inputBackgroundColor};
+          }
+        `), 
     []
   );
 
@@ -99,6 +103,10 @@ export function registerNFTInput(loader?: Registerable) {
       placeholderColor: {
         type: "color",
         defaultValue: "black"
+      },
+      inputBackgroundColor: {
+        type: "color",
+        defaultValue: "white"
       }
     },
     importPath: "@plasmicpkgs/nft-builder",
