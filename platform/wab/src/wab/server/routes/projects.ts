@@ -314,6 +314,7 @@ export async function clonePublishedTemplate(req: Request, res: Response) {
     workspaceId,
     hostUrl,
     ownerEmail: req.user?.email,
+    skipPermissionsCheck: true,
   });
   userAnalytics(req).track({
     event: "Clone template",
