@@ -1,6 +1,7 @@
 import {
   createNetworkConfig,
   SuiClientProvider,
+  useCurrentAccount,
   WalletProvider,
 } from "@mysten/dapp-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
@@ -37,8 +38,8 @@ export const InternalContext = React.createContext<{
   accessToken: string | null;
   apiUrl?: string;
 }>({
-  login: () => {},
-  logout: () => {},
+  login: () => { },
+  logout: () => { },
   user: null,
   accessToken: null,
   apiUrl: "",
@@ -106,7 +107,9 @@ export const Web3GlobalContext = ({
               <InternalContext.Provider
                 value={{ login, logout, user, accessToken, apiUrl }}
               >
-                {children}
+                <InnerWalletContext>
+                  {children}
+                </InnerWalletContext>
               </InternalContext.Provider>
             </WalletProvider>
           </SuiClientProvider>
@@ -115,6 +118,21 @@ export const Web3GlobalContext = ({
     </GlobalActionsProvider>
   );
 };
+
+export const InnerWalletContext = ({ children }: React.PropsWithChildren<{}>) => {
+  const account = useCurrentAccount();
+
+  return (
+    <DataProvider
+      name="web3WalletData"
+      data={{
+        walletAddress: account?.address || "",
+      }}
+    >
+      {children}
+    </DataProvider>
+  );
+}
 
 export function registerWeb3Provider(loader?: Registerable) {
   const doRegisterComponent: typeof registerGlobalContext = (...args) =>
