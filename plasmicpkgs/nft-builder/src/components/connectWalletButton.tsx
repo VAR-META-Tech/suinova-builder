@@ -1,29 +1,32 @@
 import {
   ConnectButton,
   useCurrentAccount,
-  useSignPersonalMessage,
+  useDisconnectWallet,
 } from "@mysten/dapp-kit";
 import React, {
   ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
+  useState,
 } from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
-import { useMutation } from "@tanstack/react-query";
-import { InternalContext } from "../globalContextProvider";
-import { DEFAULT_API_URL } from "../const";
+import { Dropdown, MenuProps, Tooltip } from "antd";
+import clsx from "clsx";
 
 type ConnectWalletButtonProps = {
   className?: string;
   connectText?: ReactNode;
   icon?: ReactNode;
+  copyIcon?: ReactNode;
+  userIcon?: ReactNode;
+  logoutIcon?: ReactNode;
+  onMyProfileClick?: () => void;
 };
 
 const CSSClasses = {
-  connectWalletButton: "connect-wallet-button",
-  connectWalletText: "connect-wallet-text",
+  connectWalletButton: "nft-builder-connect-wallet-button",
+  connectWalletText: "nft-builder-connect-wallet-text",
+  container: "nft-builder-wallet-text-container",
+  walletAddress: "nft-builder-wallet-text",
+  dropdownItem: "nft-builder-drop-down-item",
 };
 
 function minifyCss(input: string) {
@@ -32,124 +35,25 @@ function minifyCss(input: string) {
     .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/g, ""); // Remove comments.
 }
 
-const WalletIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect x="15" y="12" width="6" height="4" fill="black" fillOpacity="0.25" />
-    <path
-      d="M14.25 4H9.75C6.56802 4 4.97703 4 3.98851 5.00421C3 6.00841 3 7.62465 3 10.8571V13.1429C3 16.3753 3 17.9916 3.98851 18.9958C4.97703 20 6.56802 20 9.75 20H14.25C17.432 20 19.023 20 20.0115 18.9958C21 17.9916 21 16.3753 21 13.1429V10.8571C21 7.62465 21 6.00841 20.0115 5.00421C19.023 4 17.432 4 14.25 4Z"
-      stroke="white"
-      strokeWidth="1.2"
-    />
-    <path d="M7 8H10" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
-    <path
-      d="M19 16H17C16.0572 16 15.5858 16 15.2929 15.7071C15 15.4142 15 14.9428 15 14C15 13.0572 15 12.5858 15.2929 12.2929C15.5858 12 16.0572 12 17 12H19C19.9428 12 20.4142 12 20.7071 12.2929C21 12.5858 21 13.0572 21 14C21 14.9428 21 15.4142 20.7071 15.7071C20.4142 16 19.9428 16 19 16Z"
-      stroke="white"
-      strokeWidth="1.2"
-    />
-  </svg>
-);
+const formatAddress = (address: string) => {
+  return address.length > 15
+    ? `${address.slice(0, 6)}...${address.slice(-4)}`
+    : address;
+};
 
 const ConnectWalletButton = React.forwardRef<
   HTMLDivElement,
   ConnectWalletButtonProps
->(({ className, connectText, icon, ...props }, ref) => {
-  const {
-    login: loginContext,
-    user,
-    logout: logoutContext,
-    accessToken,
-    apiUrl = DEFAULT_API_URL,
-  } = useContext(InternalContext);
+>(({ className, connectText, icon, copyIcon, userIcon, logoutIcon, onMyProfileClick, ...props }, ref) => {
+  const [copied, setCopied] = useState(false);
+  const { mutate: disconnect } = useDisconnectWallet();
   const currentAccount = useCurrentAccount();
-  const { mutateAsync: signPersonalMessage, isPending: isPendingSign } =
-    useSignPersonalMessage({});
 
-  const loginProcessingRef = useRef(false);
-  const { mutateAsync: loginMutate, isPending: isPendingLogin } = useMutation<
-    unknown,
-    unknown,
-    { signature: string; nonce: number }
-  >({
-    mutationFn: async ({ signature, nonce }) => {
-      const res = await fetch(`${apiUrl}/auth/wallet/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          address: currentAccount?.address,
-          signature: signature,
-          nonce: nonce,
-        }),
-      });
-      return res.json();
-    },
-  });
-  const { mutateAsync: logoutMutate } = useMutation<unknown, unknown>({
-    mutationFn: async () => {
-      await fetch(`${apiUrl}/v1/auth/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-    },
-  });
-
-  const isPendingConnect = useMemo(
-    () => isPendingSign || isPendingLogin,
-    [isPendingSign, isPendingLogin]
-  );
-
-  useEffect(() => {
-    if (!user && currentAccount) {
-      login();
-    }
-    if (user && !currentAccount) {
-      logout();
-    }
-  }, [currentAccount, user]);
-
-  useEffect(() => {}, [currentAccount, user]);
-
-  const logout = () => {
-    try {
-      logoutContext();
-      logoutMutate();
-    } catch (error) {
-      console.log("🚀 ~ logout ~ error:", error);
-    }
-  };
-
-  const login = async () => {
-    try {
-      if (loginProcessingRef.current) {
-        return;
-      }
-      loginProcessingRef.current = true;
-      const nonce = Date.now();
-      const message = `Welcome to SuiNova! By signing this message, you'll securely authenticate your wallet. Timestamp: ${nonce}`;
-      const signature = await signPersonalMessage({
-        message: new TextEncoder().encode(message),
-      });
-
-      const loginRes = await loginMutate({
-        signature: signature.signature,
-        nonce,
-      });
-
-      loginContext(loginRes);
-    } catch (error) {
-      console.log("🚀 ~ login ~ error:", error);
-    } finally {
-      loginProcessingRef.current = false;
+  const handleCopy = (address: string) => {
+    if (address) {
+      navigator.clipboard.writeText(address as string);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -157,7 +61,7 @@ const ConnectWalletButton = React.forwardRef<
     () =>
       minifyCss(`
         .${CSSClasses.connectWalletButton} {
-          background-color: #2978D1 !important;
+          background-color: #48B7FF !important;
           width: 200px;
           height: 50px;
           border-radius: 12px !important;
@@ -169,23 +73,81 @@ const ConnectWalletButton = React.forwardRef<
           gap: 4px;
           align-items: center;
         }
+
+        .${CSSClasses.container} {
+          background-color: #48B7FF; 
+          padding: 6px 10px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          width: 200px;
+          height: 38px;
+        }
+
+        .${CSSClasses.walletAddress} {
+          color: white;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 24px;
+        }
+
+        .${CSSClasses.dropdownItem} {
+          padding: 8px 4px;
+        }
       `),
     []
   );
 
+  const items: MenuProps["items"] = [
+    {
+      label: <div className={CSSClasses.dropdownItem} onClick={onMyProfileClick}>My Profile</div>,
+      key: "1",
+      icon: userIcon,
+    },
+    {
+      label: <div className={CSSClasses.dropdownItem} onClick={() => disconnect()}>Disconnect Wallet</div>,
+      key: "2",
+      icon: logoutIcon,
+    },
+  ];
+
   return (
-    <ConnectButton
-      className={`${CSSClasses.connectWalletButton} ${className}`}
-      disabled={isPendingConnect}
-      connectText={
-        <div ref={ref} className={CSSClasses.connectWalletText}>
-          <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
-          {icon || <WalletIcon />}
-          {isPendingConnect ? "Connecting..." : connectText}
-        </div>
-      }
-      {...props}
-    />
+    <Dropdown
+      menu={{ items }}
+      disabled={!currentAccount?.address}
+    >
+      <a onClick={(e) => e.preventDefault()}>
+        <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
+        {currentAccount?.address ? (
+          <div className={clsx(CSSClasses.container, className)}>
+            <Tooltip title={copied ? "Copied!" : "Copy to clipboard"}>
+              <span
+                onClick={() => handleCopy(currentAccount?.address || "")}
+                style={{ cursor: "pointer" }}
+              >
+                {copyIcon}
+              </span>
+            </Tooltip>
+            <span className={CSSClasses.walletAddress}>
+              {formatAddress(currentAccount?.address || "")}
+            </span>
+          </div>
+        ) : (
+          <ConnectButton
+            className={clsx(CSSClasses.connectWalletButton, className)}
+            connectText={
+              <div ref={ref} className={CSSClasses.connectWalletText}>
+                {icon}
+                {connectText}
+              </div>
+            }
+            {...props}
+          />
+        )}
+      </a>
+    </Dropdown>
   );
 });
 
@@ -202,8 +164,39 @@ export function registerConnectWalletButton(PLASMIC?: Registerable) {
         defaultValue: "Connect Wallet",
       },
       icon: {
-        type: "imageUrl",
+        type: "slot",
+        defaultValue: [
+          {
+            type: "component",
+            name: "nft-builder-wallet-icon",
+          },
+        ],
       },
+      copyIcon: {
+        type: "slot",
+        defaultValue: {
+          type: "component",
+          name: "nft-builder-copy-icon",
+        },
+      },
+      userIcon: {
+        type: "slot",
+        defaultValue: {
+          type: "component",
+          name: "nft-builder-user-icon",
+        },
+      },
+      logoutIcon: {
+        type: "slot",
+        defaultValue: {
+          type: "component",
+          name: "nft-builder-logout-icon",
+        },
+      },
+      onMyProfileClick: {
+        type: "eventHandler",
+        argTypes: []
+      }
     },
   });
 }

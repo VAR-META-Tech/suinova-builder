@@ -258,6 +258,7 @@ export default defineConfig({
           "process.env": JSON.stringify({
             NODE_ENV: "production",
             CONTRACT_PACKAGE_ID: process.env.CONTRACT_PACKAGE_ID,
+            MARKETPLACE_CAP_ID: process.env.MARKETPLACE_CAP_ID,
             TEMPLATE_PROJECT_ID_NFT_BUILDER:
               process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER,
             TEMPLATE_PROJECT_ID_NFT_MINTING:
@@ -276,6 +277,7 @@ export default defineConfig({
               process.env.HOST_LESS_PROJECT_ID_ANTD_4,
             HOST_LESS_PROJECT_ID_CHAKRA:
               process.env.HOST_LESS_PROJECT_ID_CHAKRA,
+            MARKETPLACE_API_URL: process.env.MARKETPLACE_API_URL,
           }),
         }),
         new MonacoWebpackPlugin(),

@@ -50,7 +50,7 @@ interface ProjectListItemProps {
 }
 
 function ProjectListItem(props: ProjectListItemProps) {
-  const { project, perms, onUpdate, workspaces, matcher, showWorkspace } =
+  const { project, perms, onUpdate, matcher, showWorkspace } =
     props;
   const appCtx = useAppCtx();
   const history = useHistory();
@@ -95,10 +95,7 @@ function ProjectListItem(props: ProjectListItemProps) {
 
   const importedCollection = React.useMemo(() => {
     return isFetched &&
-      projectCollections &&
-      (projectCollections?.collections?.length || 0) > 0
-      ? projectCollections.collections[0]
-      : null;
+      projectCollections && projectCollections.collections;
   }, [projectCollections]);
 
   return (
@@ -139,7 +136,7 @@ function ProjectListItem(props: ProjectListItemProps) {
             projectId={project.id}
             appCtx={appCtx}
             onCancel={() => setOpenImportCollectionModal(false)}
-            importedCollection={importedCollection}
+            importedCollection={importedCollection || null}
           />
         )}
       </Modal>
@@ -168,7 +165,7 @@ function ProjectListItem(props: ProjectListItemProps) {
                 return;
               }
 
-              if (!importedCollection) {
+              if (project.clonedFromProjectId === process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER && !importedCollection) {
                 setOpenImportCollectionModal(true);
                 return;
               }

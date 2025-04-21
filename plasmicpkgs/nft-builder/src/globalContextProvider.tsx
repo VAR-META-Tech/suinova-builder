@@ -1,19 +1,18 @@
 import {
   createNetworkConfig,
   SuiClientProvider,
+  useCurrentAccount,
   WalletProvider,
 } from "@mysten/dapp-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
 import {
   DataProvider,
-  GlobalActionsProvider,
   registerGlobalContext,
 } from "@plasmicapp/host";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React from "react";
 import "@mysten/dapp-kit/dist/index.css";
 import { Registerable } from "./reg-util";
-import { DEFAULT_API_URL } from "./const";
 
 const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
@@ -30,91 +29,47 @@ interface Web3GlobalContextProps {
 }
 // interface Web3GlobalContextData extends Web3GlobalContextProps {}
 
-export const InternalContext = React.createContext<{
-  login: (loginSession: any) => void;
-  logout: () => void;
-  user: any;
-  accessToken: string | null;
-  apiUrl?: string;
-}>({
-  login: () => {},
-  logout: () => {},
-  user: null,
-  accessToken: null,
-  apiUrl: "",
-});
 
 export const Web3GlobalContext = ({
   children,
   contractPackageId,
   importedCollection,
-  apiUrl,
 }: React.PropsWithChildren<Web3GlobalContextProps>) => {
-  const [accessToken, setAccessToken] = React.useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = React.useState<string | null>(null);
-  const [user, setUser] = React.useState<any>(null);
-
-  useEffect(() => {
-    const accessTokenStorage = localStorage.getItem("accessToken");
-    const refreshTokenStorage = localStorage.getItem("refreshToken");
-    if (sessionStorage) {
-      setAccessToken(accessTokenStorage);
-      setRefreshToken(refreshTokenStorage);
-    }
-  }, []);
-
-  const login = (loginResponse: {
-    token: string;
-    refreshToken: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    user: any;
-  }) => {
-    setAccessToken(loginResponse.token);
-    setRefreshToken(loginResponse.refreshToken);
-    setUser(loginResponse.user);
-    localStorage.setItem("accessToken", JSON.stringify(loginResponse.token));
-    localStorage.setItem(
-      "refreshToken",
-      JSON.stringify(loginResponse.refreshToken)
-    );
-  };
-
-  const logout = () => {
-    setAccessToken(null);
-    setRefreshToken(null);
-    setUser(null);
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-  };
-
   return (
-    <GlobalActionsProvider contextName="Web3GlobalContext" actions={{ logout }}>
-      <DataProvider
-        name="web3GlobalData"
-        data={{
-          contractPackageId,
-          importedCollection,
-          accessToken,
-          refreshToken,
-          user,
-          apiUrl: apiUrl || DEFAULT_API_URL,
-        }}
-      >
-        <QueryClientProvider client={queryClient}>
-          <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
-            <WalletProvider>
-              <InternalContext.Provider
-                value={{ login, logout, user, accessToken, apiUrl }}
-              >
-                {children}
-              </InternalContext.Provider>
-            </WalletProvider>
-          </SuiClientProvider>
-        </QueryClientProvider>
-      </DataProvider>
-    </GlobalActionsProvider>
+    <DataProvider
+      name="web3GlobalData"
+      data={{
+        contractPackageId,
+        importedCollection,
+      }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+          <WalletProvider>
+            <InnerWalletContext>
+              {children}
+            </InnerWalletContext>
+          </WalletProvider>
+        </SuiClientProvider>
+      </QueryClientProvider>
+    </DataProvider>
   );
 };
+
+export const InnerWalletContext = ({ children }: React.PropsWithChildren<{}>) => {
+  const account = useCurrentAccount();
+
+  return (
+    <DataProvider
+      name="web3WalletData"
+      data={{
+        walletAddress: account?.address || "",
+      }}
+    >
+      {children}
+    </DataProvider>
+  );
+}
 
 export function registerWeb3Provider(loader?: Registerable) {
   const doRegisterComponent: typeof registerGlobalContext = (...args) =>

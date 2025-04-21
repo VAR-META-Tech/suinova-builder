@@ -30,6 +30,7 @@ import { Bundle, FastBundler } from "@/wab/shared/bundler";
 import { ifEmpty, spawn } from "@/wab/shared/common";
 import { isValidCurrentUserPropsExpr } from "@/wab/shared/core/exprs";
 import { DataSourceOpExpr } from "@/wab/shared/model/classes";
+import { shortenSuiEmail } from "@/wab/shared/utils/email-utils";
 import { Menu, notification } from "antd";
 import { observer } from "mobx-react";
 import * as React from "react";
@@ -86,6 +87,7 @@ function _ViewAsButton(props: ViewAsButtonProps) {
       roleName: user.roleName,
       roleIds: user.roleIds,
       roleId: user.roleId,
+      walletAddress: user.walletAddress,
     };
 
     await studioCtx.logAsAppUser(studioAppUser);
@@ -101,7 +103,7 @@ function _ViewAsButton(props: ViewAsButtonProps) {
 
   function getViewAsLabel() {
     if (currentAppUserCtx.appUser.email) {
-      return `Viewing as ${currentAppUserCtx.appUser.email}`;
+      return `Viewing as ${shortenSuiEmail(currentAppUserCtx.appUser.email)}`;
     } else if (currentAppUserCtx.appUser.externalId) {
       return `Viewing as ${currentAppUserCtx.appUser.externalId}`;
     } else {
@@ -156,7 +158,7 @@ function _ViewAsButton(props: ViewAsButtonProps) {
                           await logAsAppUser(user);
                         }}
                       >
-                        {user.email}{" "}
+                        {shortenSuiEmail(user.email || "")}{" "}
                         <span className="dimfg">{`- ${user.roleName}`}</span>
                       </Menu.Item>
                     );

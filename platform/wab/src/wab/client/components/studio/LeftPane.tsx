@@ -127,6 +127,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const [latestPublishedRevNum, setLatestPublishedRevNum] = useState<number>();
   const latestPublishedVersion = L.head(studioCtx.releases);
   const [collection, setCollection] = useState<NFTCollectionResponse>();
+  console.log("🚀 ~ LeftPane ~ collection:", collection)
 
   // Check if we need to fetch latest data
   React.useEffect(() => {
@@ -151,9 +152,11 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
           await studioCtx.appCtx.api.getProjectCollections(
             studioCtx.siteInfo?.id || ""
           );
+        console.log("🚀 ~ collections:", collections)
 
-        if (collections.length > 0) {
-          setCollection(collections[0]);
+
+        if (collections) {
+          setCollection(collections);
         }
       })()
     );
@@ -164,7 +167,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     studioCtx.releases.length > 0 &&
     !!latestPublishedRevNum &&
     ensure(latestPublishedRevNum, "Should have latestPublishedRevNum") <
-      dbCtx.revisionNum;
+    dbCtx.revisionNum;
 
   const isLoggedIn = studioCtx.appCtx.selfInfo != null;
 
@@ -181,56 +184,56 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
 
   const componentProps = web3GlobalContextTpl
     ? Object.fromEntries(
-        web3GlobalContextTpl.vsettings[0].args
-          .filter(
-            (arg) =>
-              !isSlot(arg.param) &&
-              !findVariantGroupForParam(
-                web3GlobalContextTpl.component,
-                arg.param
-              )
-          )
-          .map((arg) => [
-            paramToVarName(web3GlobalContextTpl.component, arg.param),
-            tryExtractJson(
-              asCode(arg.expr, {
-                projectFlags: studioCtx.projectFlags(),
-                component,
-                inStudio: true,
-              })
-            ),
-          ])
-      )
+      web3GlobalContextTpl.vsettings[0].args
+        .filter(
+          (arg) =>
+            !isSlot(arg.param) &&
+            !findVariantGroupForParam(
+              web3GlobalContextTpl.component,
+              arg.param
+            )
+        )
+        .map((arg) => [
+          paramToVarName(web3GlobalContextTpl.component, arg.param),
+          tryExtractJson(
+            asCode(arg.expr, {
+              projectFlags: studioCtx.projectFlags(),
+              component,
+              inStudio: true,
+            })
+          ),
+        ])
+    )
     : null;
 
   const params = web3GlobalContextTpl
     ? getRealParams(web3GlobalContextTpl.component).filter((param) => {
-        const propType = (
-          isHostLessCodeComponent(web3GlobalContextTpl.component)
-            ? studioCtx.getHostLessContextsMap()
-            : studioCtx.getRegisteredContextsMap()
-        ).get(web3GlobalContextTpl.component.name)?.meta.props[
-          param.variable.name
-        ];
-        const propTypeType = getPropTypeType(propType);
-        if (
-          propTypeType &&
-          isOneOf(propTypeType, [
-            "styleScopeClass",
-            "themeResetClass",
-            "themeStyles",
-          ])
-        ) {
-          return false;
-        }
-        if (isPlainObjectPropType(propType) && propType.type !== "slot") {
-          const objPropType = propType;
-          return !swallow(() =>
-            objPropType.hidden?.(componentProps, null, { path: [] })
-          );
-        }
-        return param.origin !== ComponentPropOrigin.ReactHTMLAttributes;
-      })
+      const propType = (
+        isHostLessCodeComponent(web3GlobalContextTpl.component)
+          ? studioCtx.getHostLessContextsMap()
+          : studioCtx.getRegisteredContextsMap()
+      ).get(web3GlobalContextTpl.component.name)?.meta.props[
+        param.variable.name
+      ];
+      const propTypeType = getPropTypeType(propType);
+      if (
+        propTypeType &&
+        isOneOf(propTypeType, [
+          "styleScopeClass",
+          "themeResetClass",
+          "themeStyles",
+        ])
+      ) {
+        return false;
+      }
+      if (isPlainObjectPropType(propType) && propType.type !== "slot") {
+        const objPropType = propType;
+        return !swallow(() =>
+          objPropType.hidden?.(componentProps, null, { path: [] })
+        );
+      }
+      return param.origin !== ComponentPropOrigin.ReactHTMLAttributes;
+    })
     : null;
 
   useEffect(() => {
@@ -303,8 +306,8 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
           position: "relative",
         }}
         showControls={studioCtx.showDevControls}
-        // onMouseEnter={() => setHover(true)}
-        // onMouseLeave={() => setHover(false)}
+      // onMouseEnter={() => setHover(true)}
+      // onMouseLeave={() => setHover(false)}
       >
         {studioCtx.showAddDrawer() && (
           <div
@@ -327,11 +330,11 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
               className: "canvas-editor__left-pane auto-pointer-events",
               style: !studioCtx.leftTabKey
                 ? {
-                    display: "none",
-                  }
+                  display: "none",
+                }
                 : {
-                    width: studioCtx.leftPaneWidth,
-                  },
+                  width: studioCtx.leftPaneWidth,
+                },
             },
 
             wrapChildren: (children) => (

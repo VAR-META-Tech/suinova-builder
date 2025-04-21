@@ -175,6 +175,8 @@ export function extractValueFromCurrentUser(
       return currentUser.properties?.[bindingKey];
     case "customProperties":
       return currentUser.customProperties?.[bindingKey];
+    case "walletAddress":
+      return currentUser.walletAddress;
     default:
       return undefined;
   }

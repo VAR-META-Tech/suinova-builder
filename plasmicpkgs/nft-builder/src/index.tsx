@@ -1,6 +1,5 @@
 import { Registerable } from "./reg-util";
 import { registerWeb3Provider } from "./globalContextProvider";
-import { registerUserInfoCard } from "./components/userInfoCard";
 import { registerLeftArrowIcon } from "./icons/leftArrowIcon";
 import { registerConnectWalletButton } from "./components/connectWalletButton";
 import {
@@ -22,6 +21,9 @@ import { registerNFTSelect } from "./components/nftSelect";
 import { registerNFTSelectOptGroup, registerNFTSelectOption } from "./components/nftSelectOption";
 import { registerArrowDown } from "./icons/arrowDown";
 import { registerNFTInput } from "./components/nftInput";
+import { registerCopyIcon } from "./icons/copy-icon";
+import { registerLogoutIcon } from "./icons/logoutIcon";
+import { registerUserIcon } from "./icons/userIcon";
 
 export function registerAll(loader?: Registerable) {
   // global provider
@@ -34,13 +36,15 @@ export function registerAll(loader?: Registerable) {
   registerPlayIcon(loader);
   registerStopIcon(loader);
   registerWalletIcon(loader);
+  registerCopyIcon(loader);
+  registerUserIcon(loader);
+  registerLogoutIcon(loader);
   // components
   registerVideoPlayer(loader);
   registerConnectWalletButton(loader);
   registerUserAvatar(loader);
   registerUserAvatarGroup(loader);
   registerNFTCard(loader);
-  registerUserInfoCard(loader);
   registerNFTCarousel(loader);
   registerCarouselBtnGroup(loader);
   registerNFTCarouselItem(loader);
@@ -51,25 +55,5 @@ export function registerAll(loader?: Registerable) {
   registerNFTInput(loader);
 }
 
-export * from "./components/userAvatar";
-export * from "./components/nftCard";
-export * from "./globalContextProvider";
-export * from "./components/userInfoCard";
-export * from "./icons/leftArrowIcon";
-export * from "./icons/rightArrowIcon";
-export * from "./icons/backIcon";
-export * from "./icons/forwardIcon";
-export * from "./icons/playIcon";
-export * from "./icons/stopIcon";
-export * from "./components/connectWalletButton";
-export * from "./components/videoPlayer";
-export * from "./components/nftCarousel";
-export * from "./components/carouselBtnGroup";
-export * from "./icons/walletIcon";
-export * from "./components/nftCarouselItem";
-export * from "./components/nftSelect";
-export * from "./components/nftSelectOption";
-export * from "./icons/arrowDown";
-export * from "./components/nftInput";
 export { popoverProps } from "./util";
 export { PopoverExtraProps } from "./util";

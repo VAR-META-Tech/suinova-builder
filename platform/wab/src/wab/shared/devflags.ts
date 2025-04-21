@@ -260,6 +260,7 @@ export function flattenInsertableIconGroups(
 const production = process.env.NODE_ENV === "production";
 
 export const ENV = {
+  MARKETPLACE_CAP_ID:  process.env.MARKETPLACE_CAP_ID || "",
   CONTRACT_PACKAGE_ID: process.env.CONTRACT_PACKAGE_ID || "",
   TEMPLATE_PROJECT_ID_NFT_BUILDER:
     process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "",
@@ -1119,7 +1120,7 @@ const DEFAULT_DEVFLAGS = {
   disableBranching: false,
   branchingTeamIds: [] as TeamId[],
   commitsOnBranches: false,
-  appAuth: false,
+  appAuth: true,
   advancedAppAuth: false,
   serverPublishProjectIds: [] as ProjectId[],
   focusable: false,

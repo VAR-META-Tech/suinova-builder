@@ -72,6 +72,7 @@ export async function ensureDbConnection(
 
   return await createConnection({
     ...connOpts,
+    synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE || "false"),
     name,
 
     // uncomment this to log all SQL queries

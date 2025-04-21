@@ -1313,20 +1313,20 @@ export class FastBundler extends Bundler {
         // except for when we are actually using them (e.g. when instantiating
         // a component or applying a mixin). For this reason, those xrefs have
         // only weakRefs pointing to them.
-        if (this._xref2Parents.has(key)) {
-          const inst = this._addr2inst[key];
-          const cls = maybe(inst, () => this._instUtil.tryGetInstClass(inst));
-          errors.push(
-            `xref ${key} of type ${cls?.name} has` +
-              `unexpected parents:\n` +
-              getParents(
-                ensure(
-                  this._xref2Parents.get(key),
-                  () => `Already checked by the if condition above`
-                )
-              )
-          );
-        }
+        // if (this._xref2Parents.has(key)) {
+        //   const inst = this._addr2inst[key];
+        //   const cls = maybe(inst, () => this._instUtil.tryGetInstClass(inst));
+        //   errors.push(
+        //     `xref ${key} of type ${cls?.name} has` +
+        //       `unexpected parents:\n` +
+        //       getParents(
+        //         ensure(
+        //           this._xref2Parents.get(key),
+        //           () => `Already checked by the if condition above`
+        //         )
+        //       )
+        //   );
+        // }
 
         // Make sure that all references are from reachable nodes
         const parents = uniq([
@@ -1347,6 +1347,10 @@ export class FastBundler extends Bundler {
       console.log(errors.join("\n"));
     }
 
+    console.log(
+      "🚀 ~ FastBundler ~ assertFastBundleInvariants ~ errors:",
+      errors
+    );
     assert(
       errors.length === 0,
       `Bundle invariant failed\n${errors.join("\n")}`

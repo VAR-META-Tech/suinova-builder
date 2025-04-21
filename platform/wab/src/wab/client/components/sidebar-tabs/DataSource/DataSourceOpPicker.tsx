@@ -285,15 +285,15 @@ type DataSourceOpPickerProps = {
   component?: Component;
   interaction?: Interaction;
 } & (
-  | {
+    | {
       env: Record<string, any> | undefined;
     }
-  | {
+    | {
       viewCtx: ViewCtx | undefined;
       tpl: TplNode | undefined;
       eventHandlerKey: EventHandlerKeyType | undefined;
     }
-);
+  );
 
 export const DataSourceOpPicker = observer((props: DataSourceOpPickerProps) => {
   const {
@@ -323,14 +323,14 @@ export const DataSourceOpPicker = observer((props: DataSourceOpPickerProps) => {
     "env" in props
       ? props.env
       : props.viewCtx && props.tpl
-      ? extractDataCtx(
+        ? extractDataCtx(
           props.viewCtx,
           props.tpl,
           undefined,
           props.interaction,
           props.eventHandlerKey
         )
-      : undefined;
+        : undefined;
 
   return (
     <DataSourceOpPickerProvider
@@ -492,8 +492,8 @@ const DataSourceOpExprBottomModalContent = observer(
     const env = rest.env
       ? rest.env
       : viewCtx && tpl
-      ? extractDataCtx(viewCtx, tpl, undefined, interaction, eventHandlerKey)
-      : undefined;
+        ? extractDataCtx(viewCtx, tpl, undefined, interaction, eventHandlerKey)
+        : undefined;
 
     return (
       <PlasmicDataSourceContextProvider
@@ -658,9 +658,9 @@ export function useSourceSchemaData(
     () =>
       sourceId && sourceMeta?.studioOps.schemaOp
         ? JSON.stringify({
-            sourceId: sourceId,
-            schemaOp: sourceMeta.studioOps.schemaOp,
-          })
+          sourceId: sourceId,
+          schemaOp: sourceMeta.studioOps.schemaOp,
+        })
         : null,
     async () => {
       return await studioCtx.appCtx.api
@@ -686,10 +686,10 @@ export function getMissingRequiredArgsFromDraft(
         const requiredFields =
           typeof argMeta.requiredFields === "function"
             ? argMeta.requiredFields(
-                sourceSchemaData,
-                getSelectedTable(draft, draft.opMeta, exprCtx),
-                draft
-              )
+              sourceSchemaData,
+              getSelectedTable(draft, draft.opMeta, exprCtx),
+              draft
+            )
             : argMeta.requiredFields;
         if (!requiredFields || requiredFields.length === 0) {
           return false;
@@ -785,7 +785,7 @@ const DataOpExecuteQueueContext = React.createContext<{
   >;
 }>({
   executeQueue: [],
-  setExecuteQueue: () => {},
+  setExecuteQueue: () => { },
 });
 
 function useDataOpExecuteQueue() {
@@ -841,36 +841,36 @@ const DataSourceOpExprFormAndPreview = observer(
     const [draft, setDraft] = React.useState<DataSourceOpDraftValue>(() =>
       value
         ? {
-            sourceId: value.sourceId,
-            opName: value.opName,
-            roleId: value.roleId,
-            cacheKey: value?.cacheKey ?? undefined,
-            queryInvalidation: value.queryInvalidation ?? undefined,
-            templates: mapValues(
-              value?.templates ?? {},
-              (v) =>
-                ({
-                  type: getTemplateFieldType(v),
-                  value: v.value,
-                  bindings: v.bindings,
-                } as const)
-            ),
-            queryName: isKnownComponentDataQuery(parent)
-              ? parent.name
-              : undefined,
-          }
+          sourceId: value.sourceId,
+          opName: value.opName,
+          roleId: value.roleId,
+          cacheKey: value?.cacheKey ?? undefined,
+          queryInvalidation: value.queryInvalidation ?? undefined,
+          templates: mapValues(
+            value?.templates ?? {},
+            (v) =>
+            ({
+              type: getTemplateFieldType(v),
+              value: v.value,
+              bindings: v.bindings,
+            } as const)
+          ),
+          queryName: isKnownComponentDataQuery(parent)
+            ? parent.name
+            : undefined,
+        }
         : {
-            // In all data op expr, we init the roleId with the defaultPageRoleId, inclusive in component data queries
-            roleId: studioCtx.site.defaultPageRoleId,
-            queryInvalidation: new QueryInvalidationExpr({
-              invalidationQueries: [ALL_QUERIES.value],
-              invalidationKeys: undefined,
-            }),
-            sourceId: getPreferredDataSource(studioCtx.site),
-            queryName: isKnownComponentDataQuery(parent)
-              ? parent.name
-              : undefined,
-          }
+          // In all data op expr, we init the roleId with the defaultPageRoleId, inclusive in component data queries
+          roleId: studioCtx.site.defaultPageRoleId,
+          queryInvalidation: new QueryInvalidationExpr({
+            invalidationQueries: [ALL_QUERIES.value],
+            invalidationKeys: undefined,
+          }),
+          sourceId: getPreferredDataSource(studioCtx.site),
+          queryName: isKnownComponentDataQuery(parent)
+            ? parent.name
+            : undefined,
+        }
     );
     const [previewOperation, setPreviewOperation] = React.useState<
       DataSourceOpDraftValue | undefined
@@ -1114,17 +1114,17 @@ const DataSourceOpExprFormAndPreview = observer(
                   startIcon={<Icon icon={SearchIcon} />}
                   {...(missingRequiredArgs.length > 0
                     ? {
-                        tooltip: `Missing required fields: ${missingRequiredArgs.join(
-                          ", "
-                        )}`,
-                      }
+                      tooltip: `Missing required fields: ${missingRequiredArgs.join(
+                        ", "
+                      )}`,
+                    }
                     : {})}
                 >
                   {opMeta?.type === "read"
                     ? "Preview"
                     : isExecuting || executeQueue.length > 0
-                    ? "Executing..."
-                    : "Execute"}
+                      ? "Executing..."
+                      : "Execute"}
                 </Button>
                 <Button onClick={onCancel}>Cancel</Button>
               </BottomModalButtons>
@@ -1272,9 +1272,9 @@ export function DataSourceOpDraftForm(props: {
     () =>
       sourceId && sourceMeta?.studioOps.schemaOp
         ? JSON.stringify({
-            sourceId: sourceId,
-            schemaOp: sourceMeta.studioOps.schemaOp,
-          })
+          sourceId: sourceId,
+          schemaOp: sourceMeta.studioOps.schemaOp,
+        })
         : null,
     async () => {
       return await api
@@ -1287,13 +1287,14 @@ export function DataSourceOpDraftForm(props: {
         });
     }
   );
+
   const availableDataOps = sourceMeta
     ? sourceMeta.ops.filter((op) => {
-        if (allowedOps) {
-          return allowedOps.includes(op.name);
-        }
-        return (op.type === "read" || !readOpsOnly) && !op.hidden;
-      })
+      if (allowedOps) {
+        return allowedOps.includes(op.name);
+      }
+      return (op.type === "read" || !readOpsOnly) && !op.hidden;
+    })
     : [];
 
   const opMeta =
@@ -1356,10 +1357,10 @@ export function DataSourceOpDraftForm(props: {
   ) => {
     return typeof argMeta.requiredFields === "function"
       ? argMeta.requiredFields(
-          sourceSchemaData,
-          getSelectedTable(value, opMeta, exprCtx),
-          value
-        )
+        sourceSchemaData,
+        getSelectedTable(value, opMeta, exprCtx),
+        value
+      )
       : argMeta.requiredFields;
   };
 
@@ -1379,8 +1380,8 @@ export function DataSourceOpDraftForm(props: {
           bindings !== undefined
             ? JSON.stringify(newValue)
             : isKnownTemplatedString(newValue)
-            ? newValue
-            : new TemplatedString({
+              ? newValue
+              : new TemplatedString({
                 text: isJsonType(fieldType)
                   ? [JSON.stringify(newValue)]
                   : [newValue.toString()],
@@ -1549,12 +1550,12 @@ export function DataSourceOpDraftForm(props: {
                           }
                           valueSetState={
                             key in templates &&
-                            getStringTemplateVal(
-                              value,
-                              key,
-                              argMeta.type,
-                              exprCtx
-                            ) !== undefined
+                              getStringTemplateVal(
+                                value,
+                                key,
+                                argMeta.type,
+                                exprCtx
+                              ) !== undefined
                               ? "isSet"
                               : "isUnset"
                           }
@@ -1769,8 +1770,8 @@ export function DataSourceOpDraftForm(props: {
                           sql={argMeta.isSql}
                           {...(argMeta.isSql
                             ? {
-                                dataSourceSchema: sourceSchemaData,
-                              }
+                              dataSourceSchema: sourceSchemaData,
+                            }
                             : {})}
                           {...argMeta.renderProps?.(source!)}
                           data-plasmic-prop={`data-source-modal-${key}`}
@@ -1839,44 +1840,44 @@ export function DataSourceOpDraftForm(props: {
               },
               ...(roles.length > 0
                 ? [
-                    {
-                      collapsible: !studioCtx.site.defaultPageRoleId,
-                      content: (
-                        <LabeledItemRow
-                          label="Min Role"
-                          tooltip="Require the user to be in a certain role or higher"
+                  {
+                    collapsible: !studioCtx.site.defaultPageRoleId,
+                    content: (
+                      <LabeledItemRow
+                        label="Min Role"
+                        tooltip="Require the user to be in a certain role or higher"
+                      >
+                        <StyleSelect
+                          aria-label="Select a role"
+                          placeholder="Select a role"
+                          value={selectedRole ?? "anon"}
+                          onChange={(newId) => {
+                            if (newId === "anon") {
+                              onChange({
+                                ...value,
+                                roleId: null,
+                              });
+                            } else {
+                              onChange({
+                                ...value,
+                                roleId: newId,
+                              });
+                            }
+                          }}
                         >
-                          <StyleSelect
-                            aria-label="Select a role"
-                            placeholder="Select a role"
-                            value={selectedRole ?? "anon"}
-                            onChange={(newId) => {
-                              if (newId === "anon") {
-                                onChange({
-                                  ...value,
-                                  roleId: null,
-                                });
-                              } else {
-                                onChange({
-                                  ...value,
-                                  roleId: newId,
-                                });
-                              }
-                            }}
-                          >
-                            {roles.map((role) => (
-                              <StyleSelect.Option
-                                value={role.order === 0 ? "anon" : role.id}
-                                key={role.id}
-                              >
-                                {role.name}
-                              </StyleSelect.Option>
-                            ))}
-                          </StyleSelect>
-                        </LabeledItemRow>
-                      ),
-                    },
-                  ]
+                          {roles.map((role) => (
+                            <StyleSelect.Option
+                              value={role.order === 0 ? "anon" : role.id}
+                              key={role.id}
+                            >
+                              {role.name}
+                            </StyleSelect.Option>
+                          ))}
+                        </StyleSelect>
+                      </LabeledItemRow>
+                    ),
+                  },
+                ]
                 : []),
             ])}
         </>
@@ -2022,13 +2023,13 @@ function DataSourceOpDataPreview(props: {
   function convertResultsToRenderable(results: DataSourceOpResults) {
     return results && isArray(results.data)
       ? results.data.map((result) =>
-          Object.entries(result).reduce((mappedObject, [key, val]) => {
-            mappedObject[key] = ["object", "boolean"].includes(typeof val)
-              ? JSON.stringify(val)
-              : val;
-            return mappedObject;
-          }, {})
-        )
+        Object.entries(result).reduce((mappedObject, [key, val]) => {
+          mappedObject[key] = ["object", "boolean"].includes(typeof val)
+            ? JSON.stringify(val)
+            : val;
+          return mappedObject;
+        }, {})
+      )
       : results?.data;
   }
 
@@ -2067,10 +2068,9 @@ function DataSourceOpDataPreview(props: {
       } catch (err) {
         const sourceMeta = source && getDataSourceMeta(source.source);
         notification.error({
-          message: `Operation "${
-            sourceMeta?.ops.find((op) => op.name === opExpr.opName)?.label ??
+          message: `Operation "${sourceMeta?.ops.find((op) => op.name === opExpr.opName)?.label ??
             opExpr.opName
-          }" failed`,
+            }" failed`,
           description: err.message,
         });
       }
@@ -2144,113 +2144,113 @@ function DataSourceOpDataPreview(props: {
           tabBarExtraContent={extraContent}
           tabs={withoutFalsy([
             !hideDataTab &&
-              opResults &&
-              new Tab({
-                name: "Data",
-                key: "data",
-                contents: () => (
+            opResults &&
+            new Tab({
+              name: "Data",
+              key: "data",
+              contents: () => (
+                <VerticalFillTable
+                  className="data-table"
+                  pagination={{
+                    position: ["bottomLeft"],
+                    hideOnSinglePage: true,
+                    pageSizeOptions: [10, 20, 50, 100, 500, 1000],
+                  }}
+                  rowKey={(record) =>
+                    rowKeys.map((iRowKey) => record[iRowKey]).join("#")
+                  }
+                  columns={orderFieldsByRanking(
+                    opResults.schema!.fields,
+                    rankedFieldsForTableCols
+                  ).map((field) => ({
+                    title: field.label || field.id,
+                    dataIndex: field.id,
+                    key: field.id,
+                  }))}
+                  dataSource={renderableResults}
+                  scroll={{
+                    x: "max-content",
+                  }}
+                  rowSelection={
+                    isRowSelector
+                      ? {
+                        selectedRowKeys: ensureArray(selectedRowKey),
+                        type: "radio",
+                        renderCell: (_a, row, _c) => (
+                          <Button
+                            onClick={() => onRowSelected?.(row)}
+                            type={"clearPrimary"}
+                          >
+                            View
+                          </Button>
+                        ),
+                      }
+                      : undefined
+                  }
+                />
+              ),
+            }),
+            !isRowSelector &&
+            new Tab({
+              name: "Schema Reference",
+              key: "schema",
+              contents: () =>
+                schemaReference ? (
                   <VerticalFillTable
-                    className="data-table"
+                    rowKey={"id"}
+                    columns={[
+                      {
+                        title: "Field Name",
+                        dataIndex: "id",
+                        key: "name",
+                      },
+                      {
+                        title: "Type",
+                        dataIndex: "type",
+                        key: "type",
+                      },
+                    ]}
+                    dataSource={schemaReference}
                     pagination={{
                       position: ["bottomLeft"],
                       hideOnSinglePage: true,
-                      pageSizeOptions: [10, 20, 50, 100, 500, 1000],
                     }}
-                    rowKey={(record) =>
-                      rowKeys.map((iRowKey) => record[iRowKey]).join("#")
-                    }
-                    columns={orderFieldsByRanking(
-                      opResults.schema!.fields,
-                      rankedFieldsForTableCols
-                    ).map((field) => ({
-                      title: field.label || field.id,
-                      dataIndex: field.id,
-                      key: field.id,
-                    }))}
-                    dataSource={renderableResults}
-                    scroll={{
-                      x: "max-content",
-                    }}
-                    rowSelection={
-                      isRowSelector
-                        ? {
-                            selectedRowKeys: ensureArray(selectedRowKey),
-                            type: "radio",
-                            renderCell: (_a, row, _c) => (
-                              <Button
-                                onClick={() => onRowSelected?.(row)}
-                                type={"clearPrimary"}
-                              >
-                                View
-                              </Button>
-                            ),
-                          }
-                        : undefined
-                    }
                   />
+                ) : (
+                  schemaTunnel && <schemaTunnel.Out />
                 ),
-              }),
-            !isRowSelector &&
-              new Tab({
-                name: "Schema Reference",
-                key: "schema",
-                contents: () =>
-                  schemaReference ? (
-                    <VerticalFillTable
-                      rowKey={"id"}
-                      columns={[
-                        {
-                          title: "Field Name",
-                          dataIndex: "id",
-                          key: "name",
-                        },
-                        {
-                          title: "Type",
-                          dataIndex: "type",
-                          key: "type",
-                        },
-                      ]}
-                      dataSource={schemaReference}
-                      pagination={{
-                        position: ["bottomLeft"],
-                        hideOnSinglePage: true,
-                      }}
-                    />
-                  ) : (
-                    schemaTunnel && <schemaTunnel.Out />
-                  ),
-              }),
+            }),
             opResults &&
-              !isRowSelector &&
-              new Tab({
-                name: "Response",
-                key: "response",
-                contents: () => (
-                  <React.Suspense>
-                    <LazyCodePreview
-                      value={JSON.stringify({
-                        ...opResults,
-                        ...(opResults.error instanceof Error // eslint-disable-line
-                          ? {
-                              error: {
-                                ...opResults.error,
-                                // `JSON.stringify` removes error message, so we
-                                // force add it here
-                                name: opResults.error.name,
-                                message: opResults.error.message,
-                              },
-                            }
-                          : {}),
-                      })}
-                      data={{}}
-                      className="code-preview-inner"
-                      opts={{
-                        expandLevel: expandLevel,
-                      }}
-                    />
-                  </React.Suspense>
-                ),
-              }),
+            !isRowSelector &&
+            new Tab({
+              name: "Response",
+              key: "response",
+              contents: () => (
+                <React.Suspense>
+                  <LazyCodePreview
+                    value={JSON.stringify({
+                      ...opResults,
+                      ...(opResults.error instanceof Error // eslint-disable-line
+                        ? {
+                          error: {
+                            ...opResults.error,
+                            // `JSON.stringify` removes error message, so we
+                            // force add it here
+                            name: opResults.error.name,
+                            message: opResults.error.message,
+                          },
+                        }
+                        : {}),
+                    })}
+                    data={{}}
+                    className="code-preview-inner"
+                    opts={{
+                      expandLevel: expandLevel,
+                    }}
+                  />
+                </React.Suspense>
+              ),
+            }),
           ])}
         />
       )}
@@ -2287,8 +2287,8 @@ export function DataSourcePickerButton(props: {
       {!sourceId
         ? `Pick an ${DATA_SOURCE_LOWER}`
         : !source
-        ? "Loading..."
-        : source.name}
+          ? "Loading..."
+          : source.name}
     </Button>
   );
 }
@@ -2443,16 +2443,16 @@ export const SortEditor = observer(function SortEditor({
           onChange(
             v
               ? [
-                  {
-                    field: ensure(
-                      Object.keys(fields).find(
-                        (fieldId) => sanitizeFieldId(fieldId) === v
-                      ),
-                      () => `Failed to find field ${v}`
+                {
+                  field: ensure(
+                    Object.keys(fields).find(
+                      (fieldId) => sanitizeFieldId(fieldId) === v
                     ),
-                    order: isAscending ? "asc" : "desc",
-                  },
-                ]
+                    () => `Failed to find field ${v}`
+                  ),
+                  order: isAscending ? "asc" : "desc",
+                },
+              ]
               : []
           )
         }
@@ -2530,9 +2530,9 @@ const StringDictPropEditor = observer(function StringDictPropEditor({
   const [currentValues, setCurrentValues] = React.useState(
     value !== undefined && Object.keys(value).length > 0
       ? Object.entries(value).map(([k, v]) => ({
-          key: k,
-          value: v,
-        }))
+        key: k,
+        value: v,
+      }))
       : [{ key: "", value: "" }]
   );
 
@@ -2864,11 +2864,10 @@ export const JsonWithSchemaEditor = observer(function JsonWithSchemaEditor({
                                 setValue={setExprValue}
                                 value={val}
                                 exprCtx={exprCtx}
-                                data-plasmic-prop={`data-source-modal-${
-                                  (dataPlasmicProp
-                                    ? `${dataPlasmicProp}-`
-                                    : "") + fieldName
-                                }-json-editor`}
+                                data-plasmic-prop={`data-source-modal-${(dataPlasmicProp
+                                  ? `${dataPlasmicProp}-`
+                                  : "") + fieldName
+                                  }-json-editor`}
                               />
                             );
                           } else if (isString(val) && isDynamicValue(val)) {

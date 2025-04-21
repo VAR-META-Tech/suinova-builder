@@ -33,6 +33,7 @@ import {
 import { DEVFLAGS } from "@/wab/shared/devflags";
 import { DomainValidator } from "@/wab/shared/hosting";
 import { prodUrlForProject } from "@/wab/shared/project-urls";
+import { isSuiEmail, shortenSuiEmail } from "@/wab/shared/utils/email-utils";
 import { HTMLElementRefOf } from "@plasmicapp/react-web";
 import { notification, Select, Tag, Tooltip } from "antd";
 import { uniqBy, without } from "lodash";
@@ -126,7 +127,7 @@ function PermissionsTab_(
   ) {
     const emails: string[] = [];
     unfilteredEmails.forEach((email) => {
-      if (validator.isEmail(email)) {
+      if (validator.isEmail(email) || isSuiEmail(email)) {
         if (accessesByEmail.find((u) => u.email === email)) {
           notification.warn({
             message: `Email ${email} has already been added`,
@@ -217,6 +218,7 @@ function PermissionsTab_(
         ],
       }
     );
+
 
     trackEvent(APP_AUTH_TRACKING_EVENT, {
       action: "invite",
@@ -437,7 +439,7 @@ function PermissionsTab_(
                       closable
                       onClose={() => setInvites(without(invites, option.value))}
                     >
-                      {option.value}
+                      {shortenSuiEmail(option.value)}
                     </Tag>
                   );
                 }}
@@ -512,7 +514,7 @@ function PermissionsTab_(
               return (
                 <PermissionRule
                   key={access.id}
-                  ruleName={access.email}
+                  ruleName={shortenSuiEmail(access.email)}
                   roles={roles}
                   value={access.roleId}
                   isFake={access.isFake}

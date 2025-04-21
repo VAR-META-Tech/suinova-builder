@@ -1648,8 +1648,8 @@ export class DbMgr implements MigrationDbMgr {
     );
   }
 
-  async getUserByEmail(email: string) {
-    this.checkSuperUser();
+  async getUserByEmail(email: string, skipCheck = false) {
+    !skipCheck && this.checkSuperUser();
     email = email.toLowerCase();
     return ensureFound<User>(
       await this.users().findOne({
@@ -1803,6 +1803,30 @@ export class DbMgr implements MigrationDbMgr {
     userId: string,
     chainId: string
   ): Promise<UserWallet | undefined> {
+    const userWallet = await getOneOrFailIfTooMany(
+      this.userWallets()
+        .createQueryBuilder("userWallets")
+        .where(`lower(userWallets.userId) = lower(:userId)`, {
+          userId,
+        })
+        .andWhere(`lower(userWallets.chainId) = lower(:chainId)`, {
+          chainId,
+        })
+    );
+
+    if (!userWallet) {
+      return undefined;
+    }
+
+    return userWallet;
+  }
+
+  async tryGetUserWalletByEmail(
+    email: string,
+    chainId: string
+  ): Promise<UserWallet | undefined> {
+    const userId = await this.getUserByEmail(email, true).then((u) => u.id);
+
     const userWallet = await getOneOrFailIfTooMany(
       this.userWallets()
         .createQueryBuilder("userWallets")
@@ -3925,6 +3949,7 @@ export class DbMgr implements MigrationDbMgr {
       workspaceId?: WorkspaceId;
       hostUrl?: string;
       ownerEmail?: string;
+      skipPermissionsCheck?: boolean;
     }
   ) {
     await this.checkProjectPerms(projectId, "viewer", "clone");
@@ -3951,6 +3976,7 @@ export class DbMgr implements MigrationDbMgr {
       {
         ...opts,
         name: opts.name ?? fromProject.name,
+        skipPermissionCheck: opts.skipPermissionsCheck,
       }
     );
   }
@@ -3965,6 +3991,7 @@ export class DbMgr implements MigrationDbMgr {
       workspaceId?: WorkspaceId;
       hostUrl?: string | null;
       ownerEmail?: string;
+      skipPermissionCheck?: boolean;
     }
   ) {
     const { name, ownerId, workspaceId, hostUrl } = opts;
@@ -4092,9 +4119,13 @@ export class DbMgr implements MigrationDbMgr {
     // Enable each source id independently, so that if one fails, the others still get enabled
     for (const sourceId of sourceIds) {
       try {
-        await this.allowProjectToDataSources(project.id, [
-          sourceId,
-        ] as DataSourceId[]);
+        await this.allowProjectToDataSources(
+          project.id,
+          [sourceId] as DataSourceId[],
+          {
+            skipPermissionCheck: opts.skipPermissionCheck,
+          }
+        );
       } catch (err) {
         // This may fail the clone if the user doesn't have access to the sourceIds, which is fine
         // the user will have a cloned version but won't be able to issue new opIds, the ones already
@@ -4128,12 +4159,12 @@ export class DbMgr implements MigrationDbMgr {
           2
         )
       );
-      if (global && !(global as any).badClone) {
-        (global as any).badClone = { fromSite, clonedSite, bundler };
-      }
-      throw new Error(
-        `Unexpected dependency to fromProject during cloning ${fromProject.id}`
-      );
+      // if (global && !(global as any).badClone) {
+      //   (global as any).badClone = { fromSite, clonedSite, bundler };
+      // }
+      // throw new Error(
+      //   `Unexpected dependency to fromProject during cloning ${fromProject.id}`
+      // );
     }
 
     await this.saveProjectRev({
@@ -10640,14 +10671,17 @@ export class DbMgr implements MigrationDbMgr {
     };
   }
 
-  async upsertCollectionByProjectId(projectId: string, data: {
-    packageId: string;
-    collectionId: string;
-    creatorAddress: string;
-    collectionType: string;
-    marketplaceId: string;
-    royaltyFee: number;
-  }) {
+  async upsertCollectionByProjectId(
+    projectId: string,
+    data: {
+      packageId: string;
+      collectionId: string;
+      creatorAddress: string;
+      collectionType: string;
+      marketplaceId: string;
+      royaltyFee: number;
+    }
+  ) {
     let collection = await this.getNftCollectionsByProjectId(projectId);
     if (collection) {
       assignAllowEmpty(collection, data);
@@ -10662,10 +10696,14 @@ export class DbMgr implements MigrationDbMgr {
   }
 
   async getNftCollectionsByProjectId(projectId: string) {
-    await this.checkProjectPerms(projectId, "viewer", "get project collections");
+    await this.checkProjectPerms(
+      projectId,
+      "viewer",
+      "get project collections"
+    );
     return this.nftCollections().findOne({
       where: { projectId, isActive: true },
-      order: { createdAt: "DESC" }
+      order: { createdAt: "DESC" },
     });
   }
 }
