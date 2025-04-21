@@ -1106,7 +1106,6 @@ export function observeModel(
         return null;
       })
     );
-    console.log("🚀 ~ prune ~ modelErrors:", modelErrors);
     if (modelErrors.length > 0) {
       console.log(modelErrors.join("\n"));
     }

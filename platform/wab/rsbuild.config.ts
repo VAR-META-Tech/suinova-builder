@@ -277,6 +277,7 @@ export default defineConfig({
               process.env.HOST_LESS_PROJECT_ID_ANTD_4,
             HOST_LESS_PROJECT_ID_CHAKRA:
               process.env.HOST_LESS_PROJECT_ID_CHAKRA,
+            MARKETPLACE_API_URL: process.env.MARKETPLACE_API_URL,
           }),
         }),
         new MonacoWebpackPlugin(),

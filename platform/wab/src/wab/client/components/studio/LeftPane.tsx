@@ -127,6 +127,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const [latestPublishedRevNum, setLatestPublishedRevNum] = useState<number>();
   const latestPublishedVersion = L.head(studioCtx.releases);
   const [collection, setCollection] = useState<NFTCollectionResponse>();
+  console.log("🚀 ~ LeftPane ~ collection:", collection)
 
   // Check if we need to fetch latest data
   React.useEffect(() => {
@@ -151,6 +152,8 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
           await studioCtx.appCtx.api.getProjectCollections(
             studioCtx.siteInfo?.id || ""
           );
+        console.log("🚀 ~ collections:", collections)
+
 
         if (collections) {
           setCollection(collections);

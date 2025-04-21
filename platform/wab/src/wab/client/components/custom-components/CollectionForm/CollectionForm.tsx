@@ -7,7 +7,6 @@ import styles from "@/wab/client/components/custom-components/CollectionForm/Col
 import {
   useCurrentAccount,
   useSignAndExecuteTransaction,
-  useSuiClient,
 } from "@mysten/dapp-kit";
 import { Transaction } from "@mysten/sui/transactions";
 import { ENV } from "@/wab/shared/devflags";
@@ -20,11 +19,12 @@ import {
 import { notification } from "antd";
 import { NOTIFICATION_MESSAGE } from "@/wab/client/constant/mesage.constant";
 import { NFTCollectionResponse } from "@/wab/shared/ApiSchema";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 // Define the form data type
 type FormData = {
   collectionId: { value: string; label: string } | null;
-  royalty: string;
+  royalty: number | null;
   publisher: string;
 };
 
@@ -46,9 +46,8 @@ export default function CollectionForm({
   projectId: string;
   importedCollection: NFTCollectionResponse | null;
 }) {
-  // State for collection type options
   const [collectionOptions, setCollectionOptions] = useState<Option[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // State for collection type options
   const currentWalletAccount = useCurrentAccount();
 
   const { mutateAsync: signAndExecuteTransaction, isPending } =
@@ -61,8 +60,26 @@ export default function CollectionForm({
         });
       },
     });
-
-  const suiClient = useSuiClient();
+  const { data: collections, isLoading } = useQuery({
+    queryKey: ["my-collections", currentWalletAccount?.address],
+    queryFn: async () => {
+      const res = await fetch(`${process.env.MARKETPLACE_API_URL}collection-metadata/creator/${currentWalletAccount?.address}`)
+      return (await res.json()).data
+    },
+  })
+  const { mutateAsync: generateSignature, isPending: isGeneratingSignature } = useMutation<{ signature: string, publicKey: string }, Error, { collectionType: string; royaltyFee: number }, {}>({
+    mutationFn: async (params) => {
+      const res = await fetch(`${process.env.MARKETPLACE_API_URL}collection/import/signature`, {
+        method: "POST",
+        body: JSON.stringify({
+          "project_id": projectId,
+          "collection_type": params.collectionType,
+          "royalty_fee": params.royaltyFee,
+        }),
+      })
+      return res.json()
+    },
+  })
 
   // Initialize react-hook-form
   const {
@@ -74,55 +91,22 @@ export default function CollectionForm({
     defaultValues: {
       collectionId: importedCollection
         ? {
-            value: importedCollection?.collectionId,
-            label: importedCollection.collectionId,
-          }
+          value: importedCollection?.collectionId,
+          label: importedCollection.collectionId,
+        }
         : null,
-      royalty: importedCollection?.royaltyFee?.toString() || "",
+      royalty: importedCollection?.royaltyFee || null,
       publisher: "",
     },
   });
 
-  // Fetch collection types from API
   useEffect(() => {
-    const fetchCollectionTypes = async () => {
-      setIsLoading(true);
-      try {
-        // Replace with your actual API endpoint
-        const response = await fetch("/api/collection-types");
-        const data = await response.json();
+    setCollectionOptions(collections?.map((collection) => ({
+      value: collection.type,
+      label: collection.type,
+    })) || []);
+  }, [collections]);
 
-        // Transform the data to match react-select format
-        const options = data.map((item: any) => ({
-          value: item.id,
-          label: item.name,
-        }));
-
-        setCollectionOptions(options);
-      } catch (error) {
-        console.error("Failed to fetch collection types:", error);
-        // Fallback options in case API fails
-        setCollectionOptions([
-          {
-            value:
-              "0x041bd45b2c666e65caa228963c7986e10e622b27f28a187bc348452b9fc51a51",
-            label:
-              "0x041bd45b2c666e65caa228963c7986e10e622b27f28a187bc348452b9fc51a51",
-          },
-          {
-            value:
-              "0x0718a9ff79bd8dad7ef4f073857d2a4403206598f00804273b757b8b62d566af",
-            label:
-              "0x0718a9ff79bd8dad7ef4f073857d2a4403206598f00804273b757b8b62d566af",
-          },
-        ]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    void fetchCollectionTypes();
-  }, []);
 
   // const updateImportedCollections = () => {
   //   const { collectionId } = getValues();
@@ -163,50 +147,33 @@ export default function CollectionForm({
       return;
     }
 
-    const collectionObject = await suiClient.getObject({
-      id: data?.collectionId?.value || "",
-      options: {
-        showType: true,
-        showOwner: true,
-        showContent: true,
-      },
-    });
-
-    if (!collectionObject?.data?.type) {
-      return;
-    }
+    // const signature = await generateSignature({
+    //   collectionType: data.collectionId.value,
+    //   royaltyFee: data.royalty,
+    // })
 
     notification.info({
       message: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.WAITING,
     });
 
-    // const publisher = (
-    //   await suiClient.getOwnedObjects({
-    //     owner:
-    //       "0x7c484896d088f2eb3012cac48de62fd4ec02c54540cbb1cd5e312e02216d055a",
-    //   })
-    // )?.data.find(
-    //   (item) =>
-    //     item.data?.type === "0x2::package::Publisher" &&
-    //     (item.data?.content as any)?.fields?.module_name === "collection" &&
-    //     (item.data?.content as any)?.fields?.package === "collection"
-    // );
 
     const tx = new Transaction();
 
-    // Can not find how to get the publisher yet so I hardcoded it
-    const HARDCODED_PUBLISHER =
-      "0x486ae873bc05746f6ab4565938aafd77835e5b411a90c1d143097e0875cda8e1";
+    console.log("🚀 ~ onSubmit ~ ENV.MARKETPLACE_CAP_ID:", ENV.MARKETPLACE_CAP_ID)
+    console.log("🚀 ~ onSubmit ~ projectId:", projectId)
+    console.log("🚀 ~ onSubmit ~ data.royalty.toString():", data.royalty.toString())
+    console.log("🚀 ~ onSubmit ~ data.collectionId.value:", data.collectionId.value)
+
 
     tx.moveCall({
       target: `${ENV.CONTRACT_PACKAGE_ID}::${MARKETPLACE_MODULE}::${CONTRACT_METHOD.IMPORT_COLLECTION}`,
       arguments: [
         tx.object(ENV.MARKETPLACE_CAP_ID),
-        tx.object(HARDCODED_PUBLISHER),
+        tx.pure.vector("u8", [1, 2, 3]),
         tx.pure.string(projectId),
-        tx.object(data.royalty),
+        tx.object(data.royalty.toString()),
       ],
-      typeArguments: [collectionObject.data?.type],
+      typeArguments: [data.collectionId.value],
     });
 
     // Process the form data here
@@ -340,12 +307,11 @@ export default function CollectionForm({
           </button>
           <button
             type="submit"
-            className={`${styles.importButton} ${
-              isPending ? styles.loading : ""
-            }`}
+            className={`${styles.importButton} ${isPending ? styles.loading : ""
+              }`}
             disabled={isPending}
           >
-            {isPending && (
+            {isGeneratingSignature || isPending && (
               <svg
                 className={styles.spinner}
                 xmlns="http://www.w3.org/2000/svg"
