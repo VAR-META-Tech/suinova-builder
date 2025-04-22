@@ -46,7 +46,7 @@ import {
 } from "react-beautiful-dnd";
 import { createPortal } from "react-dom";
 import { FaUpload } from "react-icons/fa";
-import Logo from "@/wab/client/assets/logo-large.png";
+import Logo from "@/wab/client/assets/suinova-logo.svg";
 
 export function LinkButton(props: React.ComponentProps<"button">) {
   const { className, ...rest } = props;
