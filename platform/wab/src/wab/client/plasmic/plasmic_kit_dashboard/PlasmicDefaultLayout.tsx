@@ -56,7 +56,7 @@ import RocketsvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__RocketSvg"; /
 import SparklessvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__SparklesSvg"; // plasmic-import: 9Z0Cu-c5J/icon
 import UnorderedListsvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__UnorderedListSvg"; // plasmic-import: suHkgkKOX/icon
 import UsersPlussvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__UsersPlusSvg"; // plasmic-import: OqMJdWElK/icon
-import Logo from "@/wab/client/assets/logo-large.png";
+import Logo from "@/wab/client/assets/suinova-logo.svg";
 import { UU } from "../../cli-routes";
 
 createPlasmicElementProxy;
@@ -249,7 +249,7 @@ function PlasmicDefaultLayout__RenderFunc(props: {
             href={UU.allProjects.pattern}
             platform={"react"}
           >
-            <img src={Logo} width={40} style={{ padding: "8px 0px" }} />
+            <img src={Logo} width={50} style={{ padding: "8px 0px" }} />
           </PlasmicLink__>
           <Stack__
             as={"div"}

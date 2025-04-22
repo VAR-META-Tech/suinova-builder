@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "@/wab/client/components/pages/LandingPage.sass";
-import suiNovaLogo from "@/wab/client/assets/logo-large.png";
+import suiNovaLogo from "@/wab/client/assets/suinova-logo.svg";
 import WalletSvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__WalletSvg";
 import ActivitySvgIcon from "@/wab/client/plasmic/plasmic_kit_icons/icons/PlasmicIcon__ActivitySvg";
 import ImageUploadsIcon from "@/wab/client/plasmic/plasmic_kit/PlasmicIcon__ImageUploads";
@@ -26,7 +26,7 @@ const LandingPage = () => {
         <div className="container">
           <div className="nav">
             <div className="logo">
-              <img src={suiNovaLogo} width={40} style={{ padding: "8px 0px" }} />
+              <img src={suiNovaLogo} width={50} style={{ padding: "8px 0px" }} />
             </div>
             <nav className="nav-links">
               <a href="#features">Features</a>

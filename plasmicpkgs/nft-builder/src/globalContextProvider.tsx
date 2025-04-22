@@ -7,12 +7,15 @@ import {
 import { getFullnodeUrl } from "@mysten/sui/client";
 import {
   DataProvider,
+  GlobalActionsProvider,
   registerGlobalContext,
+  useSelector,
 } from "@plasmicapp/host";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import "@mysten/dapp-kit/dist/index.css";
 import { Registerable } from "./reg-util";
+import { notification } from "antd";
 
 const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
@@ -29,6 +32,71 @@ interface Web3GlobalContextProps {
 }
 // interface Web3GlobalContextData extends Web3GlobalContextProps {}
 
+
+const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
+  const web3WalletData = useSelector("web3WalletData");
+  const walletAddress = web3WalletData?.walletAddress
+ 
+  const onListNFT = async (message: string) => {
+    if(!walletAddress) {
+      notification.error({
+        message: "Please connect your wallet",
+      });
+      return;
+    }
+
+    return await new Promise((resolve) => {
+      setTimeout(() => {
+        notification.success({
+          message: message || "List NFT successfully",
+        });
+        resolve(true);
+      }, 1000);
+    });
+  };
+
+  const onBuyNFT = async (message: string) => {
+    if(!walletAddress) {
+      notification.error({
+        message: "Please connect your wallet",
+      });
+      return;
+    }
+
+    return await new Promise((resolve) => {
+      setTimeout(() => {
+        notification.success({
+          message: message || "Buy NFT successfully",
+        });
+        resolve(true);
+      }, 1000);
+    });
+  }
+
+  const onCancelListing = async (message: string) => {
+    if(!walletAddress) {
+      notification.error({
+        message: "Please connect your wallet",
+      });
+      return;
+    }
+
+    return await new Promise((resolve) => {
+      setTimeout(() => {
+        notification.success({
+          message: message || "Cancel Listing successfully",
+        });
+        resolve(true);
+      }, 1000);
+    });
+  }
+
+  return (
+    <GlobalActionsProvider contextName="Web3GlobalContext" actions={{ onListNFT, onBuyNFT, onCancelListing }}>
+      {children}
+    </GlobalActionsProvider>
+  );
+}
 
 export const Web3GlobalContext = ({
   children,
@@ -47,7 +115,7 @@ export const Web3GlobalContext = ({
         <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
           <WalletProvider>
             <InnerWalletContext>
-              {children}
+              <GlobalActionsConfig>{children}</GlobalActionsConfig>
             </InnerWalletContext>
           </WalletProvider>
         </SuiClientProvider>
@@ -84,6 +152,44 @@ export function registerWeb3Provider(loader?: Registerable) {
       contractPackageId: "string",
       importedCollection: "string",
       apiUrl: "string",
+    },
+    globalActions: {
+      onListNFT: {
+        displayName: "List NFT",
+          parameters: [
+          {
+            name: "message",
+            type: {
+              type: "string",
+              defaultValue: "List NFT successfully",
+            },
+          },
+        ],
+      },
+      onBuyNFT: {
+        displayName: "Buy NFT",
+        parameters: [
+          {
+            name: "message",
+            type: {
+              type: "string",
+              defaultValue: "Buy NFT successfully",
+            },
+          },
+        ],
+      },
+      onCancelListing: {
+        displayName: "Cancel Listing",
+        parameters: [
+          {
+            name: "message",
+            type: {
+              type: "string",
+              defaultValue: "Cancel Listing successfully",
+            },
+          },
+        ],
+      },
     },
     providesData: true,
     importPath: "@plasmicpkgs/nft-builder",

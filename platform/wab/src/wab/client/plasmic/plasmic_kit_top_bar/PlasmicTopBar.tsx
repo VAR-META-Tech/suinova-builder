@@ -60,7 +60,7 @@ import PlussvgIcon from "../plasmic_kit_icons/icons/PlasmicIcon__PlusSvg"; // pl
 import IconIcon from "./icons/PlasmicIcon__Icon"; // plasmic-import: jnoWwmZ86t/icon
 import SegmentSeparatorIcon from "./icons/PlasmicIcon__SegmentSeparator"; // plasmic-import: yzguJQZL37/icon
 import imageAy93RhuWbc from "./images/image.svg"; // plasmic-import: ay93RhuWbc/picture
-import Logo from "@/wab/client/assets/logo-large.png";
+import Logo from "@/wab/client/assets/suinova-logo.svg";
 import StraightSeparator from "./icons/PlasmicIcon__StraightSeparator";
 import PlayIcon from "./icons/PlasmicIcon__PlayIcon";
 import { UU } from "../../cli-routes";
