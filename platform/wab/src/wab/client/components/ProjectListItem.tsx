@@ -35,6 +35,7 @@ import {
 } from "@mysten/dapp-kit";
 import Button from "@/wab/client/components/widgets/Button";
 import { useQuery } from "@tanstack/react-query";
+import NFTMintingForm from "@/wab/client/components/custom-components/NFTMintingForm/NFTMintingForm";
 
 interface ProjectListItemProps {
   // className prop is required for positioning instances of
@@ -56,6 +57,8 @@ function ProjectListItem(props: ProjectListItemProps) {
   const appOps = ensure(appCtx.ops, "Unexpected nullish AppOps");
   const [configProjectId, setConfigProjectId] = React.useState<string>();
   const [openImportCollectionModal, setOpenImportCollectionModal] =
+    useState(false);
+  const [openLaunchPadSettingModal, setOpenLaunchPadSettingModal] =
     useState(false);
   const currentWalletAccount = useCurrentAccount();
   const currentWallet = useCurrentWallet();
@@ -136,6 +139,41 @@ function ProjectListItem(props: ProjectListItemProps) {
             importedCollection={importedCollection || null}
           />
         )}
+      </Modal>
+      <Modal
+        destroyOnClose
+        centered
+        className={"ImportCollectionModal__Wrapper"}
+        title="Set up NFT Minting website"
+        open={openLaunchPadSettingModal}
+        onCancel={() => setOpenLaunchPadSettingModal(false)}
+        footer={null}
+      >
+        <div className={"ImportCollectionModal__InstructionText"}>
+          Connect your wallet to verify ownership and set up collection details
+          for importing and customizing your collection in SuiNova.
+        </div>
+        {!currentWalletAccount ? (
+          <ConnectButton
+            className="ImportCollectionModal__ConnectButton"
+            connectText="Connect Wallet"
+          />
+        ) : (
+          <Button
+            className="ImportCollectionModal__ConnectButton"
+            onClick={() => mutate()}
+          >
+            Disconnect Wallet
+          </Button>
+        )}
+        {currentWallet.isConnected && <NFTMintingForm
+          onCreateCollectionSuccess={() => {
+            document.location.href = U.project({
+              projectId: project.id,
+            });
+          }}
+          projectId={project.id}
+        />}
       </Modal>
       <PlasmicProjectListItem
         root={{
@@ -264,13 +302,20 @@ function ProjectListItem(props: ProjectListItemProps) {
                     <strong>Configure</strong> project
                   </Menu.Item>
                 )} */}
-                <Menu.Item
+                {project.clonedFromProjectId === process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER && <Menu.Item
                   onClick={() => {
                     setOpenImportCollectionModal(true);
                   }}
                 >
-                  <strong>Configure</strong> project
-                </Menu.Item>
+                  <strong>Configure</strong> nft marketplace
+                </Menu.Item>}
+                {project.clonedFromProjectId === process.env.TEMPLATE_PROJECT_ID_NFT_MINTING && <Menu.Item
+                  onClick={() => {
+                    setOpenLaunchPadSettingModal(true);
+                  }}
+                >
+                  <strong>Configure</strong> nft launchpad
+                </Menu.Item>}
                 <Menu.Item
                   onClick={async () => {
                     const response = await promptMoveToWorkspace(

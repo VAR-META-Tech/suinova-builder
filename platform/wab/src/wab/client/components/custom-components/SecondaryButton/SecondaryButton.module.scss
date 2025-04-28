@@ -1,0 +1,85 @@
+/* Outline button styling */
+.outlineButton {
+  background-color: transparent;
+  color: #2b6cb0;
+  border: 2px solid #2b6cb0;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  height: 30px;
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  &:hover {
+    background-color: #2b6cb0;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  }
+
+  &:disabled,
+  &[disabled] {
+    background: transparent;
+    color: #2978d1b2;
+    border-color: #2978d1b2;
+  }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(43, 108, 176, 0.3);
+    border-radius: 50%;
+    border-top-color: #2b6cb0;
+    animation: spin 1s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  .prefixIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .buttonText {
+    transition: opacity 0.2s;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gray {
+  color: black;
+  border: 1px solid #BCC1CA;
+
+
+  &:disabled {
+    background-color: #F5F6F7;
+    border-color: #E0E0E0;
+    color: #A0A4AA;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    border-color: #5B9DFF;
+    box-shadow: 0 0 0 2px rgba(91, 157, 255, 0.3);
+    outline: none;
+  }
+
+  &:hover {
+    background-color: #F0F2F5;
+    border-color: #AAB0BA;
+  }
+}

@@ -34,9 +34,13 @@ const iconMap = {
 
 export interface StarterGroupProps
   extends DefaultStarterGroupProps,
-    StarterSectionConfig {
+  StarterSectionConfig {
   projects: StarterProjectConfig[];
   workspaceId?: WorkspaceId;
+}
+
+const useCollectionForm = () => {
+  const [selectedProjectId, setSelectedProjectId] = React.useState<string>();
 }
 
 function StarterGroup(props: StarterGroupProps) {

@@ -2852,3 +2852,22 @@ export async function getProjectCollections(req: Request, res: Response) {
 
   res.json({ collections });
 }
+
+export async function getProjectLaunchpadCollections(
+  req: Request,
+  res: Response
+) {
+  const { projectId } = req.params;
+  const mgr = userDbMgr(req);
+
+  // Check if project exists
+  const project = await mgr.getProjectById(projectId);
+  if (!project) {
+    throw new BadRequestError("Project not found");
+  }
+
+  // Get collections for the project
+  const collections = await mgr.getNftCollectionsByProjectId(projectId);
+
+  res.json({ collections });
+}
