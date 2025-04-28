@@ -4,6 +4,10 @@ export const NOTIFICATION_MESSAGE = {
     DESCRIPTION: "Collection imported successfully",
     WAITING: "Waiting for confirmation...",
   },
+  IMPORT_COLLECTION_ERROR: {
+    MESSAGE: "Transaction failed!",
+    DESCRIPTION: "Collection imported failed",
+  },
   CREATE_COLLECTION: {
     MESSAGE: "Transaction confirmed!",
     DESCRIPTION: "Collection is created successfully",

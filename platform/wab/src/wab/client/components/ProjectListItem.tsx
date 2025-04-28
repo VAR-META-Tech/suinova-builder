@@ -146,10 +146,34 @@ function ProjectListItem(props: ProjectListItemProps) {
         className={"ImportCollectionModal__Wrapper"}
         title="Set up NFT Minting website"
         open={openLaunchPadSettingModal}
-        onCancel={() => setOpenImportCollectionModal(false)}
+        onCancel={() => setOpenLaunchPadSettingModal(false)}
         footer={null}
       >
-        <NFTMintingForm />
+        <div className={"ImportCollectionModal__InstructionText"}>
+          Connect your wallet to verify ownership and set up collection details
+          for importing and customizing your collection in SuiNova.
+        </div>
+        {!currentWalletAccount ? (
+          <ConnectButton
+            className="ImportCollectionModal__ConnectButton"
+            connectText="Connect Wallet"
+          />
+        ) : (
+          <Button
+            className="ImportCollectionModal__ConnectButton"
+            onClick={() => mutate()}
+          >
+            Disconnect Wallet
+          </Button>
+        )}
+        {currentWallet.isConnected && <NFTMintingForm
+          onCreateCollectionSuccess={() => {
+            document.location.href = U.project({
+              projectId: project.id,
+            });
+          }}
+          projectId={project.id}
+        />}
       </Modal>
       <PlasmicProjectListItem
         root={{
@@ -278,20 +302,20 @@ function ProjectListItem(props: ProjectListItemProps) {
                     <strong>Configure</strong> project
                   </Menu.Item>
                 )} */}
-                <Menu.Item
-                  onClick={() => {
-                    setOpenLaunchPadSettingModal(true);
-                  }}
-                >
-                  <strong>Configure</strong>launch pad project
-                </Menu.Item>
-                <Menu.Item
+                {project.clonedFromProjectId === process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER && <Menu.Item
                   onClick={() => {
                     setOpenImportCollectionModal(true);
                   }}
                 >
-                  <strong>Configure</strong> project
-                </Menu.Item>
+                  <strong>Configure</strong> nft marketplace
+                </Menu.Item>}
+                {project.clonedFromProjectId === process.env.TEMPLATE_PROJECT_ID_NFT_MINTING && <Menu.Item
+                  onClick={() => {
+                    setOpenLaunchPadSettingModal(true);
+                  }}
+                >
+                  <strong>Configure</strong> nft launchpad
+                </Menu.Item>}
                 <Menu.Item
                   onClick={async () => {
                     const response = await promptMoveToWorkspace(

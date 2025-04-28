@@ -260,7 +260,7 @@ export function flattenInsertableIconGroups(
 const production = process.env.NODE_ENV === "production";
 
 export const ENV = {
-  MARKETPLACE_CAP_ID:  process.env.MARKETPLACE_CAP_ID || "",
+  MARKETPLACE_CAP_ID: process.env.MARKETPLACE_CAP_ID || "",
   CONTRACT_PACKAGE_ID: process.env.CONTRACT_PACKAGE_ID || "",
   TEMPLATE_PROJECT_ID_NFT_BUILDER:
     process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER || "",
@@ -279,6 +279,9 @@ export const ENV = {
     process.env.HOST_LESS_PROJECT_ID_PLASMIC_NAV || "",
   HOST_LESS_PROJECT_ID_ANTD_4: process.env.HOST_LESS_PROJECT_ID_ANTD_4 || "",
   HOST_LESS_PROJECT_ID_CHAKRA: process.env.HOST_LESS_PROJECT_ID_CHAKRA || "",
+  MARKETPLACE_API_URL: process.env.MARKETPLACE_API_URL || "",
+  LAUNCHPAD_PACKAGE_ID: process.env.LAUNCHPAD_PACKAGE_ID || "",
+  LAUNCHPAD_CAP_ID: process.env.LAUNCHPAD_CAP_ID || "",
 };
 
 const DEFAULT_DEVFLAGS = {
