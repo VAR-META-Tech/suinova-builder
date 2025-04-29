@@ -44,7 +44,7 @@ interface StarterProjectProps {
   workspaceId?: WorkspaceId;
   withDropShadow?: boolean;
   cloneWithoutName?: boolean;
-  onSelect?: (projectId: string) => void;
+  onSelect?: (projectId: string, parentProjectId: string) => void;
 }
 
 function StarterProject(props: StarterProjectProps) {
@@ -186,7 +186,7 @@ function StarterProject(props: StarterProjectProps) {
                 })
               );
 
-              props.onSelect?.(newProjectId);
+              props.onSelect?.(newProjectId, props.projectId);
               // Perform a full page load so that we aren't using stale JS.
               // location.href = U.project({
               //   projectId: newProjectId,
@@ -200,7 +200,7 @@ function StarterProject(props: StarterProjectProps) {
                 )
               );
 
-              props.onSelect?.(newProjectId);
+              props.onSelect?.(newProjectId, props.baseProjectId);
               // Perform a full page load so that we aren't using stale JS.
               // location.href = U.project({
               //   projectId: newProjectId,

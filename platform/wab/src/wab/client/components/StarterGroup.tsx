@@ -25,6 +25,7 @@ import {
 } from "@mysten/dapp-kit";
 import Button from "@/wab/client/components/widgets/Button";
 import { U } from "@/wab/client/cli-routes";
+import NFTMintingForm from "@/wab/client/components/custom-components/NFTMintingForm/NFTMintingForm";
 
 const iconMap = {
   JoystickIcon: <JoystickIcon style={{ width: 20, height: 20 }} />,
@@ -34,17 +35,19 @@ const iconMap = {
 
 export interface StarterGroupProps
   extends DefaultStarterGroupProps,
-  StarterSectionConfig {
+    StarterSectionConfig {
   projects: StarterProjectConfig[];
   workspaceId?: WorkspaceId;
 }
 
-const useCollectionForm = () => {
-  const [selectedProjectId, setSelectedProjectId] = React.useState<string>();
-}
-
 function StarterGroup(props: StarterGroupProps) {
-  const [selectedProjectId, setSelectedProjectId] = React.useState<string>();
+  const [selectedProject, setSelectedProject] = React.useState<{
+    projectId: string;
+    parentProjectId: string;
+  }>({
+    projectId: "",
+    parentProjectId: "",
+  });
   const appCtx = useAppCtx();
   const showPlasmicOnlyProjects = isAdminTeamEmail(
     appCtx.selfInfo?.email,
@@ -71,8 +74,8 @@ function StarterGroup(props: StarterGroupProps) {
         workspaceId={props.workspaceId}
         withDropShadow={proj.withDropShadow}
         cloneWithoutName={proj.cloneWithoutName}
-        onSelect={(projectId: string) => {
-          setSelectedProjectId(projectId);
+        onSelect={(projectId: string, parentProjectId: string) => {
+          setSelectedProject({ projectId, parentProjectId });
         }}
       />
     ));
@@ -88,8 +91,17 @@ function StarterGroup(props: StarterGroupProps) {
         centered
         className={"ImportCollectionModal__Wrapper"}
         title="Collection Import"
-        open={!!selectedProjectId}
-        onCancel={() => setSelectedProjectId("")}
+        open={
+          !!selectedProject?.projectId &&
+          selectedProject?.parentProjectId ===
+            process.env.TEMPLATE_PROJECT_ID_NFT_BUILDER
+        }
+        onCancel={() =>
+          setSelectedProject({
+            projectId: "",
+            parentProjectId: "",
+          })
+        }
         footer={null}
       >
         <div className={"ImportCollectionModal__InstructionText"}>
@@ -109,17 +121,68 @@ function StarterGroup(props: StarterGroupProps) {
             Disconnect Wallet
           </Button>
         )}
-        {selectedProjectId && currentWallet.isConnected && (
+        {currentWallet.isConnected && (
           <CollectionForm
             onImportSuccess={() => {
               location.href = U.project({
-                projectId: selectedProjectId,
+                projectId: selectedProject.projectId,
               });
             }}
-            projectId={selectedProjectId}
+            projectId={selectedProject.projectId}
             appCtx={appCtx}
-            onCancel={() => setSelectedProjectId("")}
+            onCancel={() =>
+              setSelectedProject({
+                projectId: "",
+                parentProjectId: "",
+              })
+            }
             importedCollection={null}
+          />
+        )}
+      </Modal>
+      <Modal
+        destroyOnClose
+        centered
+        className={"ImportCollectionModal__Wrapper"}
+        title="Set up NFT Minting website"
+        open={
+          !!selectedProject?.projectId &&
+          selectedProject?.parentProjectId ===
+            process.env.TEMPLATE_PROJECT_ID_NFT_MINTING
+        }
+        onCancel={() =>
+          setSelectedProject({
+            projectId: "",
+            parentProjectId: "",
+          })
+        }
+        footer={null}
+      >
+        <div className={"ImportCollectionModal__InstructionText"}>
+          Connect your wallet to verify ownership and set up collection details
+          for importing and customizing your collection in SuiNova.
+        </div>
+        {!currentWalletAccount ? (
+          <ConnectButton
+            className="ImportCollectionModal__ConnectButton"
+            connectText="Connect Wallet"
+          />
+        ) : (
+          <Button
+            className="ImportCollectionModal__ConnectButton"
+            onClick={() => mutate()}
+          >
+            Disconnect Wallet
+          </Button>
+        )}
+        {currentWallet.isConnected && (
+          <NFTMintingForm
+            onCreateCollectionSuccess={() => {
+              document.location.href = U.project({
+                projectId: selectedProject.projectId,
+              });
+            }}
+            projectId={selectedProject.projectId}
           />
         )}
       </Modal>
