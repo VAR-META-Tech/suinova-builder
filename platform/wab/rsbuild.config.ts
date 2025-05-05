@@ -282,6 +282,7 @@ export default defineConfig({
             LAUNCHPAD_CAP_ID: process.env.LAUNCHPAD_CAP_ID,
             GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
             GITHUB_APP_NAME: process.env.GITHUB_APP_NAME,
+            PLASMIC_DEFAULT_HOST: process.env.PLASMIC_DEFAULT_HOST,
           }),
         }),
         new MonacoWebpackPlugin(),
