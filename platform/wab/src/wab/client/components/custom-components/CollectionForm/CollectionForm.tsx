@@ -63,23 +63,34 @@ export default function CollectionForm({
   const { data: collections, isLoading } = useQuery({
     queryKey: ["my-collections", currentWalletAccount?.address],
     queryFn: async () => {
-      const res = await fetch(`${process.env.MARKETPLACE_API_URL}collection-metadata/creator/${currentWalletAccount?.address}`)
-      return (await res.json()).data
+      const res = await fetch(
+        `${process.env.MARKETPLACE_API_URL}collection-metadata/creator/${currentWalletAccount?.address}`
+      );
+      return (await res.json()).data;
     },
-  })
-  const { mutateAsync: generateSignature, isPending: isGeneratingSignature } = useMutation<{ signature: string, publicKey: string }, Error, { collectionType: string; royaltyFee: number }, {}>({
-    mutationFn: async (params) => {
-      const res = await fetch(`${process.env.MARKETPLACE_API_URL}collection/import/signature`, {
-        method: "POST",
-        body: JSON.stringify({
-          "project_id": projectId,
-          "collection_type": params.collectionType,
-          "royalty_fee": params.royaltyFee,
-        }),
-      })
-      return res.json()
-    },
-  })
+  });
+  const { mutateAsync: generateSignature, isPending: isGeneratingSignature } =
+    useMutation<
+      { signature: string; publicKey: string },
+      Error,
+      { collectionType: string; royaltyFee: number },
+      {}
+    >({
+      mutationFn: async (params) => {
+        const res = await fetch(
+          `${process.env.MARKETPLACE_API_URL}collection/import/signature`,
+          {
+            method: "POST",
+            body: JSON.stringify({
+              project_id: projectId,
+              collection_type: params.collectionType,
+              royalty_fee: params.royaltyFee,
+            }),
+          }
+        );
+        return res.json();
+      },
+    });
 
   // Initialize react-hook-form
   const {
@@ -91,9 +102,9 @@ export default function CollectionForm({
     defaultValues: {
       collectionId: importedCollection
         ? {
-          value: importedCollection?.collectionId,
-          label: importedCollection.collectionId,
-        }
+            value: importedCollection?.collectionId,
+            label: importedCollection.collectionId,
+          }
         : null,
       royalty: importedCollection?.royaltyFee || null,
       publisher: "",
@@ -101,12 +112,13 @@ export default function CollectionForm({
   });
 
   useEffect(() => {
-    setCollectionOptions(collections?.map((collection) => ({
-      value: collection.type,
-      label: collection.type,
-    })) || []);
+    setCollectionOptions(
+      collections?.map((collection) => ({
+        value: collection.type,
+        label: collection.type,
+      })) || []
+    );
   }, [collections]);
-
 
   // const updateImportedCollections = () => {
   //   const { collectionId } = getValues();
@@ -156,14 +168,7 @@ export default function CollectionForm({
       message: NOTIFICATION_MESSAGE.IMPORT_COLLECTION.WAITING,
     });
 
-
     const tx = new Transaction();
-
-    console.log("🚀 ~ onSubmit ~ ENV.MARKETPLACE_CAP_ID:", ENV.MARKETPLACE_CAP_ID)
-    console.log("🚀 ~ onSubmit ~ projectId:", projectId)
-    console.log("🚀 ~ onSubmit ~ data.royalty.toString():", data.royalty.toString())
-    console.log("🚀 ~ onSubmit ~ data.collectionId.value:", data.collectionId.value)
-
 
     tx.moveCall({
       target: `${ENV.CONTRACT_PACKAGE_ID}::${MARKETPLACE_MODULE}::${CONTRACT_METHOD.IMPORT_COLLECTION}`,
@@ -307,18 +312,20 @@ export default function CollectionForm({
           </button>
           <button
             type="submit"
-            className={`${styles.importButton} ${isPending ? styles.loading : ""
-              }`}
+            className={`${styles.importButton} ${
+              isPending ? styles.loading : ""
+            }`}
             disabled={isPending}
           >
-            {isGeneratingSignature || isPending && (
-              <svg
-                className={styles.spinner}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              ></svg>
-            )}
+            {isGeneratingSignature ||
+              (isPending && (
+                <svg
+                  className={styles.spinner}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                ></svg>
+              ))}
             <span className={styles.buttonText}>Import</span>
           </button>
         </div>

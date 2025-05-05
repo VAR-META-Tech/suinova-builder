@@ -31,9 +31,20 @@ jobs:
         with:
           key: lock-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
           path: ${{ github.event.client_payload.data.directory }}/node_modules
+      - id: create_plasmic_config
+        name: Creating Plasmic configuration file...
+        run: |
+          mkdir -p ${{ github.event.client_payload.data.directory || '.' }}
+          cat > ${{ github.event.client_payload.data.directory || '.' }}/plasmic.json << 'EOL'
+          {
+            "host": "https://suinova.var-meta.com",
+            "projects": []
+          }
+          EOL
+          echo "Created plasmic.json with custom configuration"
       - id: init
         name: Initializing Plasmic app...
-        uses: plasmicapp/plasmic-action@master
+        uses: phucvarmeta/plasmic-action@v1.0.2
         with:
           run: init
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,7 +60,7 @@ jobs:
       - id: sync
         name: Syncing Plasmic project...
         if: ${{ github.event.client_payload.data.scheme == 'codegen' && steps.init.outputs.synced != 'true' }}
-        uses: plasmicapp/plasmic-action@master
+        uses: phucvarmeta/plasmic-action@v1.0.2
         with:
           run: sync
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,7 +74,7 @@ jobs:
       - id: build
         name: Building Plasmic app...
         if: ${{ github.event.client_payload.data.publish }}
-        uses: plasmicapp/plasmic-action@master
+        uses: phucvarmeta/plasmic-action@v1.0.2
         with:
           run: build
           branch: ${{ github.event.client_payload.data.branch }}

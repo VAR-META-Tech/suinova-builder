@@ -280,6 +280,8 @@ export default defineConfig({
             MARKETPLACE_API_URL: process.env.MARKETPLACE_API_URL,
             LAUNCHPAD_PACKAGE_ID: process.env.LAUNCHPAD_PACKAGE_ID,
             LAUNCHPAD_CAP_ID: process.env.LAUNCHPAD_CAP_ID,
+            GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+            GITHUB_APP_NAME: process.env.GITHUB_APP_NAME,
           }),
         }),
         new MonacoWebpackPlugin(),

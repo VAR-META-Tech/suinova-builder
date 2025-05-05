@@ -1,7 +1,7 @@
 {
-  "name": "create-plasmic-app",
-  "version": "0.0.99",
-  "description": "Create Plasmic-powered React apps",
+  "name": "suinova-create-plasmic-app",
+  "version": "0.0.4",
+  "description": "Create SuiNova-powered React apps",
   "main": "./dist/lib.js",
   "types": "./dist/lib.d.ts",
   "license": "MIT",

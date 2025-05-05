@@ -135,8 +135,10 @@ async function run(): Promise<void> {
     default: "my-app",
     validate: cpa.checkValidName,
   });
+  console.log("🚀 ~ run ~ projectName:", projectName);
   // Absolute path to the new project
   resolvedProjectPath = path.resolve(projectName);
+  console.log("🚀 ~ run ~ resolvedProjectPath:", resolvedProjectPath);
 
   // Prompt for Typescript
   const jsOrTs = (await maybePrompt({
@@ -255,7 +257,7 @@ What is the URL of your project?`,
     source: "create-plasmic-app",
   });
   await cpa.create({
-    resolvedProjectPath,
+    resolvedProjectPath: resolvedProjectPath,
     projectId,
     platform,
     platformOptions,

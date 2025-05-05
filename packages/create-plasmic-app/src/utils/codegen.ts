@@ -13,8 +13,9 @@ export async function runCodegenSync(opts: {
   projectPath: string;
 }) {
   const { projectId, projectApiToken, projectPath } = opts;
+  console.log("🚀 ~ projectPath:", projectPath);
 
-  banner("SYNCING PLASMIC COMPONENTS");
+  banner("SUINOVA - SYNCING PLASMIC COMPONENTS");
 
   const project = projectApiToken
     ? `${projectId}:${projectApiToken}`
