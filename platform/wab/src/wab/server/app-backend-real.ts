@@ -49,14 +49,14 @@ export async function runAppServer(config: Config) {
     (application) => {
       addMainAppServerRoutes(application, config);
 
-      if (!config.production) {
-        // For development, we also add codegen routes to the dev server.
-        // In production, we don't, as codegen routes has security issues
-        // like server side rendering, which the prod server is not
-        // protected against.
-        console.log("Adding codegen routes");
-        addCodegenRoutes(application);
-      }
+      // if (!config.production) {
+      // For development, we also add codegen routes to the dev server.
+      // In production, we don't, as codegen routes has security issues
+      // like server side rendering, which the prod server is not
+      // protected against.
+      console.log("Adding codegen routes");
+      addCodegenRoutes(application);
+      // }
     },
     (application) => {
       // Two socket endpoints; we forward to WS_PROXY as long poll requests.

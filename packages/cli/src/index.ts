@@ -15,6 +15,7 @@ import { UploadBundleArgs, uploadJsBundle } from "./actions/upload-bundle";
 import { WatchArgs, watchProjects } from "./actions/watch";
 import { handleError } from "./utils/error";
 import { ExportArgs, exportProjectsCli } from "./actions/export";
+import { HARDCODED_HOST } from "./const";
 
 if (process.env.DEBUG_CHDIR) {
   process.chdir(process.env.DEBUG_CHDIR);
@@ -59,7 +60,7 @@ yargs
           type: "boolean",
           default: false,
         })
-        .option("host", getYargsOption("host", "https://studio.plasmic.app"))
+        .option("host", getYargsOption("host", HARDCODED_HOST))
         .option("platform", getYargsOption("platform"))
         .option("code-lang", getYargsOption("codeLang"))
         .option("code-scheme", getYargsOption("codeScheme"))
@@ -89,7 +90,7 @@ yargs
         .option("host", {
           describe: "Plasmic host to use",
           type: "string",
-          default: "https://studio.plasmic.app",
+          default: HARDCODED_HOST,
         })
         .option("check", {
           alias: "c",
@@ -153,7 +154,7 @@ yargs
         .option("host", {
           describe: "Plasmic host to use",
           type: "string",
-          default: "https://studio.plasmic.app",
+          default: HARDCODED_HOST,
         })
         .option("projects", {
           alias: "p",
@@ -243,7 +244,7 @@ yargs
         .option("host", {
           describe: "Plasmic host to use",
           type: "string",
-          default: "https://studio.plasmic.app",
+          default: HARDCODED_HOST,
         }),
     (argv) => handleError(projectToken.projectToken(argv))
   )
@@ -261,7 +262,7 @@ yargs
         .option("host", {
           describe: "Plasmic host to use",
           type: "string",
-          default: "https://studio.plasmic.app",
+          default: HARDCODED_HOST,
         })
         .option("format", {
           describe: 'Output format. Either "json", "po" or "lingui"',

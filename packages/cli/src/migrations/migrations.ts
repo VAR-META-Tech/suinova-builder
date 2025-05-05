@@ -91,23 +91,21 @@ export async function runNecessaryMigrations(
 
   if (!!curVersion && semver.lt(cliVersion, curVersion)) {
     const confirm = await confirmWithUser(
-      `Project requires @plasmicapp/cli>=${curVersion} (You currently have ${cliVersion}). Would you like to upgrade it?`,
+      `Project requires suinova-cli>=${curVersion} (You currently have ${cliVersion}). Would you like to upgrade it?`,
       yes
     );
     if (!confirm) {
       throw new HandledError("Upgrading is required to continue.");
     }
 
-    const success = installUpgrade(cur, "@plasmicapp/cli", baseDir, {
+    const success = installUpgrade(cur, "suinova-cli", baseDir, {
       global: isCliGloballyInstalled(path.dirname(configFile)),
       dev: true,
     });
 
-    logger.info(
-      chalk.bold("@plasmicapp/cli has been upgraded; please try again!")
-    );
+    logger.info(chalk.bold("suinova-cli has been upgraded; please try again!"));
 
-    throw new HandledError(success ? "" : "Error upgrading @plasmicapp/cli");
+    throw new HandledError(success ? "" : "Error upgrading suinova-cli");
   }
 
   const context: MigrateContext = {

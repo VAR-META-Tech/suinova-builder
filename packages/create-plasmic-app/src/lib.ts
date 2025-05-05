@@ -1,4 +1,4 @@
-import { auth, getProjectApiToken, setMetadataEnv } from "@plasmicapp/cli";
+import { auth, getProjectApiToken, setMetadataEnv } from "suinova-cli";
 import chalk from "chalk";
 import * as path from "upath";
 import validateProjectName from "validate-npm-package-name";
@@ -57,15 +57,15 @@ export async function create(args: CreatePlasmicAppArgs): Promise<void> {
     console.log("Skipping auth; using the given project API token.");
   } else {
     const promise = auth({
-      host: "https://studio.plasmic.app",
+      host: "https://suinova.var-meta.com",
       check: true,
     })
       .catch(() => {
-        return auth({ host: "https://studio.plasmic.app" });
+        return auth({ host: "https://suinova.var-meta.com" });
       })
       .catch(() => {
         throw new Error(
-          "Failed to authenticate with Plasmic. Please run `npx @plasmicapp/cli auth` manually."
+          "Failed to authenticate with Plasmic. Please run `npx suinova-cli auth` manually."
         );
       });
     await promise;

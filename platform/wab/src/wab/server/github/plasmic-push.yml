@@ -30,7 +30,7 @@ jobs:
           path: node_modules
       - id: build
         name: Build Plasmic app
-        uses: phucvarmeta/plasmic-action@v1.0.2
+        uses: phucvarmeta/plasmic-action@v1.0.8
         with:
           run: build
           branch: main

@@ -80,6 +80,7 @@ async function ensureRequiredPackages(
   yes?: boolean
 ) {
   const requireds = await context.api.requiredPackages();
+  logger.info(`🚀 ~ requireds: ${requireds?.["suinova-cli"]}`);
 
   const confirmInstall = async (
     pkg: string,
@@ -107,21 +108,14 @@ async function ensureRequiredPackages(
   };
 
   const cliVersion = getCliVersion();
-  if (!cliVersion || semver.gt(requireds["@plasmicapp/cli"], cliVersion)) {
+  if (!cliVersion || semver.gt(requireds["suinova-cli"], cliVersion)) {
     const isGlobal = isCliGloballyInstalled(context.rootDir);
-    await confirmInstall(
-      "@plasmicapp/cli",
-      requireds["@plasmicapp/cli"],
-      cliVersion,
-      {
-        global: isGlobal,
-        dev: true,
-      }
-    );
+    await confirmInstall("suinova-cli", requireds["suinova-cli"], cliVersion, {
+      global: isGlobal,
+      dev: true,
+    });
 
-    logger.info(
-      chalk.bold("@plasmicapp/cli has been upgraded; please try again!")
-    );
+    logger.info(chalk.bold("suinova-cli has been upgraded; please try again!"));
 
     // Exit so the user can run again with the new cli
     throw new HandledError();

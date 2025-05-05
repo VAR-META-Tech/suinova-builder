@@ -4,7 +4,7 @@ Turn your Plasmic designs into components with the plasmic CLI!
 
 ```bash
 # Install the CLI globally:
-npm install -g @plasmicapp/cli # Or: yarn global add @plasmicapp/cli
+npm install -g suinova-cli # Or: yarn global add suinova-cli
 
 # Run it!
 plasmic sync --projects yourPlasmicProjectId

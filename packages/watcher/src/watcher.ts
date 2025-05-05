@@ -18,7 +18,7 @@ export class PlasmicRemoteChangeWatcher {
       host?: string;
     }
   ) {
-    this.host = opts.host ?? "https://studio.plasmic.app";
+    this.host = opts.host ?? "https://suinova.var-meta.com";
   }
 
   subscribe(watcher: PlasmicRemoteChangeListener) {

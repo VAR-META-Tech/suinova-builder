@@ -12,6 +12,7 @@ import {
 } from "./utils/config-utils";
 import { HandledError } from "./utils/error";
 import { Metadata } from "./utils/get-context";
+import { logger } from "./deps";
 
 export class AppServerError extends Error {
   constructor(message: string) {
@@ -108,7 +109,7 @@ export interface VersionResolution {
 
 export interface RequiredPackages {
   "@plasmicapp/loader": string;
-  "@plasmicapp/cli": string;
+  "suinova-cli": string;
   "@plasmicapp/host": string;
   "@plasmicapp/react-web": string;
   "@plasmicapp/react-web-runtime": string;
@@ -544,9 +545,11 @@ export class PlasmicApi {
   }
 
   private get codegenHost() {
+    logger.info(`🚀 ~ codegenHost ~ this.auth.host: ${this.auth.host}`);
+
     if (!this.auth.host || this.auth.host === DEFAULT_HOST) {
-      return "https://codegen.plasmic.app";
     } else {
+      return "https://codegen.suinova.var-meta.com";
       return this.auth.host;
     }
   }

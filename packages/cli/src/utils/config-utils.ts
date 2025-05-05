@@ -10,9 +10,9 @@ import {
   readFileText,
   writeFileContentRaw,
 } from "./file-utils";
+import { HARDCODED_HOST } from "../const";
 
-export const DEFAULT_HOST =
-  process.env.PLASMIC_DEFAULT_HOST || "https://studio.plasmic.app";
+export const DEFAULT_HOST = process.env.PLASMIC_DEFAULT_HOST || HARDCODED_HOST;
 
 // Default filenames
 export const AUTH_FILE_NAME = ".plasmic.auth";
@@ -532,7 +532,7 @@ export async function writeConfig(
       JSON.stringify(
         {
           ...config,
-          $schema: `https://unpkg.com/@plasmicapp/cli@${config.cliVersion}/dist/plasmic.schema.json`,
+          $schema: `https://unpkg.com/suinova-cli@${config.cliVersion}/dist/plasmic.schema.json`,
         },
         undefined,
         2
