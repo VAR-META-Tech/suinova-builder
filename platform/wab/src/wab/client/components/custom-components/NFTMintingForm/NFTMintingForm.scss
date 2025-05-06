@@ -392,3 +392,16 @@
 .publish-button {
   min-width: 200px;
 }
+
+.preview-team-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.preview-item-image {
+  width: 100px;
+  height: 100px;  
+  object-fit: cover;
+}

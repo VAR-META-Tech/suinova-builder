@@ -183,6 +183,7 @@ function StarterGroup(props: StarterGroupProps) {
               });
             }}
             projectId={selectedProject.projectId}
+            uploadImage={(file) => appCtx.api.uploadImageFile(file)}
           />
         )}
       </Modal>

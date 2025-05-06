@@ -173,6 +173,7 @@ function ProjectListItem(props: ProjectListItemProps) {
             });
           }}
           projectId={project.id}
+          uploadImage={(file) => appCtx.api.uploadImageFile(file)}
         />}
       </Modal>
       <PlasmicProjectListItem
