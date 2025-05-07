@@ -1,5 +1,5 @@
 # Plasmic workflow v4
-name: Sync, build and deploy Plasmic app
+name: Sync, build and deploy SuiNova app
 
 permissions:
   contents: write
@@ -32,7 +32,7 @@ jobs:
           key: lock-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
           path: ${{ github.event.client_payload.data.directory }}/node_modules
       - id: init
-        name: Initializing Plasmic app...
+        name: Initializing SuiNova app...
         uses: phucvarmeta/plasmic-action@master
         with:
           run: init
@@ -47,7 +47,7 @@ jobs:
           title: ${{ github.event.client_payload.data.title }}
           description: ${{ github.event.client_payload.data.description }}
       - id: sync
-        name: Syncing Plasmic project...
+        name: Syncing SuiNova project...
         if: ${{ github.event.client_payload.data.scheme == 'codegen' && steps.init.outputs.synced != 'true' }}
         uses: phucvarmeta/plasmic-action@master
         with:
@@ -61,7 +61,7 @@ jobs:
           title: ${{ github.event.client_payload.data.title }}
           description: ${{ github.event.client_payload.data.description }}
       - id: build
-        name: Building Plasmic app...
+        name: Building SuiNova app...
         if: ${{ github.event.client_payload.data.publish }}
         uses: phucvarmeta/plasmic-action@master
         with:

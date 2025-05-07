@@ -76,18 +76,8 @@ function Index() {
       <header>
         <PlasmicLogo />
         <h1 style={{ margin: 0 }}>
-          Welcome to Plasmic!
+          Welcome to SuiNova!
         </h1>
-        <h4>
-          <a
-            style={{ color: "blue" }}
-            href="https://www.plasmic.app/learn/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Plasmic
-          </a>
-        </h4>
         ${pageSection}
         <p><i>Note: Remember to remove this file if you introduce a Page component at the &#39;/&#39; path.</i></p>
       </header>

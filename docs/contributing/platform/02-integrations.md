@@ -90,7 +90,7 @@ resulting temp URL.
 ### Use toolchain debug flags
 
 We internally use our own toolchain including create-plasmic-app,
-@plasmicapp/cli, @plasmicapp/loader, etc. You can use `yalc` to temporarily
+suinova-cli, @plasmicapp/loader, etc. You can use `yalc` to temporarily
 change package.json to use your own local create-plasmic-app, and you can use
 the various debug flags for those packages like `PLASMIC_DEFAULT_HOST`.
 
