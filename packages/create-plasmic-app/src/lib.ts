@@ -2,7 +2,11 @@ import { auth, getProjectApiToken, setMetadataEnv } from "suinova-cli";
 import chalk from "chalk";
 import * as path from "upath";
 import validateProjectName from "validate-npm-package-name";
-import { ensureTsconfig, overwriteReadme } from "./utils/file-utils";
+import {
+  ensureTsconfig,
+  generateRoutingCode,
+  overwriteReadme,
+} from "./utils/file-utils";
 import { detectPackageManager } from "./utils/npm-utils";
 import { CPAStrategy } from "./utils/strategy";
 import {
@@ -155,6 +159,9 @@ export async function create(args: CreatePlasmicAppArgs): Promise<void> {
 
   // Overwrite README
   await overwriteReadme(resolvedProjectPath, platform, command);
+
+  // Generate routing code
+  await generateRoutingCode(resolvedProjectPath);
 
   console.log("----------------------------------------");
   console.log(

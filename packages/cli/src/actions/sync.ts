@@ -114,6 +114,16 @@ async function ensureRequiredPackages(
       throw new HandledError(`Upgrading ${pkg} is required to continue.`);
     }
   };
+  const install = async (
+    pkg: string,
+    opts: { global: boolean; dev: boolean }
+  ) => {
+    const success = installUpgrade(context.config, pkg, baseDir, opts);
+
+    if (!success) {
+      throw new HandledError(`Install ${pkg} is required to continue.`);
+    }
+  };
 
   const cliVersion = getCliVersion();
   if (!cliVersion || semver.gt(requireds["suinova-cli"], cliVersion)) {
@@ -164,6 +174,20 @@ async function ensureRequiredPackages(
         { global: false, dev: false }
       );
     }
+  }
+
+  const reactRouterDom = findInstalledVersion(
+    context.config,
+    baseDir,
+    "react-router-dom"
+  );
+  if (!reactRouterDom) {
+    await install("react-router-dom", { global: false, dev: false });
+  }
+
+  const fs = findInstalledVersion(context.config, baseDir, "fs");
+  if (!fs) {
+    await install("fs", { global: false, dev: false });
   }
 }
 
