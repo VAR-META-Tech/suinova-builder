@@ -469,10 +469,10 @@ const NFTMintingForm = ({
   };
 
   const onSubmit = async (formData: FormData) => {
-    // const itemAttributes = formData.attributes.map((attribute) => ({
-    //   type: attribute.type,
-    //   value: attribute.value,
-    // }));
+    const itemAttributes = formData.attributes?.map((attribute) => ({
+      trait_type: attribute.type || '',
+      value: attribute.value || '',
+    })) || [];
 
     const visions = formData.milestones?.map((milestone) => ({
       description: milestone.description || "",
@@ -501,10 +501,7 @@ const NFTMintingForm = ({
           name: formData.itemName,
           description: formData.itemDescription,
           imageUrl,
-          attributes: {
-            type: formData.attributes[0]?.type,
-            value: formData.attributes[0]?.value,
-          },
+          attributes: itemAttributes,
           creator: currentWalletAccount?.address || "",
         },
       ],

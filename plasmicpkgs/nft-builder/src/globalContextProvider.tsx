@@ -28,10 +28,10 @@ const queryClient = new QueryClient();
 interface Web3GlobalContextProps {
   contractPackageId?: string;
   importedCollection?: string;
+  createdCollection?: string;
   apiUrl?: string;
 }
 // interface Web3GlobalContextData extends Web3GlobalContextProps {}
-
 
 const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
   const web3WalletData = useSelector("web3WalletData");
@@ -102,6 +102,7 @@ export const Web3GlobalContext = ({
   children,
   contractPackageId,
   importedCollection,
+  createdCollection,
 }: React.PropsWithChildren<Web3GlobalContextProps>) => {
   return (
     <DataProvider
@@ -109,6 +110,7 @@ export const Web3GlobalContext = ({
       data={{
         contractPackageId,
         importedCollection,
+        createdCollection,
       }}
     >
       <QueryClientProvider client={queryClient}>
@@ -151,6 +153,7 @@ export function registerWeb3Provider(loader?: Registerable) {
     props: {
       contractPackageId: "string",
       importedCollection: "string",
+      createdCollection: "string",
       apiUrl: "string",
     },
     globalActions: {
