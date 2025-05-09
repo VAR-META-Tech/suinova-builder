@@ -67,10 +67,12 @@ import { isSlot } from "@/wab/shared/SlotUtils";
 import { paramToVarName } from "@/wab/shared/codegen/util";
 import {
   CONTRACT_PACKAGE_ID_PARAM_NAME,
+  CREATED_COLLECTION_PARAM_NAME,
   IMPORTED_COLLECTIONS_PARAM_NAME,
   WEB3_GLOBAL_CONTEXT_COMP_NAME,
 } from "@/wab/client/constant/contract.constant";
 import { NFTCollectionResponse } from "@/wab/shared/ApiSchema";
+import { useQuery } from "@tanstack/react-query";
 
 interface LeftPaneProps {
   studioCtx: StudioCtx;
@@ -128,6 +130,43 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const latestPublishedVersion = L.head(studioCtx.releases);
   const [collection, setCollection] = useState<NFTCollectionResponse>();
   console.log("🚀 ~ LeftPane ~ collection:", collection)
+// Intergrating API
+  // const { data: launchpadCollection, isPending: isGetLaunchpadCollectionPending } =
+  //   useQuery({
+  //     queryKey: ["launchpadCollection"],
+  //     queryFn: async () => {  
+  //       console.log("MARKETPLACE_API_URL_LAUCHPAD:", process.env.MARKETPLACE_API_URL_LAUCHPAD);
+  //       const res = await fetch(
+  //         `${process.env.MARKETPLACE_API_URL_LAUCHPAD}launchpad/collections/project/${studioCtx.siteInfo?.id}`,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+
+  //       if (!res.ok) {
+  //         throw new Error("Failed to create launchpad");
+  //       }
+
+  //       return await res.json();
+  //     },
+  //     enabled: !!studioCtx.siteInfo?.id,
+  //   });
+
+  // Check if we need to fetch latest data
+  React.useEffect(() => {
+    spawn(
+      (async () => {
+        const { rev: latestPublishedRev } = await studioCtx.getLatestVersion(
+          latestPublishedVersion?.revisionId,
+          latestPublishedVersion?.branchId ?? undefined
+        );
+        setLatestPublishedRevNum(latestPublishedRev?.revision);
+      })()
+    );
+  }, [studioCtx, latestPublishedVersion]);
 
   // Check if we need to fetch latest data
   React.useEffect(() => {
@@ -244,10 +283,20 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     if (collection?.collectionId) {
       updateTextTemplate(
         IMPORTED_COLLECTIONS_PARAM_NAME,
-        collection.collectionId
+        collection?.collectionId
       );
     }
   }, [collection?.collectionId]);
+
+  useEffect(() => {
+    // if (launchpadCollection?.collectionId) {
+    //   console.log("🚀 ~ useEffect ~ launchpadCollection?.collectionId:", launchpadCollection?.collectionId);
+    // }
+    updateTextTemplate(
+      CREATED_COLLECTION_PARAM_NAME,
+      "launchpadCollectionId"
+    );
+  }, []);
 
   const updateTextTemplate = (name: string, value?: string) => {
     if (!web3GlobalContextTpl || !value) {

@@ -278,6 +278,7 @@ export default defineConfig({
             HOST_LESS_PROJECT_ID_CHAKRA:
               process.env.HOST_LESS_PROJECT_ID_CHAKRA,
             MARKETPLACE_API_URL: process.env.MARKETPLACE_API_URL,
+            MARKETPLACE_API_URL_LAUCHPAD: process.env.MARKETPLACE_API_URL_LAUCHPAD,
             LAUNCHPAD_PACKAGE_ID: process.env.LAUNCHPAD_PACKAGE_ID,
             LAUNCHPAD_CAP_ID: process.env.LAUNCHPAD_CAP_ID,
             GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,

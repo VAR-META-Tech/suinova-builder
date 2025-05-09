@@ -1,6 +1,6 @@
 import * as React from "react";
 import "@/wab/client/components/pages/ConnectWallet.sass";
-import AppLogo from "@/wab/client/assets/logo.png";
+import AppLogo from "@/wab/client/assets/suinova-logo.svg";
 import { useNonAuthCtx } from "@/wab/client/app-ctx";
 import { useAppCtx } from "@/wab/client/contexts/AppContexts";
 import { useEffect, useState } from "react";
@@ -138,12 +138,7 @@ function ConnectWallet({ onLoggedIn }: ConnectWalletProps) {
     <div className="ConnectWallet__Container">
       <div className="ConnectWallet__Card">
         <div className="ConnectWallet__CardHeader">
-          <img
-            width={64}
-            height={60}
-            className="ConnectWallet__Logo"
-            src={AppLogo}
-          ></img>
+          <img src={AppLogo} width={60} />
           <div className="ConnectWallet__Title">Connect Wallet</div>
           <div className="ConnectWallet__Subtitle">
             Connect your wallet to sign in{" "}
