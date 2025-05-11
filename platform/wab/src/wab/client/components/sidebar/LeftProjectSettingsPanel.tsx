@@ -56,6 +56,7 @@ import * as React from "react";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import {
   CONTRACT_PACKAGE_ID_PARAM_NAME,
+  CREATED_COLLECTION_PARAM_NAME,
   IMPORTED_COLLECTIONS_PARAM_NAME,
 } from "@/wab/client/constant/contract.constant";
 
@@ -384,6 +385,7 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
                 [
                   CONTRACT_PACKAGE_ID_PARAM_NAME,
                   IMPORTED_COLLECTIONS_PARAM_NAME,
+                  CREATED_COLLECTION_PARAM_NAME,
                 ].includes(p.variable.name);
 
               const propType =
