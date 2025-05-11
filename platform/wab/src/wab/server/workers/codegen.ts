@@ -130,6 +130,7 @@ export async function doGenCode(
       projectId,
       maybeVersionOrTag
     );
+  console.log("🚀 ~ site:", site);
 
   // TODO: We need to populate some weak maps in tpls.ts mapping component
   // root to components, so that things like getTplOwnerComponent() will work.

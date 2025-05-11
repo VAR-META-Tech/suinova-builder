@@ -602,6 +602,7 @@ async function syncProject(
       wrapPagesWithGlobalContexts: context.config.wrapPagesWithGlobalContexts,
     }
   );
+  logger.info("🚀 ~ projectBundle:", projectBundle.usedNpmPackages);
 
   // Convert from TSX => JSX
   if (context.config.code.lang === "js") {
