@@ -17,6 +17,7 @@ import { ensure } from "@/wab/shared/common";
 import { Dropdown, Menu } from "antd";
 import * as React from "react";
 import { ReactNode } from "react";
+import AppLogo from "@/wab/client/assets/suinova-logo.svg";
 
 interface NormalLayoutComponentProps {
   topBar?: ReactNode;
@@ -36,7 +37,7 @@ class NormalLayoutComponent extends React.Component<
               className={"normal-layout-content normal-layout-content--top-bar"}
             >
               <widgets.PlainLink href={"/"} className={"home-logo"}>
-                <MarkFullColorIcon className="normal-layout__mark" />
+                <img src={AppLogo} width={60} />
               </widgets.PlainLink>
 
               {topBar}

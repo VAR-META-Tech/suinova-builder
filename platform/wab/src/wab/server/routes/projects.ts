@@ -2419,19 +2419,20 @@ export async function genCode(req: Request, res: Response) {
       },
     ])
   );
+  console.log("🚀 ~ genCode ~ output:", output);
 
-  const metadata = parseMetadata(req.body.metadata);
+  // const metadata = parseMetadata(req.body.metadata);
 
-  userAnalytics(req).track({
-    event: "Codegen",
-    properties: {
-      projectId: project.id,
-      projectName: project.name,
-      numComponents: output.components.length,
-      ...exportOpts,
-      ...metadata,
-    },
-  });
+  // userAnalytics(req).track({
+  //   event: "Codegen",
+  //   properties: {
+  //     projectId: project.id,
+  //     projectName: project.name,
+  //     numComponents: output.components.length,
+  //     ...exportOpts,
+  //     ...metadata,
+  //   },
+  // });
   res.json({
     ...output,
     // convert the nameInIdToUuid from map to string array.

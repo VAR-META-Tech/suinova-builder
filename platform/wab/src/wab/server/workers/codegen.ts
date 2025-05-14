@@ -294,13 +294,15 @@ export async function doGenCode(
         projectName: project.name,
       };
     });
-    return {
+    const codeGenOutput = {
       output,
       site,
       checksums: newChecksums,
       componentDeps: getComponentDeps(site, appAuthProvider),
       componentRefs,
     };
+    console.log("🚀 ~ codeGenOutput:", codeGenOutput);
+    return codeGenOutput;
   } catch (error) {
     if (
       error instanceof UnexpectedTypeError &&

@@ -199,38 +199,16 @@ export function AuthForm({ mode, onLoggedIn }: AuthFormProps) {
         <Redirect to={nextPath === "/" ? UU.allProjects.pattern : nextPath} />
       ) : (
         <div className={"LoginForm__Controls"}>
-          {["sign up", "sign in"].includes(mode) && (
-            <>
-              <div className={"LoginForm__Oauth"}>
-                <GoogleSignInButton
-                  onStart={() => {
-                    setFormFeedback(undefined);
-                    setOauthFeedback(undefined);
-                  }}
-                  onSuccess={async () => {
-                    await nonAuthCtx.api.refreshCsrfToken();
-                    const { user } = await nonAuthCtx.api.getSelfInfo();
-                    setSelfInfo(user);
-                  }}
-                  onFailure={(reason) => {
-                    setOauthFeedback({
-                      type: "error",
-                      content: "Unexpected error occurred logging in.",
-                    });
-                  }}
-                  googleAuthUrl={U.googleAuth({})}
-                >
-                  {mode === "sign in"
-                    ? "Sign in with Google"
-                    : "Sign up with Google"}
-                </GoogleSignInButton>
-                <FormFeedback feedback={oauthFeedback} />
-              </div>
-            </>
-          )}
-          <Divider>
-            <span className={"light-text"}>or</span>
-          </Divider>
+          <div
+            style={{
+              color: "grey",
+              textAlign: "center",
+              fontSize: "30px",
+              marginBottom: "20px",
+            }}
+          >
+            Admin Sign In
+          </div>
           <form onSubmit={onSubmit} className={"LoginForm__Fields"}>
             <FormFeedback feedback={formFeedback} />
             <Input
@@ -279,32 +257,6 @@ export function AuthForm({ mode, onLoggedIn }: AuthFormProps) {
               {mode === "sign in" ? "Sign in" : "Sign up"}
             </Button>
           </form>
-          {mode === "sign in" && (
-            <div className={"LoginForm__SignUpOrInToggle"}>
-              <LinkButton
-                onClick={() => setMode(nonAuthCtx, "forgot password")}
-              >
-                I forgot my password.
-              </LinkButton>
-              <br />
-              New user?{" "}
-              <LinkButton onClick={() => setModeAndClearError("sign up")}>
-                Create account
-              </LinkButton>
-              <br />
-              <LinkButton onClick={() => setModeAndClearError("sso")}>
-                Sign in with SSO
-              </LinkButton>
-            </div>
-          )}
-          {mode === "sign up" && (
-            <div className={"LoginForm__SignUpOrInToggle"}>
-              Existing user?{" "}
-              <LinkButton onClick={() => setModeAndClearError("sign in")}>
-                Sign in
-              </LinkButton>
-            </div>
-          )}
         </div>
       )}
     </IntakeFlowForm>
@@ -578,6 +530,7 @@ function createFakeUser(
   lastName: string
 ): ApiUser {
   return {
+    username: null,
     id: mkUuid() as UserId,
     email: email,
     firstName: firstName,

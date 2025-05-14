@@ -302,6 +302,10 @@ export class PlasmicApi {
       metadata?: Metadata;
     }
   ): Promise<ProjectBundle> {
+    logger.info(
+      "🚀 ~ PlasmicApi ~ this.codegenHost:" +
+        `${this.codegenHost}/api/v1/projects/${projectId}/code/components?branchName=${branchName}`
+    );
     const result = await this.post(
       `${this.codegenHost}/api/v1/projects/${projectId}/code/components?branchName=${branchName}`,
       {
