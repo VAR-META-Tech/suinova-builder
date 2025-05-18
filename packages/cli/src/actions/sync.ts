@@ -189,6 +189,23 @@ async function ensureRequiredPackages(
   if (!fs) {
     await install("fs", { global: false, dev: false });
   }
+
+  const antd = findInstalledVersion(
+    context.config,
+    baseDir,
+    "@plasmicpkgs/antd"
+  );
+  if (!antd) {
+    await install("@plasmicpkgs/antd", { global: false, dev: false });
+  }
+  const antd5 = findInstalledVersion(
+    context.config,
+    baseDir,
+    "@plasmicpkgs/antd5"
+  );
+  if (!antd5) {
+    await install("@plasmicpkgs/antd5", { global: false, dev: false });
+  }
 }
 
 /**
