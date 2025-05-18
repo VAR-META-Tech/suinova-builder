@@ -25,12 +25,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-      - id: cache
-        name: Recovering cache...
-        uses: actions/cache@v4
-        with:
-          key: lock-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
-          path: ${{ github.event.client_payload.data.directory }}/node_modules
       - id: init
         name: Initializing SuiNova app...
         uses: phucvarmeta/plasmic-action@master
