@@ -164,6 +164,43 @@ export default App;
   await fs.writeFile(appPath, appCode);
 }
 
+export async function updateViteFile(projectPath: string) {
+  const tsConfigAppFile = path.join(projectPath, "tsconfig.app.json");
+  const tsConfigNodeFile = path.join(projectPath, "tsconfig.node.json");
+  const searchText = '"verbatimModuleSyntax": true';
+  const replaceText = '"verbatimModuleSyntax": false';
+
+  const configAppFileContent = await fs.readFile(tsConfigAppFile, "utf8");
+  console.log(
+    "🚀 ~ updateViteFile ~ configAppFileContent:",
+    configAppFileContent
+  );
+  const replacedAppFileContent = configAppFileContent.replace(
+    searchText,
+    replaceText
+  );
+  console.log(
+    "🚀 ~ updateViteFile ~ replacedAppFileContent:",
+    replacedAppFileContent
+  );
+  await fs.writeFile(tsConfigAppFile, replacedAppFileContent);
+
+  const configNodeFileContent = await fs.readFile(tsConfigNodeFile, "utf8");
+  console.log(
+    "🚀 ~ updateViteFile ~ configNodeFileContent:",
+    configNodeFileContent
+  );
+  const replacedNodeFileContent = configNodeFileContent.replace(
+    searchText,
+    replaceText
+  );
+  console.log(
+    "🚀 ~ updateViteFile ~ replacedNodeFileContent:",
+    replacedNodeFileContent
+  );
+  await fs.writeFile(tsConfigNodeFile, configNodeFileContent);
+}
+
 /**
  * Generate a file to render the component
  * @param componentAbsPath - absolute path to component to render

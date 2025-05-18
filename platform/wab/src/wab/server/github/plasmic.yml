@@ -77,3 +77,50 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_branch: ${{ steps.sync.outputs.new_branch }}
           destination_branch: ${{ github.event.client_payload.data.branch }}
+      - id: vite-build
+        name: Building Vite app...
+        run: |
+          cd ${{ github.event.client_payload.data.directory || '.' }}
+          npm run build
+
+      - id: cache
+        name: Recovering cache...
+        uses: actions/cache@v4
+        with:
+          key: lock-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}
+          path: ${{ github.event.client_payload.data.directory || '.' }}/node_modules
+
+      - id: generate-config
+        name: Generate Walrus site configuration
+        run: |
+          cat > site.config.json << EOF
+          {
+            "network": "testnet",
+            "owner": "0x7c484896d088f2eb3012cac48de62fd4ec02c54540cbb1cd5e312e02216d055a",
+            "site_name": "sui-nova",
+            "metadata": {
+              "link": "https://sui-nova.wal.app",
+              "image_url": "https://myproject.xyz/preview.png",
+              "name": "My Project",
+              "description": "A decentralized web app deployed on Walrus.",
+              "project_url": "https://github.com/my-org/my-walrus-site",
+              "creator": "my-org"
+            },
+            "epochs": 5,
+            "path": "./dist",
+            "gas_budget": 100000000,
+            "write_retry_limit": 3,
+            "object_id": ""
+          }
+          EOF
+
+          echo "Generated site.config.json:"
+          cat site.config.json
+
+      - id: deploy
+        name: Deploy to Walrus Sites
+        uses: zktx-io/walrus-sites-provenance@v0.3.4
+        with:
+          config-path: "./site.config.json"
+        env:
+          ED25519_PRIVATE_KEY: "suiprivkey1qznd5vzusmcyfjync805mm6f8t3qz0jfayhrm5zkv3pr2d9p74qfqtl37ah"
