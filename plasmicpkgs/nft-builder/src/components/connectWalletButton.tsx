@@ -11,7 +11,7 @@ import { Registerable, registerComponentHelper } from "../reg-util";
 import { Dropdown, MenuProps, Tooltip } from "antd";
 import clsx from "clsx";
 
-type ConnectWalletButtonProps = {
+type NFTBuilderConnectWalletButtonProps = {
   className?: string;
   connectText?: ReactNode;
   icon?: ReactNode;
@@ -41,9 +41,9 @@ const formatAddress = (address: string) => {
     : address;
 };
 
-const ConnectWalletButton = React.forwardRef<
+const NFTBuilderConnectWalletButton = React.forwardRef<
   HTMLDivElement,
-  ConnectWalletButtonProps
+  NFTBuilderConnectWalletButtonProps
 >(({ className, connectText, icon, copyIcon, userIcon, logoutIcon, onMyProfileClick, ...props }, ref) => {
   const [copied, setCopied] = useState(false);
   const { mutate: disconnect } = useDisconnectWallet();
@@ -151,54 +151,58 @@ const ConnectWalletButton = React.forwardRef<
   );
 });
 
-export function registerConnectWalletButton(PLASMIC?: Registerable) {
-  registerComponentHelper(PLASMIC, ConnectWalletButton, {
-    name: "nft-builder-connect-wallet-btn",
-    displayName: "Connect Wallet Button",
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "ConnectWalletButton",
-    props: {
-      connectText: {
-        type: "string",
-        description: "Button text to show",
-        defaultValue: "Connect Wallet",
-      },
-      icon: {
-        type: "slot",
-        defaultValue: [
-          {
-            type: "component",
-            name: "nft-builder-wallet-icon",
-          },
-        ],
-      },
-      copyIcon: {
-        type: "slot",
-        defaultValue: {
-          type: "component",
-          name: "nft-builder-copy-icon",
-        },
-      },
-      userIcon: {
-        type: "slot",
-        defaultValue: {
-          type: "component",
-          name: "nft-builder-user-icon",
-        },
-      },
-      logoutIcon: {
-        type: "slot",
-        defaultValue: {
-          type: "component",
-          name: "nft-builder-logout-icon",
-        },
-      },
-      onMyProfileClick: {
-        type: "eventHandler",
-        argTypes: []
-      }
+export const ConnectWalletButton = NFTBuilderConnectWalletButton;
+export const ConnectWalletButtonMeta = {
+  name: "NFTBuilderConnectWalletButton",
+  displayName: "Connect Wallet Button",
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "ConnectWalletButton",
+  props: {
+    className: {
+      type: "string" as const,
     },
-  });
+    connectText: {
+      type: "string" as const,
+      description: "Button text to show",
+      defaultValue: "Connect Wallet",
+    },
+    icon: {
+      type: "slot" as const,
+      defaultValue: [
+        {
+          type: "component" as const,
+          name: "nft-builder-wallet-icon",
+        },
+      ],
+    },
+    copyIcon: {
+      type: "slot" as const,
+      defaultValue: {
+        type: "component" as const,
+        name: "nft-builder-copy-icon",
+      },
+    },
+    userIcon: {
+      type: "slot" as const,
+      defaultValue: {
+        type: "component" as const,
+        name: "nft-builder-user-icon",
+      },
+    },
+    logoutIcon: {
+      type: "slot" as const,
+      defaultValue: {
+        type: "component" as const,
+        name: "nft-builder-logout-icon",
+      },
+    },
+    onMyProfileClick: {
+      type: "eventHandler" as const,
+      argTypes: []
+    }
+  },
 }
 
-export default ConnectWalletButton;
+export function registerConnectWalletButton(PLASMIC?: Registerable) {
+  registerComponentHelper(PLASMIC, ConnectWalletButton, ConnectWalletButtonMeta);
+}

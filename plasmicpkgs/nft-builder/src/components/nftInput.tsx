@@ -3,7 +3,7 @@ import { Input } from "antd";
 import type { InputProps } from "antd";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface INFTInput extends InputProps {
+interface INFTBuilderInput extends InputProps {
   className?: string;
   placeholderColor?: string;
   inputBackgroundColor?: string;
@@ -24,7 +24,7 @@ const minifyCss = (css: string) => {
     .trim();
 };
 
-const NFTInput = ({ className, placeholderColor, inputBackgroundColor, ...props }: INFTInput) => {
+const NFTBuilderInput = ({ className, placeholderColor, inputBackgroundColor, ...props }: INFTBuilderInput) => {
   const cssStyles = React.useMemo(
     () =>
       minifyCss(`
@@ -46,70 +46,85 @@ const NFTInput = ({ className, placeholderColor, inputBackgroundColor, ...props 
   );
 };
 
-export function registerNFTInput(loader?: Registerable) {
-  registerComponentHelper(loader, NFTInput, {
-    name: "nft-builder-input",
-    displayName: "NFT Input",
-    props: {
-      size: {
-        type: "choice",
-        options: ["small", "middle", "large"],
-        description: "The size of the input box",
-        defaultValueHint: "middle",
-      },
-      placeholder: {
-        type: "string",
-        description: "Placeholder for the input",
-      },
-      allowClear: {
-        type: "boolean",
-        description: "Allow to remove input content with clear icon",
-        defaultValueHint: false,
-      },
-      bordered: {
-        type: "boolean",
-        description: "Whether has border style",
-        defaultValueHint: true,
-      },
-      disabled: {
-        type: "boolean",
-        description: "Whether the input is disabled",
-        defaultValueHint: false,
-      },
-      maxLength: {
-        type: "number",
-        description: "The maximum length of the input content",
-      },
-      status: {
-        type: "choice",
-        options: ["error", "warning"],
-        description: "Set validation status",
-      },
-      readOnly: {
-        type: "boolean",
-        description: "Whether the input is read-only",
-        defaultValueHint: false,
-      },
-      required: {
-        type: "boolean",
-        description: "Whether the input is required",
-        defaultValueHint: false,
-      },
-      autoFocus: {
-        type: "boolean",
-        description: "Whether to focus on the input when it is mounted",
-        defaultValueHint: false,
-      },
-      placeholderColor: {
-        type: "color",
-        defaultValue: "black"
-      },
-      inputBackgroundColor: {
-        type: "color",
-        defaultValue: "white"
-      }
+export const NFTInput = NFTBuilderInput
+export const NFTInputMeta = {
+  name: "NFTBuilderInput",
+  displayName: "NFT Input",
+  props: {
+    className: {
+      type: "string" as const,
     },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "NFTInput",
-  });
+    size: {
+      type: "choice" as const,
+      options: [
+        { label: "Small", value: "small" },
+        { label: "Middle", value: "middle" },
+        { label: "Large", value: "large" }
+      ],
+      description: "The size of the input box",
+      defaultValueHint: "middle",
+      multiSelect: false as const,
+    },
+    placeholder: {
+      type: "string" as const,
+      description: "Placeholder for the input",
+    },
+    allowClear: {
+      type: "boolean" as const,
+      description: "Allow to remove input content with clear icon",
+      defaultValueHint: false,
+    },
+    bordered: {
+      type: "boolean" as const,
+      description: "Whether has border style",
+      defaultValueHint: true,
+    },
+    disabled: {
+      type: "boolean" as const,
+      description: "Whether the input is disabled",
+      defaultValueHint: false,
+    },
+    maxLength: {
+      type: "number" as const,
+      description: "The maximum length of the input content",
+    },
+    status: {
+      type: "choice" as const,
+      options: [
+        { label: "Error", value: "error" },
+        { label: "Warning", value: "warning" }
+      ],
+      description: "Set validation status",
+      multiSelect: false as const,
+    },
+    readOnly: {
+      type: "boolean" as const,
+      description: "Whether the input is read-only",
+      defaultValueHint: false,
+    },
+    required: {
+      type: "boolean" as const,
+      description: "Whether the input is required",
+      defaultValueHint: false,
+    },
+    autoFocus: {
+      type: "boolean" as const,
+      description: "Whether to focus on the input when it is mounted",
+      defaultValueHint: false,
+    },
+    placeholderColor: {
+      type: "color" as const,
+      defaultValue: "black"
+    },
+    inputBackgroundColor: {
+      type: "color" as const,
+      defaultValue: "white"
+    }
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "NFTInput",
+}
+
+export function registerNFTInput(loader?: Registerable) {
+  registerComponentHelper(loader, NFTInput, NFTInputMeta);
 }
