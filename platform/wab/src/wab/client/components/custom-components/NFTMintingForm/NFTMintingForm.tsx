@@ -96,7 +96,7 @@ const formSchema = z.object({
       endTime: z.date().nullable(),
       totalNFTs: z.number().min(0),
       maxNFTsPerWallet: z.number().min(0),
-    }),
+    })
   }),
   hasPublicSale: z.boolean(),
   publicSale: z.object({
@@ -115,6 +115,54 @@ const formSchema = z.object({
     maxNFTsPerWallet: z.number().min(0),
   }),
   previewImageData: z.string().optional(),
+}).superRefine((obj, ctx) => {
+  if (obj.presale.whitelistInfo.maxNFTsPerWallet > obj.presale.whitelistInfo.totalNFTs && obj.hasPresale) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Max NFTs per wallet must be less than or equal to total NFTs",
+      path: ["presale.whitelistInfo.maxNFTsPerWallet"],
+    });
+  }
+
+  if (obj.publicSale.maxNFTsPerWallet > obj.publicSale.totalNFTs && obj.hasPublicSale) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Max NFTs per wallet must be less than or equal to total NFTs",
+      path: ["publicSale.maxNFTsPerWallet"],
+    });
+  }
+
+  if(obj.publicSale.totalNFTs < 1 && obj.hasPublicSale) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Total NFTs must be greater than 0",
+      path: ["publicSale.totalNFTs"],
+    });
+  }
+
+  if(obj.presale.whitelistInfo.totalNFTs < 1 && obj.hasPresale) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Total NFTs must be greater than 0",
+      path: ["presale.whitelistInfo.totalNFTs"],
+    });
+  }
+
+  if(obj.presale.whitelistInfo.maxNFTsPerWallet < 1 && obj.hasPresale) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Max NFTs per wallet must be greater than 0",
+      path: ["presale.whitelistInfo.maxNFTsPerWallet"],
+    });
+  }
+
+  if(obj.publicSale.maxNFTsPerWallet < 1 && obj.hasPublicSale) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Max NFTs per wallet must be greater than 0",
+      path: ["publicSale.maxNFTsPerWallet"],
+    });
+  }
 });
 
 // Typescript type inference from zod schema
@@ -141,7 +189,9 @@ const NFTMintingForm = ({
   const TOTAL_STEPS = 5;
   const currentWalletAccount = useCurrentAccount();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [previewTeamMemberImage, setPreviewTeamMemberImage] = useState<string[]>([]);
+  const [previewTeamMemberImage, setPreviewTeamMemberImage] = useState<
+    string[]
+  >([]);
   // Create storage key based on wallet address and project ID
   const getStorageKey = () => {
     if (!currentWalletAccount?.address || !projectId) {
@@ -264,6 +314,8 @@ const NFTMintingForm = ({
       },
     },
   });
+
+
 
   const { mutateAsync: signAndExecuteTransaction, isPending } =
     useSignAndExecuteTransaction({
@@ -469,10 +521,11 @@ const NFTMintingForm = ({
   };
 
   const onSubmit = async (formData: FormData) => {
-    const itemAttributes = formData.attributes?.map((attribute) => ({
-      trait_type: attribute.type || '',
-      value: attribute.value || '',
-    })) || [];
+    const itemAttributes =
+      formData.attributes?.map((attribute) => ({
+        trait_type: attribute.type || "",
+        value: attribute.value || "",
+      })) || [];
 
     const visions = formData.milestones?.map((milestone) => ({
       description: milestone.description || "",
@@ -480,7 +533,9 @@ const NFTMintingForm = ({
     }));
 
     const imageUrl = await uploadImageHandler(formData.itemImage);
-    const teamAvaUploadRequests = formData.teamMembers?.map((member) => uploadImageHandler(member.avatar));
+    const teamAvaUploadRequests = formData.teamMembers?.map((member) =>
+      uploadImageHandler(member.avatar)
+    );
     const teamMemberImageUrls = await Promise.all(teamAvaUploadRequests || []);
 
     const teams = formData.teamMembers?.map((team, index) => ({
@@ -982,12 +1037,13 @@ const NFTMintingForm = ({
                   {...register("hasPresale")}
                   className="checkbox-input"
                 />
-                <span className="checkbox-text">Pre-sales</span>
+                <span className="checkbox-text part-title">Pre-sales</span>
               </label>
             </div>
-
             {watch("hasPresale") && (
               <div className="presale-section">
+                <div className="whitelist-title part-title">Join Whitelist</div>
+
                 <div className="form-group">
                   <label>Start Time</label>
                   <Controller
@@ -1000,6 +1056,8 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={new Date()}
+                        maxDate={formValues.presale.endTime || undefined}
                       />
                     )}
                   />
@@ -1029,26 +1087,34 @@ const NFTMintingForm = ({
                     placeholder="Enter total slots"
                   />
                 </div>
-                <br />
-                <h4>Whitelist Information</h4>
+                <div className="whitelist-title part-title">
+                  Whitelist Sales
+                </div>
                 <div className="form-group">
-                  <label>Price</label>
+                  <label>
+                    Price<span className="required">*</span>
+                  </label>
                   <Controller
                     control={control}
                     name={"presale.whitelistInfo.price" as any}
                     render={({ field }) => (
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        placeholder="Enter price"
-                        value={field.value}
-                        onChange={(e) => {
-                          field.onChange(e.target.value);
-                        }}
-                        className={
-                          errors.presale?.whitelistInfo?.price ? "error" : ""
-                        }
-                      />
+                      <div className="custom-input">
+                        <input
+                          type="number"
+                          min={0}
+                          step='0.01'
+                          inputMode="decimal"
+                          placeholder="Enter price"
+                          value={field.value}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                          }}
+                          className={
+                            `${errors.presale?.whitelistInfo?.price ? "error" : ""} custom-inner-input`
+                          }
+                        />
+                        <span className="custom-input-suffix">SUI</span>
+                      </div>
                     )}
                   />
                   {errors.presale?.whitelistInfo?.price && (
@@ -1071,6 +1137,8 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={new Date()}
+                        maxDate={formValues.presale.whitelistInfo.endTime || undefined}
                       />
                     )}
                   />
@@ -1101,11 +1169,12 @@ const NFTMintingForm = ({
                     {...register("presale.whitelistInfo.totalNFTs", {
                       valueAsNumber: true,
                     })}
+                    min={1}
                     placeholder="Enter total NFTs"
                   />
-                  {errors.presale?.whitelistInfo?.price && (
+                  {errors.presale?.whitelistInfo?.totalNFTs && (
                     <span className="error-message">
-                      {errors.presale?.whitelistInfo?.price.message}
+                      {errors.presale?.whitelistInfo?.totalNFTs?.message}
                     </span>
                   )}
                 </div>
@@ -1118,6 +1187,7 @@ const NFTMintingForm = ({
                     {...register("presale.whitelistInfo.maxNFTsPerWallet", {
                       valueAsNumber: true,
                     })}
+                    min={1}
                     placeholder="Enter max NFTs per wallet"
                   />
                   {errors.presale?.whitelistInfo?.maxNFTsPerWallet && (
@@ -1136,7 +1206,7 @@ const NFTMintingForm = ({
                   {...register("hasPublicSale")}
                   className="checkbox-input"
                 />
-                <span className="checkbox-text">Public Sales</span>
+                <span className="checkbox-text part-title">Public Sales</span>
               </label>
             </div>
 
@@ -1150,16 +1220,20 @@ const NFTMintingForm = ({
                     control={control}
                     name={"publicSale.price" as any}
                     render={({ field }) => (
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        placeholder="Enter price"
-                        value={field.value}
-                        onChange={(e) => {
-                          field.onChange(e.target.value);
-                        }}
-                        className={errors.publicSale?.price ? "error" : ""}
-                      />
+                      <div className="custom-input">
+                        <input
+                          type="number"
+                          min={0}
+                          inputMode="decimal"
+                          placeholder="Enter price"
+                          value={field.value}
+                          onChange={(e) => {
+                            field.onChange(e.target.value);
+                          }}
+                          className={`${errors.publicSale?.price ? "error" : ""} custom-inner-input`}
+                        />
+                        <span className="custom-input-suffix">SUI</span>
+                      </div>
                     )}
                   />
                   {errors.publicSale?.price && (
@@ -1182,6 +1256,8 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={new Date()}
+                        maxDate={formValues.publicSale.endTime || undefined}
                       />
                     )}
                   />
@@ -1212,6 +1288,7 @@ const NFTMintingForm = ({
                     {...register("publicSale.totalNFTs", {
                       valueAsNumber: true,
                     })}
+                    min={1}
                     placeholder="Enter total NFTs"
                   />
                   {errors.publicSale?.totalNFTs && (
