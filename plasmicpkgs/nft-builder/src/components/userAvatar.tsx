@@ -3,7 +3,7 @@ import { Avatar } from "antd";
 import { usePlasmicLink } from "@plasmicapp/host";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-export function UserAvatar({
+function NFTBuilderUserAvatar({
   letters,
   href,
   target,
@@ -24,91 +24,116 @@ export function UserAvatar({
   );
 }
 
-export function UserAvatarGroup(
+function NFTBuilderUserAvatarGroup(
   props: React.ComponentProps<typeof Avatar.Group>
 ) {
   return <Avatar.Group {...props} />;
 }
 
-export function registerUserAvatar(loader?: Registerable) {
-  registerComponentHelper(loader, UserAvatar, {
-    name: "nft-builder-user-avatar",
-    displayName: "User Avatar",
-    props: {
-      href: {
-        type: "href",
-        displayName: "Link to",
-        description: "Destination to link to",
-      },
-      target: {
-        type: "boolean",
-        displayName: "Open in new tab",
-        hidden: (ps: { href?: string }) => !ps.href,
-      },
-      letters: {
-        type: "string",
-        description: "Letters to show",
-        defaultValue: "AB",
-      },
-      src: {
-        type: "imageUrl",
-        description: "Image to display",
-        defaultValue:
-          "https://suinova.var-meta.com/static/img/avatar.png",
-      },
-      size: {
-        type: "choice",
-        options: ["small", "default", "large"],
-        description: "Set the size of avatar",
-        defaultValueHint: "default",
-      },
-      shape: {
-        type: "choice",
-        options: ["circle", "square"],
-        description: "Set the avatar shape",
-        defaultValue: "square",
-        defaultValueHint: "square",
-      },
+export const UserAvatar = NFTBuilderUserAvatar;
+export const UserAvatarGroup = NFTBuilderUserAvatarGroup;
+
+export const UserAvatarMeta = {
+  name: "NFTBuilderUserAvatar",
+  displayName: "User Avatar",
+  props: {
+    href: {
+      type: "href" as const,
+      displayName: "Link to",
+      description: "Destination to link to",
     },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "UserAvatar",
-  });
+    target: {
+      type: "boolean" as const,
+      displayName: "Open in new tab",
+      hidden: (ps: { href?: string }) => !ps.href,
+    },
+    letters: {
+      type: "string" as const,
+      description: "Letters to show",
+      defaultValue: "AB",
+    },
+    src: {
+      type: "imageUrl" as const,
+      description: "Image to display",
+      defaultValue:
+        "https://suinova.var-meta.com/static/img/avatar.png",
+    },
+    size: {
+      type: "choice" as const,
+      options: [
+        { label: "Small", value: "small" },
+        { label: "Default", value: "default" },
+        { label: "Large", value: "large" }
+      ],
+      description: "Set the size of avatar",
+      defaultValueHint: "default",
+      multiSelect: false as const,
+    },
+    shape: {
+      type: "choice" as const,
+      options: [
+        { label: "Circle", value: "circle" },
+        { label: "Square", value: "square" }
+      ],
+      description: "Set the avatar shape",
+      defaultValue: "square",
+      defaultValueHint: "square",
+      multiSelect: false as const,
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "UserAvatar",
+}
+
+export const UserAvatarGroupMeta = {
+  name: "NFTBuilderUserAvatarGroup",
+  displayName: "User Avatar Group",
+  props: {
+    children: {
+      type: "slot" as const,
+      defaultValue: [1, 2, 3, 4].map((user) => ({
+        type: "component" as const,
+        name: "NFTBuilderUserAvatar",
+        props: {
+          letters: `U${user}`,
+        },
+      })),
+    },
+    maxCount: {
+      type: "number" as const,
+      description: "Max avatars to show",
+      defaultValue: 2,
+    },
+    size: {
+      type: "choice" as const,
+      options: [
+        { label: "Small", value: "small" },
+        { label: "Default", value: "default" },
+        { label: "Large", value: "large" }
+      ],
+      description: "Default size of avatars",
+      defaultValueHint: "default",
+      multiSelect: false as const,
+    },
+    maxPopoverPlacement: {
+      type: "choice" as const,
+      options: [
+        { label: "Top", value: "top" },
+        { label: "Bottom", value: "bottom" }
+      ],
+      advanced: true,
+      defaultValueHint: "top",
+      multiSelect: false as const,
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "UserAvatarGroup",
+}
+
+export function registerUserAvatar(loader?: Registerable) {
+  registerComponentHelper(loader, UserAvatar, UserAvatarMeta);
 }
 
 export function registerUserAvatarGroup(loader?: Registerable) {
-  registerComponentHelper(loader, UserAvatarGroup, {
-    name: "nft-builder-user-avatar-group",
-    displayName: "User Avatar Group",
-    props: {
-      children: {
-        type: "slot",
-        defaultValue: [1, 2, 3, 4].map((user) => ({
-          type: "component",
-          name: "nft-builder-user-avatar",
-          props: {
-            letters: `U${user}`,
-          },
-        })),
-      },
-      maxCount: {
-        type: "number",
-        description: "Max avatars to show",
-        defaultValue: 2,
-      },
-      size: {
-        type: "choice",
-        options: ["small", "default", "large"],
-        description: "Default size of avatars",
-        defaultValueHint: "default",
-      },
-      maxPopoverPlacement: {
-        type: "choice",
-        advanced: true,
-        options: ["top", "bottom"],
-        defaultValueHint: "top",
-      },
-    },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "UserAvatarGroup",
-  });
+  registerComponentHelper(loader, UserAvatarGroup, UserAvatarGroupMeta);
 }

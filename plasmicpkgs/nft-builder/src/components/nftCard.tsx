@@ -3,7 +3,7 @@ import { Card, Image } from "antd";
 import { CardProps } from "antd/es/card";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface INFTCard extends CardProps {
+interface INFTBuilderCard extends CardProps {
   className?: string;
   image?: string;
   cardTitle: string;
@@ -22,14 +22,14 @@ const CSSClasses = {
   nftCardText: "nft-card-Text",
 };
 
-export default function NFTCard({
+function NFTBuilderCard({
   className,
   image,
   cardTitle,
   cardPrice,
   cardText,
   ...props
-}: INFTCard) {
+}: INFTBuilderCard) {
   function minifyCss(input: string) {
     return input
       .replace(/\s{2,}|\n/g, "") //  Remove spaces
@@ -119,34 +119,40 @@ export default function NFTCard({
   );
 }
 
-export function registerNFTCard(loader?: Registerable) {
-  registerComponentHelper(loader, NFTCard, {
-    name: "nft-builder-card",
-    displayName: "NFT Card",
-    props: {
-      image: {
-        type: "imageUrl",
-        description: "Letters to show",
-        defaultValue:
-          "https://suinova.var-meta.com/static/img/nft-illustration.jpeg",
-      },
-      cardTitle: {
-        type: "string",
-        description: "Title to show",
-        defaultValue: "Magic Astronaut",
-      },
-      cardPrice: {
-        type: "string",
-        description: "Price to show",
-        defaultValue: "5.67 SUI",
-      },
-      cardText: {
-        type: "string",
-        description: "Text to show",
-        defaultValue: "Last sale: 5.63 SUI",
-      },
+export const NFTCard = NFTBuilderCard
+export const NFTCardMeta = {
+  name: "NFTBuilderCard",
+  displayName: "NFT Card",
+  props: {
+    className: {
+      type: "string" as const,
     },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "NFTCard",
-  });
+    image: {
+      type: "imageUrl" as const,
+      description: "Letters to show",
+      defaultValue:
+        "https://suinova.var-meta.com/static/img/nft-illustration.jpeg",
+    },
+    cardTitle: {
+      type: "string" as const,
+      description: "Title to show",
+      defaultValue: "Magic Astronaut",
+    },
+    cardPrice: {
+      type: "string" as const,
+      description: "Price to show",
+      defaultValue: "5.67 SUI",
+    },
+    cardText: {
+      type: "string" as const,
+      description: "Text to show",
+      defaultValue: "Last sale: 5.63 SUI",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "NFTCard",
+}
+
+export function registerNFTCard(loader?: Registerable) {
+  registerComponentHelper(loader, NFTCard, NFTCardMeta);
 }

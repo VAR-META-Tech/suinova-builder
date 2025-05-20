@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 import clsx from "clsx";
 
-interface ICarouselBtnGroup {
+interface INftBuilderCarouselBtnGroup {
   className?: string;
   leftBtnChildren?: ReactNode;
   rightBtnChildren?: ReactNode;
@@ -22,13 +22,13 @@ function minifyCss(input: string) {
     .replace(/\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$/g, ""); // Remove comments.
 }
 
-export default function CarouselBtnGroup({
+function NftBuilderCarouselBtnGroup({
   className,
   leftBtnChildren,
   rightBtnChildren,
   nextSlide,
   prevSlide,
-}: ICarouselBtnGroup) {
+}: INftBuilderCarouselBtnGroup) {
   const cssStyles = React.useMemo(
     () =>
       minifyCss(`
@@ -79,31 +79,35 @@ export default function CarouselBtnGroup({
   );
 }
 
-export function registerCarouselBtnGroup(loader?: Registerable) {
-  registerComponentHelper(loader, CarouselBtnGroup, {
-    name: "nft-builder-carousel-btn-group",
-    displayName: "Carousel Button Group",
-    props: {
-      leftBtnChildren: {
-        type: "slot",
-        defaultValue: [
-          {
-            type: "component",
-            name: "nft-builder-left-arrow-icon",
-          },
-        ],
-      },
-      rightBtnChildren: {
-        type: "slot",
-        defaultValue: [
-          {
-            type: "component",
-            name: "nft-builder-right-arrow-icon",
-          },
-        ],
-      },
+export const NFTCarouselBtnGroup = NftBuilderCarouselBtnGroup;
+
+export const NFTCarouselBtnGroupMeta = {
+  name: "NftBuilderCarouselBtnGroup",
+  displayName: "Carousel Button Group",
+  props: {
+    leftBtnChildren: {
+      type: "slot" as const,
+      defaultValue: [
+        {
+          type: "component" as const,
+          name: "nft-builder-left-arrow-icon",
+        },
+      ],
     },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "CarouselBtnGroup",
-  });
+    rightBtnChildren: {
+      type: "slot" as const,
+      defaultValue: [
+        {
+          type: "component" as const,
+          name: "nft-builder-right-arrow-icon",
+        },
+      ],
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "NFTCarouselBtnGroup",
+};
+
+export function registerCarouselBtnGroup(loader?: Registerable) {
+  registerComponentHelper(loader, NFTCarouselBtnGroup, NFTCarouselBtnGroupMeta);
 }

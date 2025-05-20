@@ -2,7 +2,7 @@ import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 import clsx from "clsx";
 
-interface INFTCarouselItem {
+interface INFTBuilderCarouselItem {
   id: number;
   name: string;
   image: string;
@@ -32,13 +32,13 @@ const minifyCss = (css: string) => {
     .trim();
 };
 
-export default function NFTCarouselItem({
+function NFTBuilderCarouselItem({
   price,
   id,
   image,
   name,
   className
-}: INFTCarouselItem) {
+}: INFTBuilderCarouselItem) {
   const cssStyles = React.useMemo(
     () =>
       minifyCss(`
@@ -117,29 +117,35 @@ export default function NFTCarouselItem({
   );
 }
 
-export function registerNFTCarouselItem(loader?: Registerable) {
-  registerComponentHelper(loader, NFTCarouselItem, {
-    name: "nft-builder-carousel-item",
-    displayName: "NFT Carousel Item",
-    props: {
-      price: {
-        type: "string",
-        defaultValue: "30 SUI",
-      },
-      id: {
-        type: "number",
-        defaultValue: Math.floor(Math.random() * 10000),
-      },
-      image: {
-        type: "imageUrl",
-        defaultValue: "https://suinova.var-meta.com/static/img/astronaut.jpeg",
-      },
-      name: {
-        type: "string",
-        defaultValue: "NFT Astronaut",
-      },
+export const NFTCarouselItem = NFTBuilderCarouselItem
+export const NFTCarouselItemMeta = {
+  name: "NFTBuilderCarouselItem",
+  displayName: "NFT Carousel Item",
+  props: {
+    className: {
+      type: "string" as const,
     },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "NFTCarouselItem",
-  });
+    price: {
+      type: "string" as const,
+      defaultValue: "30 SUI",
+    },
+    id: {
+      type: "number" as const,
+      defaultValue: Math.floor(Math.random() * 10000),
+    },
+    image: {
+      type: "imageUrl" as const,
+      defaultValue: "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    },
+    name: {
+      type: "string" as const,
+      defaultValue: "NFT Astronaut",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "NFTCarouselItem",
+}
+
+export function registerNFTCarouselItem(loader?: Registerable) {
+  registerComponentHelper(loader, NFTCarouselItem, NFTCarouselItemMeta);
 }

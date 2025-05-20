@@ -56,7 +56,7 @@ const collections = [
   },
 ];
 
-interface INFTCarousel extends CarouselProps {
+interface INFTBuilderCarousel extends CarouselProps {
   className?: string;
   slidesToShow?: number;
   leftBtnChildren?: ReactNode;
@@ -64,13 +64,13 @@ interface INFTCarousel extends CarouselProps {
   carouselBtnGroup?: ReactNode;
   children?: ReactNode;
 }
-const NFTCarousel = ({
+const NFTBuilderCarousel = ({
   className,
   slidesToShow,
   carouselBtnGroup,
   children,
   ...props
-}: INFTCarousel) => {
+}: INFTBuilderCarousel) => {
   const carouselRef = React.useRef<CarouselRef | null>(null);
 
   const nextSlide = () => {
@@ -138,63 +138,65 @@ const NFTCarousel = ({
     </div>
   );
 };
-export default NFTCarousel;
+
+export const NFTCarousel = NFTBuilderCarousel;
+export const NFTCarouselMeta = {
+  name: "NFTBuilderCarousel",
+  displayName: "NFT Carousel",
+  props: {
+    autoplay: {
+      type: "boolean" as const,
+      description: "Whether to scroll automatically",
+      defaultValueHint: false,
+    },
+    dotPosition: {
+      type: "choice" as const,
+      options: ["top", "bottom", "left", "right"],
+      description: "The position of the dots",
+      defaultValueHint: "bottom",
+    },
+    dots: {
+      type: "boolean" as const,
+      description: "Whether to show the dots at the bottom of the gallery",
+      defaultValueHint: true,
+    },
+    effect: {
+      type: "choice" as const,
+      options: ["scrollx", "fade"],
+      defaultValueHint: "scrollx",
+    },
+    slidesToShow: {
+      type: "number" as const,
+      defaultValue: 4,
+    },
+    carouselBtnGroup: {
+      type: "slot" as const,
+      hidePlaceholder: true,
+      defaultValue: [
+        {
+          type: "component" as const,
+          name: "NftBuilderCarouselBtnGroup",
+        },
+      ],
+    },
+    children: {
+      type: "slot" as const,
+      defaultValue: collections.map((collection) => ({
+        type: "component" as const,
+        name: "NFTBuilderCarouselItem",
+        props: {
+          id: collection.id,
+          name: collection.name,
+          image: collection.image,
+          price: collection.price,
+        },
+      })),
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "NFTCarousel",
+}
 
 export function registerNFTCarousel(loader?: Registerable) {
-  registerComponentHelper(loader, NFTCarousel, {
-    name: "nft-builder-carousel",
-    displayName: "NFT Carousel",
-    props: {
-      autoplay: {
-        type: "boolean",
-        description: "Whether to scroll automatically",
-        defaultValueHint: false,
-      },
-      dotPosition: {
-        type: "choice",
-        options: ["top", "bottom", "left", "right"],
-        description: "The position of the dots",
-        defaultValueHint: "bottom",
-      },
-      dots: {
-        type: "boolean",
-        description: "Whether to show the dots at the bottom of the gallery",
-        defaultValueHint: true,
-      },
-      effect: {
-        type: "choice",
-        options: ["scrollx", "fade"],
-        defaultValueHint: "scrollx",
-      },
-      slidesToShow: {
-        type: "number",
-        defaultValue: 4,
-      },
-      carouselBtnGroup: {
-        type: "slot",
-        hidePlaceholder: true,
-        defaultValue: [
-          {
-            type: "component",
-            name: "nft-builder-carousel-btn-group",
-          },
-        ],
-      },
-      children: {
-        type: "slot",
-        defaultValue: collections.map((collection) => ({
-          type: "component",
-          name: "nft-builder-carousel-item",
-          props: {
-            id: collection.id,
-            name: collection.name,
-            image: collection.image,
-            price: collection.price,
-          },
-        })),
-      },
-    },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "NFTCarousel",
-  });
+  registerComponentHelper(loader, NFTCarousel, NFTCarouselMeta);
 }

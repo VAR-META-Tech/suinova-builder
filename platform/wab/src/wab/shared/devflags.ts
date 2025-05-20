@@ -442,32 +442,32 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "nft-builder-card",
+          componentName: "NFTBuilderCard",
           displayName: "NFT Card",
         },
         {
           type: "hostless-component",
-          componentName: "nft-builder-video-player",
+          componentName: "NFTBuilderVideoPlayer",
           displayName: "NFT Video Player",
         },
         {
           type: "hostless-component",
-          componentName: "nft-builder-carousel",
+          componentName: "NFTBuilderCarousel",
           displayName: "NFT Carousel",
         },
         {
           type: "hostless-component",
-          componentName: "nft-builder-carousel-item",
+          componentName: "NFTBuilderCarouselItem",
           displayName: "NFT Carousel Item",
         },
         {
           type: "hostless-component",
-          componentName: "nft-builder-select",
+          componentName: "NFTBuilderSelect",
           displayName: "NFT Select",
         },
         {
           type: "hostless-component",
-          componentName: "nft-builder-input",
+          componentName: "NFTBuilderInput",
           displayName: "NFT Input",
         },
       ],
@@ -482,7 +482,7 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "nft-builder-connect-wallet-btn",
+          componentName: "NFTBuilderConnectWalletButton",
           displayName: "Connect Wallet Button",
         },
       ],
@@ -497,18 +497,13 @@ const DEFAULT_DEVFLAGS = {
       items: [
         {
           type: "hostless-component",
-          componentName: "nft-builder-user-avatar",
+          componentName: "NFTBuilderUserAvatar",
           displayName: "User Avatar",
         },
         {
           type: "hostless-component",
-          componentName: "nft-builder-user-avatar-group",
+          componentName: "NFTBuilderUserAvatarGroup",
           displayName: "User Avatar Group",
-        },
-        {
-          type: "hostless-component",
-          componentName: "nft-builder-user-info-card",
-          displayName: "User Info Card",
         },
       ],
       projectId: ENV.HOST_LESS_PROJECT_ID_NFT,
