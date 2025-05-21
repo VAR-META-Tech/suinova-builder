@@ -17,6 +17,7 @@ import { NOTIFICATION_MESSAGE } from "@/wab/client/constant/mesage.constant";
 import { ENV } from "@/wab/shared/devflags";
 import {
   CHAIN,
+  COLLECTION_IDENTIFER_STRING,
   LAUNCHER_CONTRACT_METHOD,
   LAUNCHPAD_MODULE,
 } from "@/wab/client/constant/contract.constant";
@@ -466,6 +467,8 @@ const NFTMintingForm = ({
               tx.pure.u64(Number(resData.publicNftPrice) || 0), // public_sale_nft_price
               tx.pure.u64(resData.nftPerUser || 0), // nft_per_user
               tx.pure.u64(resData.totalSupply || 0), // total_supply
+              //pass a string to identify the collection
+              tx.pure.vector("u8", Array.from(new TextEncoder().encode(COLLECTION_IDENTIFER_STRING)))
             ],
           });
 
@@ -1074,6 +1077,7 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={formValues.presale.startTime || undefined}
                         isClearable
                       />
                     )}
@@ -1155,6 +1159,7 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={formValues.presale.whitelistInfo.startTime || undefined}
                         isClearable
                       />
                     )}
@@ -1274,6 +1279,7 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={formValues.publicSale.startTime || undefined}
                         isClearable
                       />
                     )}
