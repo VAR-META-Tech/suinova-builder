@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface IBackIcon {
+interface INFTBuilderBackIcon {
   className?: string;
 }
 
-export default function BackIcon({ className }: IBackIcon) {
+function NFTBuilderBackIcon({ className }: INFTBuilderBackIcon) {
   return (
     <svg
       width="32"
@@ -43,12 +43,15 @@ export default function BackIcon({ className }: IBackIcon) {
   );
 }
 
+export const BackIcon = NFTBuilderBackIcon
+export const BackIconMeta = {
+  name: "NFTBuilderBackIcon",
+  displayName: "Back Icon",
+  props: {},
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "BackIcon",
+}
+
 export function registerBackIcon(loader?: Registerable) {
-  registerComponentHelper(loader, BackIcon, {
-    name: "nft-builder-back-icon",
-    displayName: "Back Icon",
-    props: {},
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "BackIcon",
-  });
+  registerComponentHelper(loader, BackIcon, BackIconMeta);
 }

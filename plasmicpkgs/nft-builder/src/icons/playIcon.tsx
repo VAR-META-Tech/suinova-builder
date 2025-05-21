@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface IPlayIcon {
+interface INFTBuilderPlayIcon {
   className?: string;
 }
 
-export default function PlayIcon({ className }: IPlayIcon) {
+const NFTBuilderPlayIcon = ({ className }: INFTBuilderPlayIcon) => {
   return (
     <svg
       width="32"
@@ -25,12 +25,20 @@ export default function PlayIcon({ className }: IPlayIcon) {
   );
 }
 
+export const PlayIcon = NFTBuilderPlayIcon
+export const PlayIconMeta = {
+  name: "NFTBuilderPlayIcon",
+  displayName: "Play Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "PlayIcon",
+}
+
 export function registerPlayIcon(loader?: Registerable) {
-  registerComponentHelper(loader, PlayIcon, {
-    name: "nft-builder-play-icon",
-    displayName: "Play Icon",
-    props: {},
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "PlayIcon",
-  });
+  registerComponentHelper(loader, PlayIcon, PlayIconMeta);
 }

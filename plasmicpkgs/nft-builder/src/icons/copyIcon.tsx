@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface ICopyIcon {
+interface INFTBuilderCopyIcon {
   className?: string;
 }
 
-const CopyIcon = ({ className }: ICopyIcon) => {
+const NFTBuilderCopyIcon = ({ className }: INFTBuilderCopyIcon) => {
   return (
     <svg
       width="20"
@@ -31,19 +31,24 @@ const CopyIcon = ({ className }: ICopyIcon) => {
   );
 };
 
-export default CopyIcon;
+export const CopyIcon = NFTBuilderCopyIcon;
+export const CopyIconMeta = {
+  name: "NFTBuilderCopyIcon",
+  displayName: "Copy Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
+    },
+    iconColor: {
+      type: "color" as const,
+      defaultValue: "#27273A",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "CopyIcon",
+};
 
 export function registerCopyIcon(loader?: Registerable) {
-  registerComponentHelper(loader, CopyIcon, {
-    name: "nft-builder-copy-icon",
-    displayName: "Copy Icon",
-    props: {
-      iconColor: {
-        type: "color",
-        defaultValue: "#27273A",
-      },
-    },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "CopyIcon",
-  });
+  registerComponentHelper(loader, CopyIcon, CopyIconMeta);
 }

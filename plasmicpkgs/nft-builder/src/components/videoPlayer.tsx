@@ -284,7 +284,7 @@ export const VideoPlayerMeta: ComponentMeta<INFTBuilderVideoPlayer> = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-back-icon",
+          name: "NFTBuilderBackIcon",
         },
       ],
     },
@@ -293,7 +293,7 @@ export const VideoPlayerMeta: ComponentMeta<INFTBuilderVideoPlayer> = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-forward-icon",
+          name: "NFTBuilderForwardIcon",
         },
       ],
     },
@@ -302,7 +302,7 @@ export const VideoPlayerMeta: ComponentMeta<INFTBuilderVideoPlayer> = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-play-icon",
+          name: "NFTBuilderPlayIcon",
         },
       ],
     },
@@ -311,7 +311,7 @@ export const VideoPlayerMeta: ComponentMeta<INFTBuilderVideoPlayer> = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-stop-icon",
+          name: "NFTBuilderStopIcon",
         },
       ],
     },

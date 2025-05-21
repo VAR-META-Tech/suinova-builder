@@ -195,7 +195,7 @@ export function registerWeb3Provider(loader?: Registerable) {
       },
     },
     providesData: true,
-    importPath: "@plasmicpkgs/nft-builder",
+    importPath: "@plasmicpkgs/nft-builder/dist/index.js",
     importName: "Web3GlobalContext",
   });
 }

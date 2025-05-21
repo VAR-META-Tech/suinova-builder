@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface IUserIcon {
+interface INFTBuilderUserIcon {
   className?: string;
 }
 
-const UserIcon = ({ className }: IUserIcon) => {
+const NFTBuilderUserIcon = ({ className }: INFTBuilderUserIcon) => {
   return (
     <svg
       width="24"
@@ -30,19 +30,20 @@ const UserIcon = ({ className }: IUserIcon) => {
   );
 };
 
-export default UserIcon;
+export const UserIcon = NFTBuilderUserIcon;
+export const UserIconMeta = {
+  name: "NFTBuilderUserIcon",
+  displayName: "User Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "UserIcon",
+};
 
 export function registerUserIcon(loader?: Registerable) {
-  registerComponentHelper(loader, UserIcon, {
-    name: "nft-builder-user-icon",
-    displayName: "User Icon",
-    props: {
-      iconColor: {
-        type: "color",
-        defaultValue: "#27273A",
-      },
-    },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "UserIcon",
-  });
+  registerComponentHelper(loader, UserIcon, UserIconMeta);
 }
