@@ -184,6 +184,7 @@ export const ConnectWalletButtonMeta = {
     },
     icon: {
       type: "slot" as const,
+      hidePlaceholder: true,
       defaultValue: [
         {
           type: "component" as const,
