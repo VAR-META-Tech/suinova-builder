@@ -422,7 +422,7 @@ const DEFAULT_DEVFLAGS = {
       name: "NFT Marketplace",
       sectionLabel: "NFT Marketplace",
       codeLink:
-        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/suinova-nft-builder",
       items: [
         {
           type: "hostless-component",
@@ -438,7 +438,7 @@ const DEFAULT_DEVFLAGS = {
       name: "NFT Display",
       sectionLabel: "NFT Marketplace",
       codeLink:
-        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/suinova-nft-builder",
       items: [
         {
           type: "hostless-component",
@@ -478,7 +478,7 @@ const DEFAULT_DEVFLAGS = {
       name: "Connect Wallet",
       sectionLabel: "NFT Marketplace",
       codeLink:
-        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/suinova-nft-builder",
       items: [
         {
           type: "hostless-component",
@@ -493,7 +493,7 @@ const DEFAULT_DEVFLAGS = {
       name: "User Profile",
       sectionLabel: "NFT Marketplace",
       codeLink:
-        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/nft-builder",
+        "https://github.com/plasmicapp/plasmic/tree/master/plasmicpkgs/suinova-nft-builder",
       items: [
         {
           type: "hostless-component",
