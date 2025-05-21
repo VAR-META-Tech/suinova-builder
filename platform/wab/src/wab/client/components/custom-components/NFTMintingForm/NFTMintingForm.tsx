@@ -1074,6 +1074,7 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={formValues.presale.startTime || undefined}
                         isClearable
                       />
                     )}
@@ -1155,6 +1156,7 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={formValues.presale.whitelistInfo.startTime || undefined}
                         isClearable
                       />
                     )}
@@ -1274,6 +1276,7 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
+                        minDate={formValues.publicSale.startTime || undefined}
                         isClearable
                       />
                     )}
