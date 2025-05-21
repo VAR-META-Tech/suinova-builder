@@ -90,7 +90,7 @@ export const NFTCarouselBtnGroupMeta = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-left-arrow-icon",
+          name: "NFTBuilderLeftArrowIcon",
         },
       ],
     },
@@ -99,7 +99,7 @@ export const NFTCarouselBtnGroupMeta = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-right-arrow-icon",
+          name: "NFTBuilderRightArrowIcon",
         },
       ],
     },

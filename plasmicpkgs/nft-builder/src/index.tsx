@@ -19,9 +19,9 @@ import { registerWalletIcon } from "./icons/walletIcon";
 import { registerNFTCarouselItem } from "./components/nftCarouselItem";
 import { registerNFTSelect } from "./components/nftSelect";
 import { registerNFTSelectOptGroup, registerNFTSelectOption } from "./components/nftSelectOption";
-import { registerArrowDown } from "./icons/arrowDown";
+import { registerArrowDownIcon } from "./icons/arrowDownIcon";
 import { registerNFTInput } from "./components/nftInput";
-import { registerCopyIcon } from "./icons/copy-icon";
+import { registerCopyIcon } from "./icons/copyIcon";
 import { registerLogoutIcon } from "./icons/logoutIcon";
 import { registerUserIcon } from "./icons/userIcon";
 
@@ -51,7 +51,7 @@ export function registerAll(loader?: Registerable) {
   registerNFTSelectOption(loader);
   registerNFTSelectOptGroup(loader);
   registerNFTSelect(loader);
-  registerArrowDown(loader);
+  registerArrowDownIcon(loader);
   registerNFTInput(loader);
 }
 

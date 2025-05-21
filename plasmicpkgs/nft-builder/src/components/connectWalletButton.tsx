@@ -171,7 +171,7 @@ export const ConnectWalletButtonMeta = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-wallet-icon",
+          name: "NFTBuilderWalletIcon",
         },
       ],
     },
@@ -179,21 +179,21 @@ export const ConnectWalletButtonMeta = {
       type: "slot" as const,
       defaultValue: {
         type: "component" as const,
-        name: "nft-builder-copy-icon",
+        name: "NFTBuilderCopyIcon",
       },
     },
     userIcon: {
       type: "slot" as const,
       defaultValue: {
         type: "component" as const,
-        name: "nft-builder-user-icon",
+        name: "NFTBuilderUserIcon",
       },
     },
     logoutIcon: {
       type: "slot" as const,
       defaultValue: {
         type: "component" as const,
-        name: "nft-builder-logout-icon",
+        name: "NFTBuilderLogoutIcon",
       },
     },
     onMyProfileClick: {

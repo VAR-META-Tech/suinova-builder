@@ -65,7 +65,7 @@ export const NFTSelectMeta = {
       defaultValue: [
         {
           type: "component" as const,
-          name: "nft-builder-arrow-down-icon",
+          name: "NFTBuilderArrowDownIcon",
         },
       ],
     },

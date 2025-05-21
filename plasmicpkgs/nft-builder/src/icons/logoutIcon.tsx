@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface ILogOut {
+interface INFTBuilderLogoutIcon {
   className?: string;
 }
 
-const LogoutIcon = ({ className }: ILogOut) => {
+const NFTBuilderLogoutIcon = ({ className }: INFTBuilderLogoutIcon) => {
   return (
     <svg
       width="24"
@@ -34,19 +34,20 @@ const LogoutIcon = ({ className }: ILogOut) => {
   );
 };
 
-export default LogoutIcon;
+export const LogoutIcon = NFTBuilderLogoutIcon
+export const LogoutIconMeta = {
+  name: "NFTBuilderLogoutIcon",
+  displayName: "Logout Icon Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "LogoutIcon",
+}
 
 export function registerLogoutIcon(loader?: Registerable) {
-  registerComponentHelper(loader, LogoutIcon, {
-    name: "nft-builder-logout-icon",
-    displayName: "Logout Icon Icon",
-    props: {
-      iconColor: {
-        type: "color",
-        defaultValue: "#27273A",
-      },
-    },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "LogoutIconIcon",
-  });
+  registerComponentHelper(loader, LogoutIcon, LogoutIconMeta);
 }

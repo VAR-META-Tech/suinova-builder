@@ -2,24 +2,24 @@ import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 import clsx from "clsx";
 
-interface IStopIcon {
+interface INFTBuilderStopIcon {
   className?: string;
 }
 
 const CSSClasses = {
-  stopIcon: "stop-icon"
-}
+  stopIcon: "stop-icon",
+};
 
-export default function StopIcon({ className }: IStopIcon) {
-    const cssStyles = React.useMemo(
-      () => `
+function NFTBuilderStopIcon({ className }: INFTBuilderStopIcon) {
+  const cssStyles = React.useMemo(
+    () => `
        .${CSSClasses.stopIcon} {
           width: 32px;
           height: 32px;
         }
       `,
-      []
-    );
+    []
+  );
 
   return (
     <svg
@@ -63,12 +63,20 @@ export default function StopIcon({ className }: IStopIcon) {
   );
 }
 
+export const StopIcon = NFTBuilderStopIcon;
+export const StopIconMeta = {
+  name: "NFTBuilderStopIcon",
+  displayName: "Stop Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "StopIcon",
+};
+
 export function registerStopIcon(loader?: Registerable) {
-  registerComponentHelper(loader, StopIcon, {
-    name: "nft-builder-stop-icon",
-    displayName: "Stop Icon",
-    props: {},
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "StopIcon",
-  });
+  registerComponentHelper(loader, StopIcon, StopIconMeta);
 }

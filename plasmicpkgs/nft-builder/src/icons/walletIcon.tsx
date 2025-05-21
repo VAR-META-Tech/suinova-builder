@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface IWalletIcon {
+interface INFTBuilderWalletIcon {
   className?: string;
 }
 
-export default function WalletIcon({ className }: IWalletIcon) {
+function NFTBuilderWalletIcon({ className }: INFTBuilderWalletIcon) {
   return (
     <svg
       width="24"
@@ -43,12 +43,20 @@ export default function WalletIcon({ className }: IWalletIcon) {
   );
 }
 
+export const WalletIcon = NFTBuilderWalletIcon;
+export const WalletIconMeta = {
+  name: "NFTBuilderWalletIcon",
+  displayName: "Wallet Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "WalletIcon",
+};
+
 export function registerWalletIcon(loader?: Registerable) {
-  registerComponentHelper(loader, WalletIcon, {
-    name: "nft-builder-wallet-icon",
-    displayName: "Wallet Icon",
-    props: {},
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "WalletIcon",
-  });
+  registerComponentHelper(loader, WalletIcon, WalletIconMeta);
 }

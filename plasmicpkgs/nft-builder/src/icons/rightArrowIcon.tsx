@@ -1,12 +1,15 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface IRightArrowIcon {
+interface INFTBuilderRightArrowIcon {
   className?: string;
   iconColor?: string;
 }
 
-export default function RightArrowIcon({ className, iconColor }: IRightArrowIcon) {
+function NFTBuilderRightArrowIcon({
+  className,
+  iconColor,
+}: INFTBuilderRightArrowIcon) {
   return (
     <svg
       width="32"
@@ -32,17 +35,24 @@ export default function RightArrowIcon({ className, iconColor }: IRightArrowIcon
   );
 }
 
-export function registerRightArrowIcon(loader?: Registerable) {
-  registerComponentHelper(loader, RightArrowIcon, {
-    name: "nft-builder-right-arrow-icon",
-    displayName: "Right Arrow Icon",
-    props: {
-      iconColor: {
-        type: "color",
-        defaultValue: "#27273A"
-      }
+export const RightArrowIcon = NFTBuilderRightArrowIcon;
+export const RightArrowIconMeta = {
+  name: "NFTBuilderRightArrowIcon",
+  displayName: "Right Arrow Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
     },
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "RightArrowIcon",
-  });
+    iconColor: {
+      type: "color" as const,
+      defaultValue: "#27273A",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "RightArrowIcon",
+};
+
+export function registerRightArrowIcon(loader?: Registerable) {
+  registerComponentHelper(loader, RightArrowIcon, RightArrowIconMeta);
 }

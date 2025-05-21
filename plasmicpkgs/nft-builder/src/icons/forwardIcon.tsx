@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface IForwardIcon {
+interface INFTBuilderForwardIcon {
   className?: string;
 }
 
-export default function ForwardIcon({ className }: IForwardIcon) {
+const NFTBuilderForwardIcon = ({ className }: INFTBuilderForwardIcon) => {
   return (
     <svg
       width="32"
@@ -43,12 +43,20 @@ export default function ForwardIcon({ className }: IForwardIcon) {
   );
 }
 
+export const ForwardIcon = NFTBuilderForwardIcon
+export const ForwardIconMeta = {
+  name: "NFTBuilderForwardIcon",
+  displayName: "Forward Icon",
+  props: {
+    className: {
+      type: "string" as const,
+      defaultValue: "",
+    },
+  },
+  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importName: "ForwardIcon",
+}
+
 export function registerForwardIcon(loader?: Registerable) {
-  registerComponentHelper(loader, ForwardIcon, {
-    name: "nft-builder-forward-icon",
-    displayName: "Forward Icon",
-    props: {},
-    importPath: "@plasmicpkgs/nft-builder",
-    importName: "ForwardIcon",
-  });
+  registerComponentHelper(loader, ForwardIcon, ForwardIconMeta);
 }
