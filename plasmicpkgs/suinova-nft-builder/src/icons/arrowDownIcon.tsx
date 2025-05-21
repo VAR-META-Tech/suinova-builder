@@ -35,9 +35,9 @@ export const ArrowDownIconMeta = {
       defaultValue: "#27273A",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "ArrowDownIcon",
-}
+};
 
 export function registerArrowDownIcon(loader?: Registerable) {
   registerComponentHelper(loader, ArrowDownIcon, ArrowDownIconMeta);

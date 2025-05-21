@@ -22,36 +22,31 @@ const collections = [
   {
     id: 1,
     name: "Happy Robots",
-    image:
-      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    image: "https://suinova.var-meta.com/static/img/astronaut.jpeg",
     price: "50 SUI",
   },
   {
     id: 2,
     name: "Magic Mushrooms",
-    image:
-      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    image: "https://suinova.var-meta.com/static/img/astronaut.jpeg",
     price: "50 SUI",
   },
   {
     id: 3,
     name: "Disco Machines",
-    image:
-      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    image: "https://suinova.var-meta.com/static/img/astronaut.jpeg",
     price: "50 SUI",
   },
   {
     id: 4,
     name: "Disco Machines",
-    image:
-      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    image: "https://suinova.var-meta.com/static/img/astronaut.jpeg",
     price: "50 SUI",
   },
   {
     id: 5,
     name: "Disco Machines",
-    image:
-      "https://suinova.var-meta.com/static/img/astronaut.jpeg",
+    image: "https://suinova.var-meta.com/static/img/astronaut.jpeg",
     price: "50 SUI",
   },
 ];
@@ -193,9 +188,9 @@ export const NFTCarouselMeta = {
       })),
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "NFTCarousel",
-}
+};
 
 export function registerNFTCarousel(loader?: Registerable) {
   registerComponentHelper(loader, NFTCarousel, NFTCarouselMeta);

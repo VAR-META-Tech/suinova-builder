@@ -104,7 +104,7 @@ export const NFTCarouselBtnGroupMeta = {
       ],
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "NFTCarouselBtnGroup",
 };
 

@@ -17,7 +17,7 @@ export const fstPartyHostLessComponents = [
   "react-chartjs-2",
   "plasmic-link-preview",
   "loading-boundary",
-  "nft-builder",
+  "suinova-nft-builder",
   "lodash",
   "uuid",
   "isomorphic-fetch",

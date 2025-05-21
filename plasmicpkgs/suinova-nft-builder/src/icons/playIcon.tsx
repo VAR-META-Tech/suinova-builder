@@ -23,9 +23,9 @@ const NFTBuilderPlayIcon = ({ className }: INFTBuilderPlayIcon) => {
       />
     </svg>
   );
-}
+};
 
-export const PlayIcon = NFTBuilderPlayIcon
+export const PlayIcon = NFTBuilderPlayIcon;
 export const PlayIconMeta = {
   name: "NFTBuilderPlayIcon",
   displayName: "Play Icon",
@@ -35,9 +35,9 @@ export const PlayIconMeta = {
       defaultValue: "",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "/dist/index.js",
   importName: "PlayIcon",
-}
+};
 
 export function registerPlayIcon(loader?: Registerable) {
   registerComponentHelper(loader, PlayIcon, PlayIconMeta);

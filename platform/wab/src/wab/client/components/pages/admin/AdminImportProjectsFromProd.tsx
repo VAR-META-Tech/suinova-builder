@@ -242,8 +242,8 @@ export function AdminImportProjectsFromProd() {
       <Button
         onClick={() =>
           nonAuthCtx.api.createHostLessProject({
-            name: "nft-builder",
-            npmPkg: ["@plasmicpkgs/nft-builder"],
+            name: "suinova-nft-builder",
+            npmPkg: ["suinova-nft-builder"],
           })
         }
       >

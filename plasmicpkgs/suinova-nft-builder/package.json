@@ -1,7 +1,7 @@
 {
-  "name": "@plasmicpkgs/nft-builder",
-  "version": "0.0.1",
-  "description": "NFT components for Plasmic",
+  "name": "suinova-nft-builder",
+  "version": "0.0.2",
+  "description": "NFT components for SuiNova",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.mjs",
@@ -53,6 +53,6 @@
     "clsx": "^2.0.0",
     "lucide-react": "^0.279.0",
     "remeda": "^1.27.0",
-    "@floating-ui/react-dom@": "^2.0.0"
+    "@floating-ui/react-dom": "^2.0.0"
   }
 }

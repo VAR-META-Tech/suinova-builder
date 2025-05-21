@@ -329,18 +329,18 @@ export function observeModel(
       return false;
     }
 
-    // if (shouldNotHaveParents(inst)) {
-    //   // The only assertion for nodes that shouldn't have strong parents is
-    //   // that it's not referenced by any strong reference.
-    //   if (instParents.has(inst)) {
-    //     return () =>
-    //       `Instance ${inst.uid} (${_instUtil.getInstClassName(
-    //         inst
-    //       )}) has unexpected parent refs:\n` + getRefs(instParents);
-    //   } else {
-    //     return false;
-    //   }
-    // }
+    if (shouldNotHaveParents(inst)) {
+      // The only assertion for nodes that shouldn't have strong parents is
+      // that it's not referenced by any strong reference.
+      if (instParents.has(inst)) {
+        return () =>
+          `Instance ${inst.uid} (${_instUtil.getInstClassName(
+            inst
+          )}) has unexpected parent refs:\n` + getRefs(instParents);
+      } else {
+        return false;
+      }
+    }
     if (!instParents.has(inst) && inst2Weakrefs.has(inst)) {
       // Inst is invalid because became unreachable but still has WeakRefs
       return () =>
@@ -1106,6 +1106,7 @@ export function observeModel(
         return null;
       })
     );
+    console.log("🚀 ~ prune ~ modelErrors:", modelErrors);
     if (modelErrors.length > 0) {
       console.log(modelErrors.join("\n"));
     }

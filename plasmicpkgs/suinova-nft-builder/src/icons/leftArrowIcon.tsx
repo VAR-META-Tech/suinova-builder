@@ -6,8 +6,10 @@ interface INFTBuilderLeftArrowIcon {
   iconColor?: string;
 }
 
-function NFTBuilderLeftArrowIcon({ className, iconColor }: INFTBuilderLeftArrowIcon) {
-
+function NFTBuilderLeftArrowIcon({
+  className,
+  iconColor,
+}: INFTBuilderLeftArrowIcon) {
   return (
     <svg
       width="32"
@@ -33,7 +35,7 @@ function NFTBuilderLeftArrowIcon({ className, iconColor }: INFTBuilderLeftArrowI
   );
 }
 
-export const LeftArrowIcon = NFTBuilderLeftArrowIcon
+export const LeftArrowIcon = NFTBuilderLeftArrowIcon;
 export const LeftArrowIconMeta = {
   name: "NFTBuilderLeftArrowIcon",
   displayName: "Left Arrow Icon",
@@ -47,9 +49,9 @@ export const LeftArrowIconMeta = {
       defaultValue: "#27273A",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "/dist/index.js",
   importName: "LeftArrowIcon",
-}
+};
 
 export function registerLeftArrowIcon(loader?: Registerable) {
   registerComponentHelper(loader, LeftArrowIcon, LeftArrowIconMeta);

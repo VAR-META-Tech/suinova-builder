@@ -107,9 +107,7 @@ function NFTBuilderCard({
       <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
       <div className={CSSClasses.nftCardBody}>
         <div className={CSSClasses.nftCardContent}>
-          <div className={CSSClasses.nftCardTitle}>
-            {cardTitle}
-          </div>
+          <div className={CSSClasses.nftCardTitle}>{cardTitle}</div>
           <div className={CSSClasses.nftCardPrice}>{cardPrice}</div>
         </div>
 
@@ -119,7 +117,7 @@ function NFTBuilderCard({
   );
 }
 
-export const NFTCard = NFTBuilderCard
+export const NFTCard = NFTBuilderCard;
 export const NFTCardMeta = {
   name: "NFTBuilderCard",
   displayName: "NFT Card",
@@ -149,9 +147,9 @@ export const NFTCardMeta = {
       defaultValue: "Last sale: 5.63 SUI",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "NFTCard",
-}
+};
 
 export function registerNFTCard(loader?: Registerable) {
   registerComponentHelper(loader, NFTCard, NFTCardMeta);

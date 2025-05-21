@@ -34,7 +34,7 @@ const NFTBuilderLogoutIcon = ({ className }: INFTBuilderLogoutIcon) => {
   );
 };
 
-export const LogoutIcon = NFTBuilderLogoutIcon
+export const LogoutIcon = NFTBuilderLogoutIcon;
 export const LogoutIconMeta = {
   name: "NFTBuilderLogoutIcon",
   displayName: "Logout Icon Icon",
@@ -44,9 +44,9 @@ export const LogoutIconMeta = {
       defaultValue: "",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "/dist/index.js",
   importName: "LogoutIcon",
-}
+};
 
 export function registerLogoutIcon(loader?: Registerable) {
   registerComponentHelper(loader, LogoutIcon, LogoutIconMeta);

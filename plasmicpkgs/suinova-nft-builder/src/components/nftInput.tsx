@@ -24,7 +24,12 @@ const minifyCss = (css: string) => {
     .trim();
 };
 
-const NFTBuilderInput = ({ className, placeholderColor, inputBackgroundColor, ...props }: INFTBuilderInput) => {
+const NFTBuilderInput = ({
+  className,
+  placeholderColor,
+  inputBackgroundColor,
+  ...props
+}: INFTBuilderInput) => {
   const cssStyles = React.useMemo(
     () =>
       minifyCss(`
@@ -34,7 +39,7 @@ const NFTBuilderInput = ({ className, placeholderColor, inputBackgroundColor, ..
           .${CSSClasses.input} {
             background-color: ${inputBackgroundColor};
           }
-        `), 
+        `),
     []
   );
 
@@ -46,7 +51,7 @@ const NFTBuilderInput = ({ className, placeholderColor, inputBackgroundColor, ..
   );
 };
 
-export const NFTInput = NFTBuilderInput
+export const NFTInput = NFTBuilderInput;
 export const NFTInputMeta = {
   name: "NFTBuilderInput",
   displayName: "NFT Input",
@@ -59,7 +64,7 @@ export const NFTInputMeta = {
       options: [
         { label: "Small", value: "small" },
         { label: "Middle", value: "middle" },
-        { label: "Large", value: "large" }
+        { label: "Large", value: "large" },
       ],
       description: "The size of the input box",
       defaultValueHint: "middle",
@@ -92,7 +97,7 @@ export const NFTInputMeta = {
       type: "choice" as const,
       options: [
         { label: "Error", value: "error" },
-        { label: "Warning", value: "warning" }
+        { label: "Warning", value: "warning" },
       ],
       description: "Set validation status",
       multiSelect: false as const,
@@ -114,16 +119,16 @@ export const NFTInputMeta = {
     },
     placeholderColor: {
       type: "color" as const,
-      defaultValue: "black"
+      defaultValue: "black",
     },
     inputBackgroundColor: {
       type: "color" as const,
-      defaultValue: "white"
-    }
+      defaultValue: "white",
+    },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "NFTInput",
-}
+};
 
 export function registerNFTInput(loader?: Registerable) {
   registerComponentHelper(loader, NFTInput, NFTInputMeta);

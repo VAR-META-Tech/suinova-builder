@@ -73,7 +73,7 @@ export const StopIconMeta = {
       defaultValue: "",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "/dist/index.js",
   importName: "StopIcon",
 };
 

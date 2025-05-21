@@ -55,15 +55,14 @@ export const UserAvatarMeta = {
     src: {
       type: "imageUrl" as const,
       description: "Image to display",
-      defaultValue:
-        "https://suinova.var-meta.com/static/img/avatar.png",
+      defaultValue: "https://suinova.var-meta.com/static/img/avatar.png",
     },
     size: {
       type: "choice" as const,
       options: [
         { label: "Small", value: "small" },
         { label: "Default", value: "default" },
-        { label: "Large", value: "large" }
+        { label: "Large", value: "large" },
       ],
       description: "Set the size of avatar",
       defaultValueHint: "default",
@@ -73,7 +72,7 @@ export const UserAvatarMeta = {
       type: "choice" as const,
       options: [
         { label: "Circle", value: "circle" },
-        { label: "Square", value: "square" }
+        { label: "Square", value: "square" },
       ],
       description: "Set the avatar shape",
       defaultValue: "square",
@@ -81,9 +80,9 @@ export const UserAvatarMeta = {
       multiSelect: false as const,
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "UserAvatar",
-}
+};
 
 export const UserAvatarGroupMeta = {
   name: "NFTBuilderUserAvatarGroup",
@@ -109,7 +108,7 @@ export const UserAvatarGroupMeta = {
       options: [
         { label: "Small", value: "small" },
         { label: "Default", value: "default" },
-        { label: "Large", value: "large" }
+        { label: "Large", value: "large" },
       ],
       description: "Default size of avatars",
       defaultValueHint: "default",
@@ -119,16 +118,16 @@ export const UserAvatarGroupMeta = {
       type: "choice" as const,
       options: [
         { label: "Top", value: "top" },
-        { label: "Bottom", value: "bottom" }
+        { label: "Bottom", value: "bottom" },
       ],
       advanced: true,
       defaultValueHint: "top",
       multiSelect: false as const,
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "UserAvatarGroup",
-}
+};
 
 export function registerUserAvatar(loader?: Registerable) {
   registerComponentHelper(loader, UserAvatar, UserAvatarMeta);

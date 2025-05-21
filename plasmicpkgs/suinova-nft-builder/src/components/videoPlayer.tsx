@@ -23,8 +23,8 @@ interface INFTBuilderVideoPlayer {
   forwardIcon?: ReactNode;
   playIcon?: ReactNode;
   stopIcon?: ReactNode;
-  thumbnail?: string
-  videoSrc?: string
+  thumbnail?: string;
+  videoSrc?: string;
 }
 
 const NFTBuilderVideoPlayer = ({
@@ -34,7 +34,7 @@ const NFTBuilderVideoPlayer = ({
   playIcon,
   stopIcon,
   thumbnail,
-  videoSrc
+  videoSrc,
 }: INFTBuilderVideoPlayer) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -317,14 +317,16 @@ export const VideoPlayerMeta: ComponentMeta<INFTBuilderVideoPlayer> = {
     },
     thumbnail: {
       type: "imageUrl" as const,
-      defaultValue: "https://s3-alpha-sig.figma.com/img/307e/78e9/1542c6bc2e88ac8d5bd1190edf7f182f?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=YC9Nb-81NWbkKhQ9Qpkn55~KXZQkInPijbohqwT5FprPXZEaJAoJFR61Gs4KcO3cPFLXBIC4jWPYaRUYYYuFN30H4QqHDZE5BOKP4LgkXgwp7TCRTDrpQtIf4ESdfSQrm-9XaoMetypW8O0ZV59yGabl3b67dCu9rPn7VEB~97QLneBt1OJS6Drh5yq98BtOtFjoTGu2a9aYUA1YblTeggFXP5e00j9MzL~kMdQf0KOH8-hBjoEeYENT6beZ1ecmGcYr0Y3OCI5BL3U6mIX7e6BbqrMG-4qMno60AImR6TNuU9hB55wJxJ4oMbtZeT4~BovB-RUvW-oRWMfq9rS-pQ__"
+      defaultValue:
+        "https://s3-alpha-sig.figma.com/img/307e/78e9/1542c6bc2e88ac8d5bd1190edf7f182f?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=YC9Nb-81NWbkKhQ9Qpkn55~KXZQkInPijbohqwT5FprPXZEaJAoJFR61Gs4KcO3cPFLXBIC4jWPYaRUYYYuFN30H4QqHDZE5BOKP4LgkXgwp7TCRTDrpQtIf4ESdfSQrm-9XaoMetypW8O0ZV59yGabl3b67dCu9rPn7VEB~97QLneBt1OJS6Drh5yq98BtOtFjoTGu2a9aYUA1YblTeggFXP5e00j9MzL~kMdQf0KOH8-hBjoEeYENT6beZ1ecmGcYr0Y3OCI5BL3U6mIX7e6BbqrMG-4qMno60AImR6TNuU9hB55wJxJ4oMbtZeT4~BovB-RUvW-oRWMfq9rS-pQ__",
     },
     videoSrc: {
       type: "href" as const,
-      defaultValue: "https://www.youtube.com/embed/NNQLJcJEzv0?si=PfX5rnN-HxvOUuQh"
-    }
+      defaultValue:
+        "https://www.youtube.com/embed/NNQLJcJEzv0?si=PfX5rnN-HxvOUuQh",
+    },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "VideoPlayer",
 };
 

@@ -45,7 +45,7 @@ export const CopyIconMeta = {
       defaultValue: "#27273A",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "/dist/index.js",
   importName: "CopyIcon",
 };
 

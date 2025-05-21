@@ -3,10 +3,7 @@ import {
   useCurrentAccount,
   useDisconnectWallet,
 } from "@mysten/dapp-kit";
-import React, {
-  ReactNode,
-  useState,
-} from "react";
+import React, { ReactNode, useState } from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 import { Dropdown, MenuProps, Tooltip } from "antd";
 import clsx from "clsx";
@@ -44,22 +41,35 @@ const formatAddress = (address: string) => {
 const NFTBuilderConnectWalletButton = React.forwardRef<
   HTMLDivElement,
   NFTBuilderConnectWalletButtonProps
->(({ className, connectText, icon, copyIcon, userIcon, logoutIcon, onMyProfileClick, ...props }, ref) => {
-  const [copied, setCopied] = useState(false);
-  const { mutate: disconnect } = useDisconnectWallet();
-  const currentAccount = useCurrentAccount();
+>(
+  (
+    {
+      className,
+      connectText,
+      icon,
+      copyIcon,
+      userIcon,
+      logoutIcon,
+      onMyProfileClick,
+      ...props
+    },
+    ref
+  ) => {
+    const [copied, setCopied] = useState(false);
+    const { mutate: disconnect } = useDisconnectWallet();
+    const currentAccount = useCurrentAccount();
 
-  const handleCopy = (address: string) => {
-    if (address) {
-      navigator.clipboard.writeText(address as string);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+    const handleCopy = (address: string) => {
+      if (address) {
+        navigator.clipboard.writeText(address as string);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    };
 
-  const cssStyles = React.useMemo(
-    () =>
-      minifyCss(`
+    const cssStyles = React.useMemo(
+      () =>
+        minifyCss(`
         .${CSSClasses.connectWalletButton} {
           background-color: #48B7FF !important;
           width: 200px;
@@ -97,65 +107,71 @@ const NFTBuilderConnectWalletButton = React.forwardRef<
           padding: 8px 4px;
         }
       `),
-    []
-  );
+      []
+    );
 
-  const items: MenuProps["items"] = [
-    {
-      label: <div className={CSSClasses.dropdownItem} onClick={onMyProfileClick}>My Profile</div>,
-      key: "1",
-      icon: userIcon,
-    },
-    {
-      label: <div className={CSSClasses.dropdownItem} onClick={() => disconnect()}>Disconnect Wallet</div>,
-      key: "2",
-      icon: logoutIcon,
-    },
-  ];
-
-  return (
-    <Dropdown
-      menu={{ items }}
-      disabled={!currentAccount?.address}
-    >
-      <a onClick={(e) => e.preventDefault()}>
-        <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
-        {currentAccount?.address ? (
-          <div className={clsx(CSSClasses.container, className)}>
-            <Tooltip title={copied ? "Copied!" : "Copy to clipboard"}>
-              <span
-                onClick={() => handleCopy(currentAccount?.address || "")}
-                style={{ cursor: "pointer" }}
-              >
-                {copyIcon}
-              </span>
-            </Tooltip>
-            <span className={CSSClasses.walletAddress}>
-              {formatAddress(currentAccount?.address || "")}
-            </span>
+    const items: MenuProps["items"] = [
+      {
+        label: (
+          <div className={CSSClasses.dropdownItem} onClick={onMyProfileClick}>
+            My Profile
           </div>
-        ) : (
-          <ConnectButton
-            className={clsx(CSSClasses.connectWalletButton, className)}
-            connectText={
-              <div ref={ref} className={CSSClasses.connectWalletText}>
-                {icon}
-                {connectText}
-              </div>
-            }
-            {...props}
-          />
-        )}
-      </a>
-    </Dropdown>
-  );
-});
+        ),
+        key: "1",
+        icon: userIcon,
+      },
+      {
+        label: (
+          <div className={CSSClasses.dropdownItem} onClick={() => disconnect()}>
+            Disconnect Wallet
+          </div>
+        ),
+        key: "2",
+        icon: logoutIcon,
+      },
+    ];
+
+    return (
+      <Dropdown menu={{ items }} disabled={!currentAccount?.address}>
+        <a onClick={(e) => e.preventDefault()}>
+          <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
+          {currentAccount?.address ? (
+            <div className={clsx(CSSClasses.container, className)}>
+              <Tooltip title={copied ? "Copied!" : "Copy to clipboard"}>
+                <span
+                  onClick={() => handleCopy(currentAccount?.address || "")}
+                  style={{ cursor: "pointer" }}
+                >
+                  {copyIcon}
+                </span>
+              </Tooltip>
+              <span className={CSSClasses.walletAddress}>
+                {formatAddress(currentAccount?.address || "")}
+              </span>
+            </div>
+          ) : (
+            <ConnectButton
+              className={clsx(CSSClasses.connectWalletButton, className)}
+              connectText={
+                <div ref={ref} className={CSSClasses.connectWalletText}>
+                  {icon}
+                  {connectText}
+                </div>
+              }
+              {...props}
+            />
+          )}
+        </a>
+      </Dropdown>
+    );
+  }
+);
 
 export const ConnectWalletButton = NFTBuilderConnectWalletButton;
 export const ConnectWalletButtonMeta = {
   name: "NFTBuilderConnectWalletButton",
   displayName: "Connect Wallet Button",
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "ConnectWalletButton",
   props: {
     className: {
@@ -198,11 +214,15 @@ export const ConnectWalletButtonMeta = {
     },
     onMyProfileClick: {
       type: "eventHandler" as const,
-      argTypes: []
-    }
+      argTypes: [],
+    },
   },
-}
+};
 
 export function registerConnectWalletButton(PLASMIC?: Registerable) {
-  registerComponentHelper(PLASMIC, ConnectWalletButton, ConnectWalletButtonMeta);
+  registerComponentHelper(
+    PLASMIC,
+    ConnectWalletButton,
+    ConnectWalletButtonMeta
+  );
 }

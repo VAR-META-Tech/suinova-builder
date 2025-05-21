@@ -53,7 +53,7 @@ export const WalletIconMeta = {
       defaultValue: "",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "/dist/index.js",
   importName: "WalletIcon",
 };
 

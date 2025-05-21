@@ -37,7 +37,7 @@ function NFTBuilderCarouselItem({
   id,
   image,
   name,
-  className
+  className,
 }: INFTBuilderCarouselItem) {
   const cssStyles = React.useMemo(
     () =>
@@ -101,23 +101,23 @@ function NFTBuilderCarouselItem({
 
   return (
     <div key={id} className={clsx(className, CSSClasses.carouselItem)}>
-        <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
-        <div className={CSSClasses.collectionCard}>
-          <div className={CSSClasses.cardImageWrapper}>
-            <img alt={name} src={image} className={CSSClasses.cardImage} />
-          </div>
-          <div className={CSSClasses.cardContent}>
-            <div className={CSSClasses.cardTitle}>{name}</div>
-            <div className={CSSClasses.statsContainer}>
-              <div className={CSSClasses.statValue}>{price}</div>
-            </div>
+      <style dangerouslySetInnerHTML={{ __html: cssStyles }} />
+      <div className={CSSClasses.collectionCard}>
+        <div className={CSSClasses.cardImageWrapper}>
+          <img alt={name} src={image} className={CSSClasses.cardImage} />
+        </div>
+        <div className={CSSClasses.cardContent}>
+          <div className={CSSClasses.cardTitle}>{name}</div>
+          <div className={CSSClasses.statsContainer}>
+            <div className={CSSClasses.statValue}>{price}</div>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 
-export const NFTCarouselItem = NFTBuilderCarouselItem
+export const NFTCarouselItem = NFTBuilderCarouselItem;
 export const NFTCarouselItemMeta = {
   name: "NFTBuilderCarouselItem",
   displayName: "NFT Carousel Item",
@@ -142,9 +142,9 @@ export const NFTCarouselItemMeta = {
       defaultValue: "NFT Astronaut",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "NFTCarouselItem",
-}
+};
 
 export function registerNFTCarouselItem(loader?: Registerable) {
   registerComponentHelper(loader, NFTCarouselItem, NFTCarouselItemMeta);

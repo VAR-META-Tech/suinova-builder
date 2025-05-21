@@ -35,10 +35,10 @@ interface Web3GlobalContextProps {
 
 const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
   const web3WalletData = useSelector("web3WalletData");
-  const walletAddress = web3WalletData?.walletAddress
- 
+  const walletAddress = web3WalletData?.walletAddress;
+
   const onListNFT = async (message: string) => {
-    if(!walletAddress) {
+    if (!walletAddress) {
       notification.error({
         message: "Please connect your wallet",
       });
@@ -56,7 +56,7 @@ const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
   };
 
   const onBuyNFT = async (message: string) => {
-    if(!walletAddress) {
+    if (!walletAddress) {
       notification.error({
         message: "Please connect your wallet",
       });
@@ -71,10 +71,10 @@ const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
         resolve(true);
       }, 1000);
     });
-  }
+  };
 
   const onCancelListing = async (message: string) => {
-    if(!walletAddress) {
+    if (!walletAddress) {
       notification.error({
         message: "Please connect your wallet",
       });
@@ -89,14 +89,17 @@ const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
         resolve(true);
       }, 1000);
     });
-  }
+  };
 
   return (
-    <GlobalActionsProvider contextName="Web3GlobalContext" actions={{ onListNFT, onBuyNFT, onCancelListing }}>
+    <GlobalActionsProvider
+      contextName="Web3GlobalContext"
+      actions={{ onListNFT, onBuyNFT, onCancelListing }}
+    >
       {children}
     </GlobalActionsProvider>
   );
-}
+};
 
 export const Web3GlobalContext = ({
   children,
@@ -126,7 +129,9 @@ export const Web3GlobalContext = ({
   );
 };
 
-export const InnerWalletContext = ({ children }: React.PropsWithChildren<{}>) => {
+export const InnerWalletContext = ({
+  children,
+}: React.PropsWithChildren<{}>) => {
   const account = useCurrentAccount();
 
   return (
@@ -139,7 +144,7 @@ export const InnerWalletContext = ({ children }: React.PropsWithChildren<{}>) =>
       {children}
     </DataProvider>
   );
-}
+};
 
 export function registerWeb3Provider(loader?: Registerable) {
   const doRegisterComponent: typeof registerGlobalContext = (...args) =>
@@ -159,7 +164,7 @@ export function registerWeb3Provider(loader?: Registerable) {
     globalActions: {
       onListNFT: {
         displayName: "List NFT",
-          parameters: [
+        parameters: [
           {
             name: "message",
             type: {
@@ -195,7 +200,7 @@ export function registerWeb3Provider(loader?: Registerable) {
       },
     },
     providesData: true,
-    importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+    importPath: "/dist/index.js",
     importName: "Web3GlobalContext",
   });
 }

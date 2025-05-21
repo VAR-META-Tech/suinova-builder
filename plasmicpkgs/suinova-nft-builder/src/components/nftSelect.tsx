@@ -30,7 +30,11 @@ const minifyCss = (css: string) => {
     .trim();
 };
 
-const NFTBuilderSelect = ({ className, suffixIcon, ...props }: INFTBuilderSelect) => {
+const NFTBuilderSelect = ({
+  className,
+  suffixIcon,
+  ...props
+}: INFTBuilderSelect) => {
   const cssStyles = React.useMemo(
     () =>
       minifyCss(`
@@ -217,7 +221,7 @@ export const NFTSelectMeta = {
       valueProp: "open",
     },
   },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "NFTSelect",
 };
 

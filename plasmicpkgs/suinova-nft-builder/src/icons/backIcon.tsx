@@ -1,11 +1,11 @@
 import React from "react";
 import { Registerable, registerComponentHelper } from "../reg-util";
 
-interface INFTBuilderForwardIcon {
+interface INFTBuilderBackIcon {
   className?: string;
 }
 
-const NFTBuilderForwardIcon = ({ className }: INFTBuilderForwardIcon) => {
+function NFTBuilderBackIcon({ className }: INFTBuilderBackIcon) {
   return (
     <svg
       width="32"
@@ -32,7 +32,7 @@ const NFTBuilderForwardIcon = ({ className }: INFTBuilderForwardIcon) => {
         strokeLinejoin="round"
       />
       <path
-        d="M25.5479 8.42028C31.2027 13.6588 31.5121 22.4595 26.2389 28.0771C20.9657 33.6948 12.1069 34.0021 6.45206 28.7636C0.797264 23.525 0.487906 14.7244 5.76109 9.10671C8.76048 5.91139 12.92 4.43414 16.9901 4.71831M15 1.5L18.5658 4.87773L15 8.5"
+        d="M6.45206 8.42028C0.797264 13.6588 0.487905 22.4595 5.76109 28.0771C11.0343 33.6948 19.8931 34.0021 25.5479 28.7636C31.2027 23.525 31.5121 14.7244 26.2389 9.10671C23.2395 5.91139 19.08 4.43414 15.0099 4.71831M17 1.5L13.4342 4.87773L17 8.5"
         stroke="white"
         strokeOpacity="0.7"
         strokeWidth="2.5"
@@ -43,20 +43,15 @@ const NFTBuilderForwardIcon = ({ className }: INFTBuilderForwardIcon) => {
   );
 }
 
-export const ForwardIcon = NFTBuilderForwardIcon
-export const ForwardIconMeta = {
-  name: "NFTBuilderForwardIcon",
-  displayName: "Forward Icon",
-  props: {
-    className: {
-      type: "string" as const,
-      defaultValue: "",
-    },
-  },
-  importPath: "@plasmicpkgs/nft-builder/dist/index.js",
-  importName: "ForwardIcon",
-}
+export const BackIcon = NFTBuilderBackIcon;
+export const BackIconMeta = {
+  name: "NFTBuilderBackIcon",
+  displayName: "Back Icon",
+  props: {},
+  importPath: "/dist/index.js",
+  importName: "BackIcon",
+};
 
-export function registerForwardIcon(loader?: Registerable) {
-  registerComponentHelper(loader, ForwardIcon, ForwardIconMeta);
+export function registerBackIcon(loader?: Registerable) {
+  registerComponentHelper(loader, BackIcon, BackIconMeta);
 }

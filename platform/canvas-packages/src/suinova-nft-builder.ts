@@ -1,4 +1,4 @@
-import { registerAll } from "@plasmicpkgs/nft-builder";
+import { registerAll } from "suinova-nft-builder";
 
 export function register() {
   registerAll();
