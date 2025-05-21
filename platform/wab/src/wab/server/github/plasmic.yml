@@ -113,7 +113,7 @@ jobs:
 
       - id: deploy
         name: Deploy to Walrus Sites
-        uses: zktx-io/walrus-sites-provenance@v0.3.4
+        uses: zktx-io/walrus-sites-provenance@v0.4.12
         with:
           config-path: "./site.config.json"
         env:
