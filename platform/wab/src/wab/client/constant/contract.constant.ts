@@ -7,6 +7,7 @@ export const WEB3_GLOBAL_CONTEXT_COMP_NAME = "Web3GlobalContext";
 export const CONTRACT_PACKAGE_ID_PARAM_NAME = "contractPackageId";
 export const IMPORTED_COLLECTIONS_PARAM_NAME = "importedCollection";
 export const CREATED_COLLECTION_PARAM_NAME = "createdCollection";
+export const MINTING_INFO_PARAM_NAME = "mintingInfo";
 export const LAUNCHPAD_MODULE = "launchpad";
 export const COLLECTION_IDENTIFER_STRING = "collection-identifer-string";
 export const LAUNCHER_CONTRACT_METHOD = {

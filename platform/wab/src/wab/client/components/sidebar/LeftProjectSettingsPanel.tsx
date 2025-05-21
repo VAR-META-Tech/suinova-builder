@@ -58,6 +58,7 @@ import {
   CONTRACT_PACKAGE_ID_PARAM_NAME,
   CREATED_COLLECTION_PARAM_NAME,
   IMPORTED_COLLECTIONS_PARAM_NAME,
+  MINTING_INFO_PARAM_NAME,
 } from "@/wab/client/constant/contract.constant";
 
 type ComponentDependency = {
@@ -386,6 +387,7 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
                   CONTRACT_PACKAGE_ID_PARAM_NAME,
                   IMPORTED_COLLECTIONS_PARAM_NAME,
                   CREATED_COLLECTION_PARAM_NAME,
+                  MINTING_INFO_PARAM_NAME,
                 ].includes(p.variable.name);
 
               const propType =

@@ -16,7 +16,7 @@ import React from "react";
 import "@mysten/dapp-kit/dist/index.css";
 import { Registerable } from "./reg-util";
 import { notification } from "antd";
-
+import { IMintingInfo } from "./type";
 const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
   devnet: { url: getFullnodeUrl("devnet") },
@@ -29,6 +29,7 @@ interface Web3GlobalContextProps {
   contractPackageId?: string;
   importedCollection?: string;
   createdCollection?: string;
+  mintingInfo?: IMintingInfo;
   apiUrl?: string;
 }
 // interface Web3GlobalContextData extends Web3GlobalContextProps {}
@@ -106,6 +107,7 @@ export const Web3GlobalContext = ({
   contractPackageId,
   importedCollection,
   createdCollection,
+  mintingInfo,
 }: React.PropsWithChildren<Web3GlobalContextProps>) => {
   return (
     <DataProvider
@@ -114,6 +116,7 @@ export const Web3GlobalContext = ({
         contractPackageId,
         importedCollection,
         createdCollection,
+        mintingInfo,
       }}
     >
       <QueryClientProvider client={queryClient}>
@@ -159,6 +162,7 @@ export function registerWeb3Provider(loader?: Registerable) {
       contractPackageId: "string",
       importedCollection: "string",
       createdCollection: "string",
+      mintingInfo: "object",
       apiUrl: "string",
     },
     globalActions: {
