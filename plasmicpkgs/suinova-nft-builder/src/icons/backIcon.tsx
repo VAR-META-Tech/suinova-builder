@@ -48,7 +48,7 @@ export const BackIconMeta = {
   name: "NFTBuilderBackIcon",
   displayName: "Back Icon",
   props: {},
-  importPath: "/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "BackIcon",
 };
 

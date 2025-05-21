@@ -200,7 +200,7 @@ export function registerWeb3Provider(loader?: Registerable) {
       },
     },
     providesData: true,
-    importPath: "/dist/index.js",
+    importPath: "suinova-nft-builder/dist/index.js",
     importName: "Web3GlobalContext",
   });
 }

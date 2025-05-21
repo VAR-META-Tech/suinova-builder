@@ -49,7 +49,7 @@ export const LeftArrowIconMeta = {
       defaultValue: "#27273A",
     },
   },
-  importPath: "/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "LeftArrowIcon",
 };
 

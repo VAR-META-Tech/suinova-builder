@@ -40,7 +40,7 @@ export const UserIconMeta = {
       defaultValue: "",
     },
   },
-  importPath: "/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "UserIcon",
 };
 

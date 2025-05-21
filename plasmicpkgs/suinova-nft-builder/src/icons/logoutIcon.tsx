@@ -44,7 +44,7 @@ export const LogoutIconMeta = {
       defaultValue: "",
     },
   },
-  importPath: "/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "LogoutIcon",
 };
 

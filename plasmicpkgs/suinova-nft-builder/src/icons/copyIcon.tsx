@@ -45,7 +45,7 @@ export const CopyIconMeta = {
       defaultValue: "#27273A",
     },
   },
-  importPath: "/dist/index.js",
+  importPath: "suinova-nft-builder/dist/index.js",
   importName: "CopyIcon",
 };
 
