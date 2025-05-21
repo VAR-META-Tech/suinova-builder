@@ -7752,10 +7752,10 @@ sucrase@^3.20.0:
     pirates "^4.0.1"
     ts-interface-checker "^0.1.9"
 
-suinova-nft-builder@~0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/suinova-nft-builder/-/suinova-nft-builder-0.0.1.tgz#d142258ca4ca1a6e8344baca025f72283fd03581"
-  integrity sha512-HOH0FJuZcQaQiJr0LIJoVdnAm+UV+sIKPdM7d4Rkt7YBpdhrmxH/uLlc5aijddL1mMTXA7u0kUIp9zPYNBYafA==
+suinova-nft-builder@~0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/suinova-nft-builder/-/suinova-nft-builder-0.0.2.tgz#2d42fa0507dff6b33bd099ec1973b3c7e428bbf1"
+  integrity sha512-PBcYBZSspzAKKx4qhPrSG1mlv4LR5F+Ab3O1XdzT3H8y5B6MD0wuiTkMdyCDHHMFeNUqDTl8otetQIWiLrjNJQ==
   dependencies:
     "@floating-ui/react-dom" "^2.0.0"
     "@mysten/dapp-kit" "^0.14.53"
