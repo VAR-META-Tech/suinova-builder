@@ -140,100 +140,6 @@ export type {
   IPublicSaleConfig,
 };
 
-const defaultNFTMintingFormData = {
-  id: "77ef09c2-9eac-4087-b9ec-dd624d6d9a3f",
-  projectId: "uxSvnFVJhHuq8fAQzP1gkK",
-  collectionId: null,
-  admin: "0x7c484896d088f2eb3012cac48de62fd4ec02c54540cbb1cd5e312e02216d055a",
-  name: "SUI NoVa",
-  description: "SUI NoVa",
-  imageUrl:
-    "https://dev-suinova.s3.ap-southeast-1.amazonaws.com/4621c944c6fe416d850d02b1db4014f2.svg",
-  royaltyFee: "0",
-  hasPresale: false,
-  whitelistStartTime: null,
-  whitelistEndTime: null,
-  presaleStartTime: null,
-  presaleEndTime: null,
-  presaleNftPrice: null,
-  presaleWhitelistedUsers: null,
-  presaleTotalNft: null,
-  presaleNftPerUser: null,
-  publicSaleStartTime: null,
-  publicSaleEndTime: null,
-  publicNftPrice: null,
-  nftPerUser: null,
-  totalSupply: null,
-  mintedSupply: "0",
-  status: "DRAFT",
-  createdAt: "2025-05-22T22:31:08.896Z",
-  updatedAt: "2025-05-22T22:31:08.896Z",
-  items: [
-    {
-      id: "48",
-      launchpadId: "77ef09c2-9eac-4087-b9ec-dd624d6d9a3f",
-      name: "Suinova testnet",
-      description: "Suinova testnet",
-      imageUrl:
-        "https://dev-suinova.s3.ap-southeast-1.amazonaws.com/4621c944c6fe416d850d02b1db4014f2.svg",
-      attributes: [
-        {
-          value: "red",
-          trait_type: "background",
-        },
-        {
-          value: "gray",
-          trait_type: "background",
-        },
-        {
-          value: "pink",
-          trait_type: "background",
-        },
-      ],
-      creator:
-        "0x7c484896d088f2eb3012cac48de62fd4ec02c54540cbb1cd5e312e02216d055a",
-      createdAt: "2025-05-22T22:31:08.903Z",
-      updatedAt: "2025-05-22T22:31:08.903Z",
-    },
-  ],
-  visions: [
-    {
-      id: "22",
-      launchpadId: "77ef09c2-9eac-4087-b9ec-dd624d6d9a3f",
-      description: "milestone1",
-      visionTime: "2025-05-23T06:29:43.208Z",
-      createdAt: "2025-05-22T22:31:08.910Z",
-      updatedAt: "2025-05-22T22:31:08.910Z",
-    },
-    {
-      id: "23",
-      launchpadId: "77ef09c2-9eac-4087-b9ec-dd624d6d9a3f",
-      description: "milestone2",
-      visionTime: "2025-05-30T06:29:44.000Z",
-      createdAt: "2025-05-22T22:31:08.910Z",
-      updatedAt: "2025-05-22T22:31:08.910Z",
-    },
-  ],
-  teams: [
-    {
-      id: "28",
-      launchpadId: "77ef09c2-9eac-4087-b9ec-dd624d6d9a3f",
-      memberName: "member1",
-      memberTitle: "developer",
-      createdAt: "2025-05-22T22:31:08.917Z",
-      updatedAt: "2025-05-22T22:31:08.917Z",
-    },
-    {
-      id: "29",
-      launchpadId: "77ef09c2-9eac-4087-b9ec-dd624d6d9a3f",
-      memberName: "member2",
-      memberTitle: "manager",
-      createdAt: "2025-05-22T22:31:08.917Z",
-      updatedAt: "2025-05-22T22:31:08.917Z",
-    },
-  ],
-};
-
 const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const { studioCtx } = props;
   const dbCtx = studioCtx.dbCtx();
@@ -307,7 +213,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
       const data = await res.json();
 
       // Check if data is available
-      if (data.status !== "ACTIVE" ) {
+      if (data.status !== "ACTIVE") {
         throw new Error("Data is not available");
       }
 
@@ -320,7 +226,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     retry: 5, // Retry 3 times,
     retryDelay: () => 2000, // 2 second delay between retries
   });
-  
+
   // Check if we need to fetch latest data
   React.useEffect(() => {
     spawn(
@@ -453,20 +359,20 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     }
   }, [collection?.collectionId]);
 
+  const launchpadCollectionString = JSON.stringify(launchpadCollection);
+
   useEffect(() => {
+    const stringifiedData = JSON.stringify(launchpadCollection);
     if (launchpadCollection?.id) {
       updateTextTemplate(
         CREATED_COLLECTION_PARAM_NAME,
         launchpadCollection?.id
       );
 
-      const stringifiedData = JSON.stringify(launchpadCollection);
-      updateObjectTemplate(MINTING_INFO_PARAM_NAME, stringifiedData);
-    } else {
-      const stringifiedData = JSON.stringify(defaultNFTMintingFormData);
+      console.log("🚀 ~ useEffect ~ stringifiedData:", stringifiedData);
       updateObjectTemplate(MINTING_INFO_PARAM_NAME, stringifiedData);
     }
-  }, [launchpadCollection?.id]);
+  }, [launchpadCollectionString]);
 
   const updateObjectTemplate = (name: string, value?: string) => {
     if (!web3GlobalContextTpl || !value) {
@@ -494,21 +400,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
         return;
       }
 
-      const arg = web3GlobalContextTpl.vsettings[0].args.find(
-        (_arg) => _arg.param === p
-      );
-      const curExpr = maybe(arg, (x) => x.expr) || p.defaultExpr || undefined;
-
-      const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
-
-      if (!!exprLit) {
-        return;
-      }
-
-      if (expr == null && exprLit == null) {
-        return;
-      }
-      const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+      const newExpr = codeLit(expr);
       void studioCtx.change(({ success }) => {
         tplMgr.setArg(
           web3GlobalContextTpl,
