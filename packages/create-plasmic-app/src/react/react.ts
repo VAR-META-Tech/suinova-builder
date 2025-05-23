@@ -1,12 +1,12 @@
 import { promises as fs } from "fs";
-import glob from "glob";
+// import glob from "glob";
 import path from "path";
 import { spawnOrFail } from "../utils/cmd-utils";
 import { installCodegenDeps, runCodegenSync } from "../utils/codegen";
 import {
   deleteGlob,
   generateHomePage,
-  generateWelcomePage,
+  // generateWelcomePage,
   getPlasmicConfig,
 } from "../utils/file-utils";
 import { installUpgrade } from "../utils/npm-utils";
@@ -100,7 +100,7 @@ export const reactStrategy: CPAStrategy = {
 
       // Pick a page for the entry point App.tsx page
       const config = await getPlasmicConfig(projectPath, "react", scheme);
-      const pagesDir = path.join(projectPath, config.srcDir);
+      // const pagesDir = path.join(projectPath, config.srcDir);
       const projectConfig = config.projects.find(
         (p) => p.projectId === projectId
       );
@@ -114,20 +114,27 @@ export const reactStrategy: CPAStrategy = {
               projectConfig.globalContextsFilePath
             )
           : undefined;
-      const homeFilePossibilities = glob.sync(
-        path.join(pagesDir, "**", "@(index|Home|home|Homepage).*")
-      );
+      // const homeFilePossibilities = glob.sync(
+      //   path.join(pagesDir, "**", "@(index|Home|home|Homepage).*")
+      // );
 
       // Overwrite App.tsx
       const indexPath = path.join(projectPath, "src", `App.${jsOrTs}x`);
-      const content =
-        homeFilePossibilities.length > 0
-          ? generateHomePage(
-              homeFilePossibilities[0],
-              indexPath,
-              globalContextsPath
-            )
-          : generateWelcomePage(config, "react");
+      const content = await generateHomePage(
+        // homeFilePossibilities[0],
+        indexPath,
+        projectPath,
+        globalContextsPath
+      );
+      // const content =
+      //   homeFilePossibilities.length > 0
+      //     ? await generateHomePage(
+      //         homeFilePossibilities[0],
+      //         indexPath,
+      //         projectPath,
+      //         globalContextsPath
+      //       )
+      //     : generateWelcomePage(config, "react");
       await fs.writeFile(indexPath, content);
     }
 

@@ -18,7 +18,10 @@ import { registerCarouselBtnGroup } from "./components/carouselBtnGroup";
 import { registerWalletIcon } from "./icons/walletIcon";
 import { registerNFTCarouselItem } from "./components/nftCarouselItem";
 import { registerNFTSelect } from "./components/nftSelect";
-import { registerNFTSelectOptGroup, registerNFTSelectOption } from "./components/nftSelectOption";
+import {
+  registerNFTSelectOptGroup,
+  registerNFTSelectOption,
+} from "./components/nftSelectOption";
 import { registerArrowDownIcon } from "./icons/arrowDownIcon";
 import { registerNFTInput } from "./components/nftInput";
 import { registerCopyIcon } from "./icons/copyIcon";
@@ -57,3 +60,4 @@ export function registerAll(loader?: Registerable) {
 
 export { popoverProps } from "./util";
 export { PopoverExtraProps } from "./util";
+export { Web3GlobalContext } from "./globalContextProvider";

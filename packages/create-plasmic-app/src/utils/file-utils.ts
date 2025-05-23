@@ -207,18 +207,24 @@ export async function updateViteFile(projectPath: string) {
  * @param indexAbsPath - absolute path of index file to write
  * @returns
  */
-export function generateHomePage(
-  componentAbsPath: string,
+export async function generateHomePage(
+  // componentAbsPath: string,
   indexAbsPath: string,
+  projectPath: string,
   globalContextsAbsPath?: string
-): string {
-  const componentFilename = path.basename(componentAbsPath);
-  const componentName = stripExtension(componentFilename);
+): Promise<string> {
+  // console.log("🚀 ~ componentAbsPath:", componentAbsPath);
+  console.log("🚀 ~ projectPath:", projectPath);
+  // const componentFilename = path.basename(componentAbsPath);
+  // const componentName = stripExtension(componentFilename);
   // The relative import path from App.js to the Plasmic component
-  const componentRelativePath = path.relative(
-    path.dirname(indexAbsPath),
-    componentAbsPath
-  );
+  // const componentRelativePath = path.relative(
+  //   path.dirname(indexAbsPath),
+  //   componentAbsPath
+  // );
+
+  const routes = await extractRoutes(projectPath);
+
   const globalContextsImport = globalContextsAbsPath
     ? `import GlobalContextsProvider from './${stripExtension(
         path.relative(path.dirname(indexAbsPath), globalContextsAbsPath)
@@ -229,13 +235,39 @@ export function generateHomePage(
       ? `<GlobalContextsProvider>${content}</GlobalContextsProvider>`
       : content;
   };
+  const routeElements = routes
+    .map(
+      (route) =>
+        `        <Route path="${route.path}" element={<${route.componentName} />} />`
+    )
+    .join("\n");
+
+  // Generate import statements
+  const imports = routes
+    .map(
+      (route) =>
+        `import ${route.componentName} from "./components/${route.modulePath}";`
+    )
+    .join("\n");
 
   const appjsContents = `
-import ${componentName} from './${stripExtension(componentRelativePath)}';
-${globalContextsImport}
+  import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+  ${globalContextsImport}
+  ${imports}
 
 function App() {
-  return (${maybeWrapInGlobalContexts(`<${componentName} />`)});
+  return (${maybeWrapInGlobalContexts(`
+     <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="${routes[0].path}" />}
+        />
+${routeElements}
+        {/* Add more routes here as needed */}
+      </Routes>
+    </Router>
+  `)});
 }
 
 export default App;
