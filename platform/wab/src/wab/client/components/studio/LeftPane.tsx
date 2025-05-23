@@ -304,11 +304,23 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
         throw new Error("Failed to create launchpad");
       }
 
-      return await res.json();
-    },
-    enabled: !!studioCtx.siteInfo?.id,
-  });
+      const data = await res.json();
 
+      // Check if data is available
+      if (data.status !== "ACTIVE" ) {
+        throw new Error("Data is not available");
+      }
+
+      return data;
+    },
+    enabled:
+      !!studioCtx.siteInfo?.id &&
+      studioCtx.siteInfo?.clonedFromProjectId ===
+        process.env.TEMPLATE_PROJECT_ID_NFT_MINTING,
+    retry: 5, // Retry 3 times,
+    retryDelay: () => 2000, // 2 second delay between retries
+  });
+  
   // Check if we need to fetch latest data
   React.useEffect(() => {
     spawn(
