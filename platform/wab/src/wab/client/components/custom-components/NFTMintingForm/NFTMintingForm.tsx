@@ -38,6 +38,7 @@ import {
 // Define the schema for form validation using zod
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
+  collectionImage: z.any().optional(),
   description: z.string().min(1, { message: "Description is required" }),
   royalty: z
     .string()
@@ -190,6 +191,7 @@ const NFTMintingForm = ({
   const TOTAL_STEPS = 5;
   const currentWalletAccount = useCurrentAccount();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [collectionPreviewImage, setCollectionPreviewImage] = useState<string | null>(null);
   const [previewTeamMemberImage, setPreviewTeamMemberImage] = useState<
     string[]
   >([]);
@@ -498,16 +500,24 @@ const NFTMintingForm = ({
       },
     });
 
-  const handleItemImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, isCollectionImage?: boolean) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
+        if (isCollectionImage) {
+          setCollectionPreviewImage(reader.result as string);
+        } else {
+          setPreviewImage(reader.result as string);
+        }
       };
       reader.readAsDataURL(file);
       // Store the file in the form data
-      setValue("itemImage", file);
+      if (isCollectionImage) {
+        setValue("collectionImage", file);
+      } else {
+        setValue("itemImage", file);
+      }
     }
   };
 
@@ -536,6 +546,9 @@ const NFTMintingForm = ({
     }));
 
     const imageUrl = await uploadImageHandler(formData.itemImage);
+    console.log("🚀 ~ onSubmit ~ imageUrl:", imageUrl)
+    const collectionImageUrl = await uploadImageHandler(formData.collectionImage);
+    console.log("🚀 ~ onSubmit ~ collectionImageUrl:", collectionImageUrl)
     const teamAvaUploadRequests = formData.teamMembers?.map((member) =>
       uploadImageHandler(member.avatar)
     );
@@ -551,7 +564,7 @@ const NFTMintingForm = ({
       projectId,
       name: formData.name,
       description: formData.description,
-      imageUrl,
+      imageUrl: collectionImageUrl,
       admin: currentWalletAccount?.address || "",
       //need BE to update for attributes, it should be an array of objects
       items: [
@@ -729,6 +742,52 @@ const NFTMintingForm = ({
             <p className="section-description">
               Please fill out the collection information below
             </p>
+            <div className="form-group">
+              <label htmlFor="collectionImage">
+                Image<span className="required">*</span>
+              </label>
+              <div className="image-uplocollectionImagead-container">
+                {collectionPreviewImage ? (
+                  <div className="image-preview">
+                    <img
+                      className="preview-item-image"
+                      src={collectionPreviewImage}
+                      alt="Preview"
+                    />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => setCollectionPreviewImage(null)}
+                    >
+                      <TrashIcon color="#85858B" />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className="image-upload-label"
+                    onClick={() =>
+                      document.getElementById("collectionImage")?.click()
+                    }
+                  >
+                    <UploadSvgIcon className="upload-icon" />
+                    <span>Upload image</span>
+                  </div>
+                )}
+                <input
+                  id="collectionImage"
+                  type="file"
+                  accept="image/*"
+                  {...register("collectionImage")}
+                  className={`hidden-input ${errors.collectionImage ? "error" : ""}`}
+                  onChange={(e) => handleImageChange(e, true)}
+                />
+              </div>
+              {errors.collectionImage && (
+                <span className="error-message">
+                  {errors.collectionImage?.message?.toString() || ""}
+                </span>
+              )}
+            </div>
             <div className="form-group">
               <label htmlFor="name">
                 Name<span className="required">*</span>
@@ -944,7 +1003,7 @@ const NFTMintingForm = ({
                   accept="image/*"
                   {...register("itemImage")}
                   className={`hidden-input ${errors.itemImage ? "error" : ""}`}
-                  onChange={handleItemImageChange}
+                  onChange={handleImageChange}
                 />
               </div>
               {errors.itemImage && (
