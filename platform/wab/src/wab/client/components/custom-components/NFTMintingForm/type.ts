@@ -1,5 +1,7 @@
 export interface ILaunchpadData {
   projectId: string;
+  whitelistStartTime: Date | string;
+  whitelistEndTime: Date | string;
   name: string;
   description: string;
   imageUrl: string;
