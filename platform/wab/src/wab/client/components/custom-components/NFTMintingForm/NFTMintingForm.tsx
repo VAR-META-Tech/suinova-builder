@@ -17,7 +17,6 @@ import { NOTIFICATION_MESSAGE } from "@/wab/client/constant/mesage.constant";
 import { ENV } from "@/wab/shared/devflags";
 import {
   CHAIN,
-  COLLECTION_IDENTIFER_STRING,
   LAUNCHER_CONTRACT_METHOD,
   LAUNCHPAD_MODULE,
 } from "@/wab/client/constant/contract.constant";
@@ -482,7 +481,7 @@ const NFTMintingForm = ({
               tx.pure.vector(
                 "u8",
                 Array.from(
-                  new TextEncoder().encode(COLLECTION_IDENTIFER_STRING)
+                  new TextEncoder().encode(resData.id)
                 )
               ),
             ],
