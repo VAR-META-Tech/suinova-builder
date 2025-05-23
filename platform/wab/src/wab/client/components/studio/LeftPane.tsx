@@ -69,6 +69,7 @@ import {
   CONTRACT_PACKAGE_ID_PARAM_NAME,
   CREATED_COLLECTION_PARAM_NAME,
   IMPORTED_COLLECTIONS_PARAM_NAME,
+  MINTING_INFO_PARAM_NAME,
   WEB3_GLOBAL_CONTEXT_COMP_NAME,
 } from "@/wab/client/constant/contract.constant";
 import { NFTCollectionResponse } from "@/wab/shared/ApiSchema";
@@ -78,6 +79,114 @@ interface LeftPaneProps {
   studioCtx: StudioCtx;
   className?: string;
 }
+
+interface IAttribute {
+  type: string;
+  value: string;
+}
+
+interface ITeamMember {
+  name: string;
+  role: string;
+  avatar?: string;
+}
+
+interface IWhitelistInfo {
+  price: string;
+  startTime: Date;
+  endTime: Date | null;
+  totalNFTs: number;
+  maxNFTsPerWallet: number;
+}
+
+interface IPresaleConfig {
+  startTime: Date;
+  endTime: Date | null;
+  totalSlots: number;
+  whitelistInfo: IWhitelistInfo;
+}
+
+interface IPublicSaleConfig {
+  price: string;
+  startTime: Date;
+  endTime: Date | null;
+  totalNFTs: number;
+  maxNFTsPerWallet: number;
+}
+
+interface IMintingInfo {
+  name: string;
+  description: string;
+  royalty: string;
+  milestones: string[];
+  itemName: string;
+  itemDescription: string;
+  attributes: IAttribute[];
+  teamMembers: ITeamMember[];
+  hasPresale: boolean;
+  presale: IPresaleConfig;
+  hasPublicSale: boolean;
+  publicSale: IPublicSaleConfig;
+}
+
+export type {
+  IMintingInfo,
+  IAttribute,
+  ITeamMember,
+  IWhitelistInfo,
+  IPresaleConfig,
+  IPublicSaleConfig,
+};
+
+export const transformApiResponseToMintingInfo = (data: any): IMintingInfo => {
+  const item = data.items?.[0] || {};
+
+  return {
+    name: data.name || "",
+    description: data.description || "",
+    royalty: data.royaltyFee || "0",
+    milestones: data.visions?.map((v: any) => v.description) || [],
+    itemName: item.name || "",
+    itemDescription: item.description || "",
+    attributes: item.attributes?.map((attr: any) => ({
+      type: attr.trait_type || "",
+      value: attr.value || "",
+    })) || [{ type: "", value: "" }],
+    teamMembers:
+      data.teams?.map((member: any) => ({
+        name: member.name || "",
+        role: member.role || "",
+        avatar: member.avatar || undefined,
+      })) || [],
+    hasPresale: data.hasPresale || false,
+    presale: {
+      startTime: data.presaleStartTime
+        ? new Date(data.presaleStartTime)
+        : new Date(),
+      endTime: data.presaleEndTime ? new Date(data.presaleEndTime) : null,
+      totalSlots: data.presaleTotalNft || 0,
+      whitelistInfo: {
+        price: data.presaleNftPrice || "0",
+        startTime: data.whitelistStartTime
+          ? new Date(data.whitelistStartTime)
+          : new Date(),
+        endTime: data.whitelistEndTime ? new Date(data.whitelistEndTime) : null,
+        totalNFTs: data.presaleTotalNft || 0,
+        maxNFTsPerWallet: data.presaleNftPerUser || 0,
+      },
+    },
+    hasPublicSale: Boolean(data.publicNftPrice),
+    publicSale: {
+      price: data.publicNftPrice || "0",
+      startTime: data.publicSaleStartTime
+        ? new Date(data.publicSaleStartTime)
+        : new Date(),
+      endTime: data.publicSaleEndTime ? new Date(data.publicSaleEndTime) : null,
+      totalNFTs: data.totalSupply || 0,
+      maxNFTsPerWallet: data.nftPerUser || 0,
+    },
+  };
+};
 
 const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const { studioCtx } = props;
@@ -129,31 +238,29 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const [latestPublishedRevNum, setLatestPublishedRevNum] = useState<number>();
   const latestPublishedVersion = L.head(studioCtx.releases);
   const [collection, setCollection] = useState<NFTCollectionResponse>();
-  console.log("🚀 ~ LeftPane ~ collection:", collection)
-// Intergrating API
-  // const { data: launchpadCollection, isPending: isGetLaunchpadCollectionPending } =
-  //   useQuery({
-  //     queryKey: ["launchpadCollection"],
-  //     queryFn: async () => {  
-  //       console.log("MARKETPLACE_API_URL_LAUCHPAD:", process.env.MARKETPLACE_API_URL_LAUCHPAD);
-  //       const res = await fetch(
-  //         `${process.env.MARKETPLACE_API_URL_LAUCHPAD}launchpad/collections/project/${studioCtx.siteInfo?.id}`,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
+  console.log("🚀 ~ LeftPane ~ collection:", collection);
+  // Intergrating API for minting info
+  const { data: launchpadCollection } = useQuery({
+    queryKey: ["mintingInfo"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.MARKETPLACE_API_URL_LAUCHPAD}launchpad/collections/project/wivZ45shhRbrFVqGojSKBD`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  //       if (!res.ok) {
-  //         throw new Error("Failed to create launchpad");
-  //       }
+      if (!res.ok) {
+        throw new Error("Failed to create launchpad");
+      }
 
-  //       return await res.json();
-  //     },
-  //     enabled: !!studioCtx.siteInfo?.id,
-  //   });
+      return await res.json();
+    },
+    enabled: !!studioCtx.siteInfo?.id,
+  });
 
   // Check if we need to fetch latest data
   React.useEffect(() => {
@@ -191,8 +298,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
           await studioCtx.appCtx.api.getProjectCollections(
             studioCtx.siteInfo?.id || ""
           );
-        console.log("🚀 ~ collections:", collections)
-
+        console.log("🚀 ~ collections:", collections);
 
         if (collections) {
           setCollection(collections);
@@ -206,7 +312,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     studioCtx.releases.length > 0 &&
     !!latestPublishedRevNum &&
     ensure(latestPublishedRevNum, "Should have latestPublishedRevNum") <
-    dbCtx.revisionNum;
+      dbCtx.revisionNum;
 
   const isLoggedIn = studioCtx.appCtx.selfInfo != null;
 
@@ -223,56 +329,56 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
 
   const componentProps = web3GlobalContextTpl
     ? Object.fromEntries(
-      web3GlobalContextTpl.vsettings[0].args
-        .filter(
-          (arg) =>
-            !isSlot(arg.param) &&
-            !findVariantGroupForParam(
-              web3GlobalContextTpl.component,
-              arg.param
-            )
-        )
-        .map((arg) => [
-          paramToVarName(web3GlobalContextTpl.component, arg.param),
-          tryExtractJson(
-            asCode(arg.expr, {
-              projectFlags: studioCtx.projectFlags(),
-              component,
-              inStudio: true,
-            })
-          ),
-        ])
-    )
+        web3GlobalContextTpl.vsettings[0].args
+          .filter(
+            (arg) =>
+              !isSlot(arg.param) &&
+              !findVariantGroupForParam(
+                web3GlobalContextTpl.component,
+                arg.param
+              )
+          )
+          .map((arg) => [
+            paramToVarName(web3GlobalContextTpl.component, arg.param),
+            tryExtractJson(
+              asCode(arg.expr, {
+                projectFlags: studioCtx.projectFlags(),
+                component,
+                inStudio: true,
+              })
+            ),
+          ])
+      )
     : null;
 
   const params = web3GlobalContextTpl
     ? getRealParams(web3GlobalContextTpl.component).filter((param) => {
-      const propType = (
-        isHostLessCodeComponent(web3GlobalContextTpl.component)
-          ? studioCtx.getHostLessContextsMap()
-          : studioCtx.getRegisteredContextsMap()
-      ).get(web3GlobalContextTpl.component.name)?.meta.props[
-        param.variable.name
-      ];
-      const propTypeType = getPropTypeType(propType);
-      if (
-        propTypeType &&
-        isOneOf(propTypeType, [
-          "styleScopeClass",
-          "themeResetClass",
-          "themeStyles",
-        ])
-      ) {
-        return false;
-      }
-      if (isPlainObjectPropType(propType) && propType.type !== "slot") {
-        const objPropType = propType;
-        return !swallow(() =>
-          objPropType.hidden?.(componentProps, null, { path: [] })
-        );
-      }
-      return param.origin !== ComponentPropOrigin.ReactHTMLAttributes;
-    })
+        const propType = (
+          isHostLessCodeComponent(web3GlobalContextTpl.component)
+            ? studioCtx.getHostLessContextsMap()
+            : studioCtx.getRegisteredContextsMap()
+        ).get(web3GlobalContextTpl.component.name)?.meta.props[
+          param.variable.name
+        ];
+        const propTypeType = getPropTypeType(propType);
+        if (
+          propTypeType &&
+          isOneOf(propTypeType, [
+            "styleScopeClass",
+            "themeResetClass",
+            "themeStyles",
+          ])
+        ) {
+          return false;
+        }
+        if (isPlainObjectPropType(propType) && propType.type !== "slot") {
+          const objPropType = propType;
+          return !swallow(() =>
+            objPropType.hidden?.(componentProps, null, { path: [] })
+          );
+        }
+        return param.origin !== ComponentPropOrigin.ReactHTMLAttributes;
+      })
     : null;
 
   useEffect(() => {
@@ -289,14 +395,20 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   }, [collection?.collectionId]);
 
   useEffect(() => {
-    // if (launchpadCollection?.collectionId) {
-    //   console.log("🚀 ~ useEffect ~ launchpadCollection?.collectionId:", launchpadCollection?.collectionId);
-    // }
-    updateTextTemplate(
-      CREATED_COLLECTION_PARAM_NAME,
-      "launchpadCollectionId"
-    );
-  }, []);
+    console.log("🚀 ~ useEffect ~ launchpadCollection:", launchpadCollection);
+    if (launchpadCollection?.id) {
+      console.log("🚀 ~ useEffect ~ launchpadCollection?.id:", launchpadCollection?.id)
+      updateTextTemplate(
+        CREATED_COLLECTION_PARAM_NAME,
+        launchpadCollection?.id
+      );
+
+      updateTextTemplate(
+        MINTING_INFO_PARAM_NAME,
+        JSON.stringify(transformApiResponseToMintingInfo(launchpadCollection))
+      );
+    }
+  }, [launchpadCollection?.id]);
 
   const updateTextTemplate = (name: string, value?: string) => {
     if (!web3GlobalContextTpl || !value) {
@@ -355,8 +467,8 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
           position: "relative",
         }}
         showControls={studioCtx.showDevControls}
-      // onMouseEnter={() => setHover(true)}
-      // onMouseLeave={() => setHover(false)}
+        // onMouseEnter={() => setHover(true)}
+        // onMouseLeave={() => setHover(false)}
       >
         {studioCtx.showAddDrawer() && (
           <div
@@ -379,11 +491,11 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
               className: "canvas-editor__left-pane auto-pointer-events",
               style: !studioCtx.leftTabKey
                 ? {
-                  display: "none",
-                }
+                    display: "none",
+                  }
                 : {
-                  width: studioCtx.leftPaneWidth,
-                },
+                    width: studioCtx.leftPaneWidth,
+                  },
             },
 
             wrapChildren: (children) => (
