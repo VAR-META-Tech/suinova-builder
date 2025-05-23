@@ -213,7 +213,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
       const data = await res.json();
 
       // Check if data is available
-      if (data.status !== "ACTIVE" ) {
+      if (data.status !== "ACTIVE") {
         throw new Error("Data is not available");
       }
 
@@ -226,8 +226,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
     retry: 5, // Retry 3 times,
     retryDelay: () => 2000, // 2 second delay between retries
   });
-  console.log("🚀 ~ launchpadCollection:", launchpadCollection)
-  
+
   // Check if we need to fetch latest data
   React.useEffect(() => {
     spawn(
@@ -370,7 +369,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
         launchpadCollection?.id
       );
 
-      console.log("🚀 ~ useEffect ~ stringifiedData:", stringifiedData)
+      console.log("🚀 ~ useEffect ~ stringifiedData:", stringifiedData);
       updateObjectTemplate(MINTING_INFO_PARAM_NAME, stringifiedData);
     }
   }, [launchpadCollectionString]);
@@ -401,21 +400,7 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
         return;
       }
 
-      const arg = web3GlobalContextTpl.vsettings[0].args.find(
-        (_arg) => _arg.param === p
-      );
-      const curExpr = maybe(arg, (x) => x.expr) || p.defaultExpr || undefined;
-
-      const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
-
-      if (!!exprLit) {
-        return;
-      }
-
-      if (expr == null && exprLit == null) {
-        return;
-      }
-      const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+      const newExpr = codeLit(expr);
       void studioCtx.change(({ success }) => {
         tplMgr.setArg(
           web3GlobalContextTpl,
