@@ -36,136 +36,145 @@ import {
 } from "@/wab/client/components/custom-components/NFTMintingForm/type";
 
 // Define the schema for form validation using zod
-const formSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  collectionImage: z.any().optional(),
-  description: z.string().min(1, { message: "Description is required" }),
-  royalty: z
-    .string()
-    .refine((val) => !isNaN(parseFloat(val)), {
-      message: "Royalty must be a valid number",
-    })
-    .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) >= 0, {
-      message: "Royalty must be greater tan or equal to 0",
-    })
-    .default("0"),
-  milestones: z
-    .array(
-      z.object({
-        time: z.date({ required_error: "Date is required" }),
-        description: z.string().optional(),
+const formSchema = z
+  .object({
+    name: z.string().min(1, { message: "Name is required" }),
+    collectionImage: z.any().optional(),
+    description: z.string().min(1, { message: "Description is required" }),
+    royalty: z
+      .string()
+      .refine((val) => !isNaN(parseFloat(val)), {
+        message: "Royalty must be a valid number",
       })
-    )
-    .default([{ time: new Date(), description: "" }]),
-  teamMembers: z
-    .array(
-      z.object({
-        name: z.string().optional(),
-        title: z.string().optional(),
-        avatar: z.any().optional(), // For file uploads
+      .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) >= 0, {
+        message: "Royalty must be greater tan or equal to 0",
       })
-    )
-    .optional(),
-  itemImage: z.any().optional(), // For image upload
-  itemName: z.string().min(1, { message: "Item name is required" }),
-  itemDescription: z
-    .string()
-    .min(1, { message: "Item description is required" }),
-  attributes: z
-    .array(
-      z.object({
-        type: z.string().optional(),
-        value: z.string().optional(),
-      })
-    )
-    .default([{ type: "", value: "" }]),
-  hasPresale: z.boolean().optional(),
-  presale: z.object({
-    startTime: z.date(),
-    endTime: z.date().nullable(),
-    totalSlots: z.number().min(0),
-    whitelistInfo: z.object({
+      .default("0"),
+    milestones: z
+      .array(
+        z.object({
+          time: z.date({ required_error: "Date is required" }),
+          description: z.string().optional(),
+        })
+      )
+      .default([{ time: new Date(), description: "" }]),
+    teamMembers: z
+      .array(
+        z.object({
+          name: z.string().optional(),
+          title: z.string().optional(),
+          avatar: z.any().optional(), // For file uploads
+        })
+      )
+      .optional(),
+    itemImage: z.any().optional(), // For image upload
+    itemName: z.string().min(1, { message: "Item name is required" }),
+    itemDescription: z
+      .string()
+      .min(1, { message: "Item description is required" }),
+    attributes: z
+      .array(
+        z.object({
+          type: z.string().optional(),
+          value: z.string().optional(),
+        })
+      )
+      .default([{ type: "", value: "" }]),
+    hasPresale: z.boolean().optional(),
+    presale: z.object({
+      startTime: z.date(),
+      endTime: z.date().nullable(),
+      totalSlots: z.number().min(0),
+      whitelistInfo: z.object({
+        price: z
+          .string()
+          .refine((val) => !isNaN(parseFloat(val)), {
+            message: "Price must be a valid number",
+          })
+          .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) >= 0, {
+            message: "Price must be a valid number",
+          })
+          .default("0"),
+        startTime: z.date(),
+        endTime: z.date().nullable(),
+        totalNFTs: z.number().min(0),
+        maxNFTsPerWallet: z.number().min(0),
+      }),
+    }),
+    hasPublicSale: z.boolean(),
+    publicSale: z.object({
       price: z
         .string()
         .refine((val) => !isNaN(parseFloat(val)), {
           message: "Price must be a valid number",
         })
         .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) >= 0, {
-          message: "Price must be a valid number",
+          message: "Price must be greater than or equal to 0",
         })
         .default("0"),
       startTime: z.date(),
       endTime: z.date().nullable(),
       totalNFTs: z.number().min(0),
       maxNFTsPerWallet: z.number().min(0),
-    })
-  }),
-  hasPublicSale: z.boolean(),
-  publicSale: z.object({
-    price: z
-      .string()
-      .refine((val) => !isNaN(parseFloat(val)), {
-        message: "Price must be a valid number",
-      })
-      .refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) >= 0, {
-        message: "Price must be greater than or equal to 0",
-      })
-      .default("0"),
-    startTime: z.date(),
-    endTime: z.date().nullable(),
-    totalNFTs: z.number().min(0),
-    maxNFTsPerWallet: z.number().min(0),
-  }),
-  previewImageData: z.string().optional(),
-}).superRefine((obj, ctx) => {
-  if (obj.presale.whitelistInfo.maxNFTsPerWallet > obj.presale.whitelistInfo.totalNFTs && obj.hasPresale) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Max NFTs per wallet must be less than or equal to total NFTs",
-      path: ["presale.whitelistInfo.maxNFTsPerWallet"],
-    });
-  }
+    }),
+    previewImageData: z.string().optional(),
+  })
+  .superRefine((obj, ctx) => {
+    if (
+      obj.presale.whitelistInfo.maxNFTsPerWallet >
+        obj.presale.whitelistInfo.totalNFTs &&
+      obj.hasPresale
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Max NFTs per wallet must be less than or equal to total NFTs",
+        path: ["presale.whitelistInfo.maxNFTsPerWallet"],
+      });
+    }
 
-  if (obj.publicSale.maxNFTsPerWallet > obj.publicSale.totalNFTs && obj.hasPublicSale) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Max NFTs per wallet must be less than or equal to total NFTs",
-      path: ["publicSale.maxNFTsPerWallet"],
-    });
-  }
+    if (
+      obj.publicSale.maxNFTsPerWallet > obj.publicSale.totalNFTs &&
+      obj.hasPublicSale
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Max NFTs per wallet must be less than or equal to total NFTs",
+        path: ["publicSale.maxNFTsPerWallet"],
+      });
+    }
 
-  if(obj.publicSale.totalNFTs < 1 && obj.hasPublicSale) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Total NFTs must be greater than 0",
-      path: ["publicSale.totalNFTs"],
-    });
-  }
+    if (obj.publicSale.totalNFTs < 1 && obj.hasPublicSale) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Total NFTs must be greater than 0",
+        path: ["publicSale.totalNFTs"],
+      });
+    }
 
-  if(obj.presale.whitelistInfo.totalNFTs < 1 && obj.hasPresale) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Total NFTs must be greater than 0",
-      path: ["presale.whitelistInfo.totalNFTs"],
-    });
-  }
+    if (obj.presale.whitelistInfo.totalNFTs < 1 && obj.hasPresale) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Total NFTs must be greater than 0",
+        path: ["presale.whitelistInfo.totalNFTs"],
+      });
+    }
 
-  if(obj.presale.whitelistInfo.maxNFTsPerWallet < 1 && obj.hasPresale) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Max NFTs per wallet must be greater than 0",
-      path: ["presale.whitelistInfo.maxNFTsPerWallet"],
-    });
-  }
+    if (obj.presale.whitelistInfo.maxNFTsPerWallet < 1 && obj.hasPresale) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Max NFTs per wallet must be greater than 0",
+        path: ["presale.whitelistInfo.maxNFTsPerWallet"],
+      });
+    }
 
-  if(obj.publicSale.maxNFTsPerWallet < 1 && obj.hasPublicSale) {
-    ctx.addIssue({
-      code: "custom",
-      message: "Max NFTs per wallet must be greater than 0",
-      path: ["publicSale.maxNFTsPerWallet"],
-    });
-  }
-});
+    if (obj.publicSale.maxNFTsPerWallet < 1 && obj.hasPublicSale) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Max NFTs per wallet must be greater than 0",
+        path: ["publicSale.maxNFTsPerWallet"],
+      });
+    }
+  });
 
 // Typescript type inference from zod schema
 type FormData = z.infer<typeof formSchema>;
@@ -191,7 +200,9 @@ const NFTMintingForm = ({
   const TOTAL_STEPS = 5;
   const currentWalletAccount = useCurrentAccount();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [collectionPreviewImage, setCollectionPreviewImage] = useState<string | null>(null);
+  const [collectionPreviewImage, setCollectionPreviewImage] = useState<
+    string | null
+  >(null);
   const [previewTeamMemberImage, setPreviewTeamMemberImage] = useState<
     string[]
   >([]);
@@ -317,8 +328,6 @@ const NFTMintingForm = ({
       },
     },
   });
-
-
 
   const { mutateAsync: signAndExecuteTransaction, isPending } =
     useSignAndExecuteTransaction({
@@ -470,7 +479,12 @@ const NFTMintingForm = ({
               tx.pure.u64(resData.nftPerUser || 0), // nft_per_user
               tx.pure.u64(resData.totalSupply || 0), // total_supply
               //pass a string to identify the collection
-              tx.pure.vector("u8", Array.from(new TextEncoder().encode(COLLECTION_IDENTIFER_STRING)))
+              tx.pure.vector(
+                "u8",
+                Array.from(
+                  new TextEncoder().encode(COLLECTION_IDENTIFER_STRING)
+                )
+              ),
             ],
           });
 
@@ -500,7 +514,10 @@ const NFTMintingForm = ({
       },
     });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, isCollectionImage?: boolean) => {
+  const handleImageChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    isCollectionImage?: boolean
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -546,9 +563,11 @@ const NFTMintingForm = ({
     }));
 
     const imageUrl = await uploadImageHandler(formData.itemImage);
-    console.log("🚀 ~ onSubmit ~ imageUrl:", imageUrl)
-    const collectionImageUrl = await uploadImageHandler(formData.collectionImage);
-    console.log("🚀 ~ onSubmit ~ collectionImageUrl:", collectionImageUrl)
+    console.log("🚀 ~ onSubmit ~ imageUrl:", imageUrl);
+    const collectionImageUrl = await uploadImageHandler(
+      formData.collectionImage
+    );
+    console.log("🚀 ~ onSubmit ~ collectionImageUrl:", collectionImageUrl);
     const teamAvaUploadRequests = formData.teamMembers?.map((member) =>
       uploadImageHandler(member.avatar)
     );
@@ -564,6 +583,8 @@ const NFTMintingForm = ({
       projectId,
       name: formData.name,
       description: formData.description,
+      whitelistStartTime: formData.presale.whitelistInfo.startTime || "",
+      whitelistEndTime: formData.presale.whitelistInfo.endTime || "",
       imageUrl: collectionImageUrl,
       admin: currentWalletAccount?.address || "",
       //need BE to update for attributes, it should be an array of objects
@@ -778,7 +799,9 @@ const NFTMintingForm = ({
                   type="file"
                   accept="image/*"
                   {...register("collectionImage")}
-                  className={`hidden-input ${errors.collectionImage ? "error" : ""}`}
+                  className={`hidden-input ${
+                    errors.collectionImage ? "error" : ""
+                  }`}
                   onChange={(e) => handleImageChange(e, true)}
                 />
               </div>
@@ -1165,16 +1188,16 @@ const NFTMintingForm = ({
                         <input
                           type="number"
                           min={0}
-                          step='0.01'
+                          step="0.01"
                           inputMode="decimal"
                           placeholder="Enter price"
                           value={field.value}
                           onChange={(e) => {
                             field.onChange(e.target.value);
                           }}
-                          className={
-                            `${errors.presale?.whitelistInfo?.price ? "error" : ""} custom-inner-input`
-                          }
+                          className={`${
+                            errors.presale?.whitelistInfo?.price ? "error" : ""
+                          } custom-inner-input`}
                         />
                         <span className="custom-input-suffix">SUI</span>
                       </div>
@@ -1201,7 +1224,9 @@ const NFTMintingForm = ({
                         showTimeSelect
                         dateFormat="Pp"
                         minDate={new Date()}
-                        maxDate={formValues.presale.whitelistInfo.endTime || undefined}
+                        maxDate={
+                          formValues.presale.whitelistInfo.endTime || undefined
+                        }
                       />
                     )}
                   />
@@ -1218,7 +1243,10 @@ const NFTMintingForm = ({
                         onChange={(date) => field.onChange(date)}
                         showTimeSelect
                         dateFormat="Pp"
-                        minDate={formValues.presale.whitelistInfo.startTime || undefined}
+                        minDate={
+                          formValues.presale.whitelistInfo.startTime ||
+                          undefined
+                        }
                         isClearable
                       />
                     )}
@@ -1294,7 +1322,9 @@ const NFTMintingForm = ({
                           onChange={(e) => {
                             field.onChange(e.target.value);
                           }}
-                          className={`${errors.publicSale?.price ? "error" : ""} custom-inner-input`}
+                          className={`${
+                            errors.publicSale?.price ? "error" : ""
+                          } custom-inner-input`}
                         />
                         <span className="custom-input-suffix">SUI</span>
                       </div>

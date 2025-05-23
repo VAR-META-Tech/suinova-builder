@@ -18,7 +18,6 @@ import "@mysten/dapp-kit/dist/index.css";
 import { Registerable } from "./reg-util";
 import { notification } from "antd";
 import { IMintingInfo } from "./type";
-import { CONTRACT_METHOD, ENV } from "./const";
 import { Transaction } from "@mysten/sui/transactions";
 const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
@@ -33,6 +32,19 @@ interface Web3GlobalContextProps {
   importedCollection?: string;
   createdCollection?: string;
   mintingInfo?: IMintingInfo;
+}
+export const ENV = {
+  MARKETPLACE_MODULE: 'marketplace',
+  IMPORT_COLLECTION: 'import_collection',
+  CONTRACT_PACKAGE_ID: '0x2d99da054514ff31c7e7da82751d11bb16b53c66290c435a409e17c8992e35ed',
+  MARKETPLACE_CAP_ID: '0xc4a3970aafc40dbe7e60577a0748632d898ba84ec74526bd4ed36e9ed41320b9',
+  CHAIN: 'sui:testnet',
+}
+
+export const CONTRACT_METHOD = {
+  LIST: 'list',
+  DELIST: 'delist',
+  BUY: 'buy',
 }
 // interface Web3GlobalContextData extends Web3GlobalContextProps {}
 
