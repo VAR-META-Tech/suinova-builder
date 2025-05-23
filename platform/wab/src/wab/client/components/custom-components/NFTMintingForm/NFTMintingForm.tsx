@@ -563,11 +563,9 @@ const NFTMintingForm = ({
     }));
 
     const imageUrl = await uploadImageHandler(formData.itemImage);
-    console.log("🚀 ~ onSubmit ~ imageUrl:", imageUrl);
     const collectionImageUrl = await uploadImageHandler(
       formData.collectionImage
     );
-    console.log("🚀 ~ onSubmit ~ collectionImageUrl:", collectionImageUrl);
     const teamAvaUploadRequests = formData.teamMembers?.map((member) =>
       uploadImageHandler(member.avatar)
     );
@@ -583,8 +581,6 @@ const NFTMintingForm = ({
       projectId,
       name: formData.name,
       description: formData.description,
-      whitelistStartTime: formData.presale.whitelistInfo.startTime || "",
-      whitelistEndTime: formData.presale.whitelistInfo.endTime || "",
       imageUrl: collectionImageUrl,
       admin: currentWalletAccount?.address || "",
       //need BE to update for attributes, it should be an array of objects
