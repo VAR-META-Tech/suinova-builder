@@ -616,6 +616,7 @@ function InnerPropEditorRow_(props: PropEditorRowProps) {
     icon,
     shouldHighlight,
   } = props;
+  console.log("🚀 ~ attr:", attr);
 
   const currValueEditorCtx = usePropValueEditorContext();
   const {

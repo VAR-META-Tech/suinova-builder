@@ -32,6 +32,8 @@ export interface FullCodeEditorProps {
   hideGlobalSuggestions?: boolean;
   folding?: boolean;
   schema?: DataPickerTypesSchema;
+  isReadOnly?: boolean;
+
   /**
    * Defaults to true
    */
@@ -57,6 +59,7 @@ export const FullCodeEditor = React.forwardRef(
       schema,
       autoFocus = true,
       fileName = "main",
+      isReadOnly = false,
     } = props;
 
     const handlersRef = React.useRef<
@@ -85,6 +88,7 @@ export const FullCodeEditor = React.forwardRef(
       fontFamily: BASE_FONT_FAMILY,
       fontSize: BASE_FONT_SIZE,
       tabSize: 2,
+      readOnly: isReadOnly,
       suggest: hideGlobalSuggestions
         ? {
             showConstructors: false,

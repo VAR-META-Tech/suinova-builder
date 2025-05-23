@@ -74,6 +74,8 @@ import {
 } from "@/wab/client/constant/contract.constant";
 import { NFTCollectionResponse } from "@/wab/shared/ApiSchema";
 import { useQuery } from "@tanstack/react-query";
+import { notification } from "antd";
+import jsonrepair from "jsonrepair";
 
 interface LeftPaneProps {
   studioCtx: StudioCtx;
@@ -238,13 +240,14 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   const [latestPublishedRevNum, setLatestPublishedRevNum] = useState<number>();
   const latestPublishedVersion = L.head(studioCtx.releases);
   const [collection, setCollection] = useState<NFTCollectionResponse>();
-  console.log("🚀 ~ LeftPane ~ collection:", collection);
   // Intergrating API for minting info
   const { data: launchpadCollection } = useQuery({
-    queryKey: ["mintingInfo"],
+    queryKey: ["mintingInfo", studioCtx.siteInfo?.id || ""],
     queryFn: async () => {
       const res = await fetch(
-        `${process.env.MARKETPLACE_API_URL_LAUCHPAD}launchpad/collections/project/wivZ45shhRbrFVqGojSKBD`,
+        `${
+          process.env.MARKETPLACE_API_URL_LAUCHPAD
+        }launchpad/collections/project/${studioCtx.siteInfo?.id || ""}`,
         {
           method: "GET",
           headers: {
@@ -395,20 +398,77 @@ const LeftPane = observer(function LeftPane(props: LeftPaneProps) {
   }, [collection?.collectionId]);
 
   useEffect(() => {
-    console.log("🚀 ~ useEffect ~ launchpadCollection:", launchpadCollection);
     if (launchpadCollection?.id) {
-      console.log("🚀 ~ useEffect ~ launchpadCollection?.id:", launchpadCollection?.id)
       updateTextTemplate(
         CREATED_COLLECTION_PARAM_NAME,
         launchpadCollection?.id
       );
 
-      updateTextTemplate(
-        MINTING_INFO_PARAM_NAME,
-        JSON.stringify(transformApiResponseToMintingInfo(launchpadCollection))
+      const stringifiedData = JSON.stringify(
+        transformApiResponseToMintingInfo(launchpadCollection)
       );
+      updateObjectTemplate(MINTING_INFO_PARAM_NAME, stringifiedData);
     }
   }, [launchpadCollection?.id]);
+
+  const updateObjectTemplate = (name: string, value?: string) => {
+    if (!web3GlobalContextTpl || !value) {
+      return;
+    }
+
+    let val;
+    try {
+      val = jsonrepair(value);
+    } catch {}
+
+    if (val[0] !== "{") {
+      notification.warn({
+        message: "Invalid JSON object",
+        description: "Only JSON objects (wrapped in {}) are supported.",
+      });
+      return false;
+    }
+    try {
+      const expr = JSON.parse(val);
+
+      const p = params?.find((item) => item.variable.name === name);
+
+      if (!p) {
+        return;
+      }
+
+      const arg = web3GlobalContextTpl.vsettings[0].args.find(
+        (_arg) => _arg.param === p
+      );
+      const curExpr = maybe(arg, (x) => x.expr) || p.defaultExpr || undefined;
+
+      const exprLit = curExpr ? tryExtractJson(curExpr) ?? curExpr : undefined;
+
+      if (!!exprLit) {
+        return;
+      }
+
+      if (expr == null && exprLit == null) {
+        return;
+      }
+      const newExpr = isKnownExpr(expr) ? expr : codeLit(expr);
+      void studioCtx.change(({ success }) => {
+        tplMgr.setArg(
+          web3GlobalContextTpl,
+          web3GlobalContextTpl.vsettings[0],
+          p.variable,
+          newExpr
+        );
+        return success();
+      });
+    } catch (err) {
+      notification.warn({
+        message: "Invalid JSON",
+        description: `${err}`,
+      });
+      return;
+    }
+  };
 
   const updateTextTemplate = (name: string, value?: string) => {
     if (!web3GlobalContextTpl || !value) {

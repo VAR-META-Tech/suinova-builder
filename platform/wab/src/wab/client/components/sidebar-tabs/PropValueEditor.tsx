@@ -923,6 +923,7 @@ const PropValueEditor_ = (
     }; // default control;
     return <PropValueEditor {...props} propType={control} ref={ref} />;
   } else if (isPlainObjectPropType(propType) && propType.type === "dynamic") {
+    // MAYBE THIS
     const control = ensure(
       _getContextDependentValue(propType.control),
       "missing control for dynamic prop type"
@@ -1043,6 +1044,7 @@ const PropValueEditor_ = (
       viewCtx &&
       isTplComponent(tpl)
     ) {
+      // MAYBE THIS
       const evaluated = isKnownExpr(value)
         ? tryEvalExpr(
             getRawCode(value, {
@@ -1074,6 +1076,7 @@ const PropValueEditor_ = (
         />
       );
     } else {
+      // MAYBE THIS
       return (
         <CodeEditor
           onChange={onChange}
@@ -1085,7 +1088,7 @@ const PropValueEditor_ = (
             isPlainObjectPropType(propType) && hackyCast(propType).requireObject
           }
           saveAsObject
-          isDisabled={readOnly}
+          isDisabled={disabled || readOnly}
           defaultFullscreen={
             isPlainObjectPropType(propType) &&
             hackyCast(propType).control === "sidebar"

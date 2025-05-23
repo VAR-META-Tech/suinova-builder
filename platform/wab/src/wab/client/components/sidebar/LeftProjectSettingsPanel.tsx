@@ -442,6 +442,7 @@ const ContextPropEditor = observer(function ContextPropEditor_(props: {
                         label={labelNode}
                         definedIndicator={definedIndicator}
                         menu={
+                          !paramReadonly &&
                           definedIndicator.source.includes("set") ? (
                             <Menu>
                               <Menu.Item

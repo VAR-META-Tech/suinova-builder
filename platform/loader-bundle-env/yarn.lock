@@ -6418,10 +6418,8 @@ stylis@^4.3.4:
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.3.6.tgz#7c7b97191cb4f195f03ecab7d52f7902ed378320"
   integrity sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==
 
-suinova-nft-builder@~0.0.3:
+"suinova-nft-builder@file:../../plasmicpkgs/suinova-nft-builder":
   version "0.0.3"
-  resolved "https://registry.yarnpkg.com/suinova-nft-builder/-/suinova-nft-builder-0.0.3.tgz#e551a69602f80eea268354068efb7203d985cda1"
-  integrity sha512-W3qg/u1ZBEBn3AgmyuUZfiOHm7SjBKI9kKj+o1QvWxUPyfqIHz9+rJgHu38Qg9EpAG1Ju3is/inF/YLjqirkDg==
   dependencies:
     "@floating-ui/react-dom" "^2.0.0"
     "@mysten/dapp-kit" "^0.14.53"

@@ -1,6 +1,6 @@
 {
   "name": "suinova-nft-builder",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "NFT components for SuiNova",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

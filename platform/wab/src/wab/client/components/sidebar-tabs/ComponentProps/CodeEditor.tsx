@@ -112,7 +112,9 @@ export const CodeEditor = observer(function CodeEditor(props: {
     requireObject,
     data,
     fileName,
+    isDisabled,
   } = props;
+
   const stringValue =
     (lang === "json" && saveAsObject) || (value && typeof value === "object")
       ? swallow(() => JSON.stringify(value, undefined, 2))
@@ -146,6 +148,7 @@ export const CodeEditor = observer(function CodeEditor(props: {
     }
   };
   const trySave = (val: string) => {
+    console.log("🚀 ~ trySave ~ val:", typeof val);
     if (!checkStrSizeLimit(val)) {
       return false;
     }
@@ -199,7 +202,7 @@ export const CodeEditor = observer(function CodeEditor(props: {
     <>
       <div
         className="code-editor-input"
-        onClick={() => !props.isDisabled && setShow(true)}
+        onClick={() => setShow(true)}
         data-plasmic-prop={props["data-plasmic-prop"]}
       >
         <Tooltip title={props.isDisabled && props.disabledTooltip}>
@@ -225,7 +228,7 @@ export const CodeEditor = observer(function CodeEditor(props: {
             }}
             className="flex-col"
           >
-            {fullscreen && (
+            {!isDisabled && fullscreen && (
               <div className="mb-lg flex-col">
                 <div className="mb-sm">
                   {"Enter your content or "}
@@ -273,12 +276,14 @@ export const CodeEditor = observer(function CodeEditor(props: {
                   onSave={trySave}
                   editorHeight={fullscreen ? 396 : 310}
                   fileName={fileName}
+                  isReadOnly={isDisabled}
                 />
               )}
             />
             <div className="flex flex-right mt-lg mr-xlg">
               <Button onClick={onCancel}>Cancel</Button>
               <Button
+                disabled={isDisabled}
                 className={"ml-lg"}
                 onClick={() => {
                   if (

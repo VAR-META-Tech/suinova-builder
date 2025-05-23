@@ -30,7 +30,6 @@ interface Web3GlobalContextProps {
   importedCollection?: string;
   createdCollection?: string;
   mintingInfo?: IMintingInfo;
-  apiUrl?: string;
 }
 // interface Web3GlobalContextData extends Web3GlobalContextProps {}
 
@@ -163,7 +162,6 @@ export function registerWeb3Provider(loader?: Registerable) {
       importedCollection: "string",
       createdCollection: "string",
       mintingInfo: "object",
-      apiUrl: "string",
     },
     globalActions: {
       onListNFT: {
