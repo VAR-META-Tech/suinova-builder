@@ -2,6 +2,7 @@ import {
   createNetworkConfig,
   SuiClientProvider,
   useCurrentAccount,
+  useSignAndExecuteTransaction,
   WalletProvider,
 } from "@mysten/dapp-kit";
 import { getFullnodeUrl } from "@mysten/sui/client";
@@ -17,6 +18,8 @@ import "@mysten/dapp-kit/dist/index.css";
 import { Registerable } from "./reg-util";
 import { notification } from "antd";
 import { IMintingInfo } from "./type";
+import { CONTRACT_METHOD, ENV } from "./const";
+import { Transaction } from "@mysten/sui/transactions";
 const { networkConfig } = createNetworkConfig({
   localnet: { url: getFullnodeUrl("localnet") },
   devnet: { url: getFullnodeUrl("devnet") },
@@ -36,44 +39,61 @@ interface Web3GlobalContextProps {
 const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
   const web3WalletData = useSelector("web3WalletData");
   const walletAddress = web3WalletData?.walletAddress;
+  const { mutateAsync: signAndExecuteTransaction, isPending } =
+    useSignAndExecuteTransaction();
 
-  const onListNFT = async (message: string) => {
+  const onListNFT = async (
+    collectionType: string,
+    nftId: string,
+    listPrice: string,
+    message: string
+  ) => {
     if (!walletAddress) {
       notification.error({
         message: "Please connect your wallet",
       });
       return;
     }
+    notification.info({
+      message: "Listing NFT...",
+    });
 
-    return await new Promise((resolve) => {
-      setTimeout(() => {
+    const tx = new Transaction();
+    tx.setGasBudget(10000000);
+
+    tx.moveCall({
+      target: `${ENV.CONTRACT_PACKAGE_ID}::${ENV.MARKETPLACE_MODULE}::${CONTRACT_METHOD.LIST}`,
+      arguments: [
+        tx.object(ENV.MARKETPLACE_CAP_ID),
+        tx.object(nftId),
+        tx.object(listPrice),
+      ],
+      typeArguments: [collectionType],
+    });
+
+    await signAndExecuteTransaction({
+      transaction: tx as any,
+      chain: ENV.CHAIN as `${string}:${string}`,
+    })
+      .then(() => {
         notification.success({
           message: message || "List NFT successfully",
         });
-        resolve(true);
-      }, 1000);
-    });
-  };
-
-  const onBuyNFT = async (message: string) => {
-    if (!walletAddress) {
-      notification.error({
-        message: "Please connect your wallet",
-      });
-      return;
-    }
-
-    return await new Promise((resolve) => {
-      setTimeout(() => {
-        notification.success({
-          message: message || "Buy NFT successfully",
+      })
+      .catch((error) => {
+        notification.error({
+          message:
+            error.message ||
+            "List NFT failed due to some network error, please try again",
         });
-        resolve(true);
-      }, 1000);
-    });
+      });
   };
 
-  const onCancelListing = async (message: string) => {
+  const onCancelListing = async (
+    collectionType: string,
+    nftId: string,
+    message: string
+  ) => {
     if (!walletAddress) {
       notification.error({
         message: "Please connect your wallet",
@@ -81,14 +101,94 @@ const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    return await new Promise((resolve) => {
-      setTimeout(() => {
+    notification.info({
+      message: "Cancelling Listing...",
+    });
+
+    const tx = new Transaction();
+    tx.setGasBudget(10000000);
+
+    tx.moveCall({
+      target: `${ENV.CONTRACT_PACKAGE_ID}::${ENV.MARKETPLACE_MODULE}::${CONTRACT_METHOD.DELIST}`,
+      arguments: [
+        tx.object(ENV.MARKETPLACE_CAP_ID),
+        tx.object(nftId),
+      ],
+      typeArguments: [collectionType],
+    });
+
+    await signAndExecuteTransaction({
+      transaction: tx as any,
+      chain: ENV.CHAIN as `${string}:${string}`,
+    })
+      .then(() => {
         notification.success({
           message: message || "Cancel Listing successfully",
         });
-        resolve(true);
-      }, 1000);
+      })
+      .catch((error) => {
+        notification.error({
+          message:
+            error.message ||
+            "Cancel Listing failed due to some network error, please try again",
+        });
+      });
+  };
+
+  const onBuyNFT = async (
+    collectionType: string,
+    nftId: string,
+    royaltyBag: string,
+    message: string
+  ) => {
+    notification.info({
+      message: "Buying NFT...",
     });
+    // const coins = await client.getCoins({
+    //   owner: currentWalletAccount?.address || "",
+    //   coinType: "0x2::sui::SUI",
+    // });
+    // const coinObjectId = coins.data[0]?.coinObjectId;
+    // const nftPrice = 1;
+
+    const tx = new Transaction();
+    tx.setGasBudget(10000000);
+
+    // Split the coin for payment
+    // const [payment] = tx.splitCoins(
+    //   tx.object(coinObjectId),
+    //   [tx.pure.u64(nftPrice)]
+    // );
+    tx.moveCall({
+      target: `${ENV.CONTRACT_PACKAGE_ID}::${ENV.MARKETPLACE_MODULE}::${CONTRACT_METHOD.BUY}`,
+      arguments: [
+        tx.object(ENV.MARKETPLACE_CAP_ID),
+        tx.object(royaltyBag),
+        tx.object(nftId),
+        tx.makeMoveVec({
+          type: "0x2::sui::SUI", //SUI obj id: 0x83f019e7365c1589d0063adf48c66ef9967c4e7085986f4c4a3b8aad4178f82f
+          elements: []
+        })
+      ],
+      typeArguments: [collectionType],
+    });
+
+    await signAndExecuteTransaction({
+      transaction: tx as any,
+      chain: ENV.CHAIN as `${string}:${string}`,
+    })
+      .then(() => {
+        notification.success({
+          message: message || "Buy NFT successfully",
+        });
+      })
+      .catch((error) => {
+        notification.error({
+          message:
+            error.message ||
+            "Buy NFT failed due to some network error, please try again",
+        });
+      });
   };
 
   return (
@@ -96,7 +196,14 @@ const GlobalActionsConfig = ({ children }: { children: React.ReactNode }) => {
       contextName="Web3GlobalContext"
       actions={{ onListNFT, onBuyNFT, onCancelListing }}
     >
-      {children}
+      <DataProvider
+        name="web3GlobalActionsData"
+        data={{
+          isTransactionPending: isPending,
+        }}
+      >
+        {children}
+      </DataProvider>
     </GlobalActionsProvider>
   );
 };
@@ -130,7 +237,7 @@ export const Web3GlobalContext = ({
     </DataProvider>
   );
 };
-
+4
 export const InnerWalletContext = ({
   children,
 }: React.PropsWithChildren<{}>) => {
@@ -174,6 +281,27 @@ export function registerWeb3Provider(loader?: Registerable) {
               defaultValue: "List NFT successfully",
             },
           },
+          {
+            name: "collectionType",
+            type: {
+              type: "string",
+              defaultValue: "CollectionType",
+            },
+          },
+          {
+            name: "nftId",
+            type: {
+              type: "string",
+              defaultValue: "NFT ID",
+            },
+          },
+          {
+            name: "listPrice",
+            type: {
+              type: "string",
+              defaultValue: "List Price",
+            },
+          },
         ],
       },
       onBuyNFT: {
@@ -186,6 +314,20 @@ export function registerWeb3Provider(loader?: Registerable) {
               defaultValue: "Buy NFT successfully",
             },
           },
+          {
+            name: "collectionType",
+            type: {
+              type: "string",
+              defaultValue: "CollectionType",
+            },
+          },
+          {
+            name: "nftId",
+            type: {
+              type: "string",
+              defaultValue: "NFT ID",
+            },
+          },
         ],
       },
       onCancelListing: {
@@ -196,6 +338,20 @@ export function registerWeb3Provider(loader?: Registerable) {
             type: {
               type: "string",
               defaultValue: "Cancel Listing successfully",
+            },
+          },
+          {
+            name: "collectionType",
+            type: {
+              type: "string",
+              defaultValue: "CollectionType",
+            },
+          },
+          {
+            name: "nftId",
+            type: {
+              type: "string",
+              defaultValue: "NFT ID",
             },
           },
         ],

@@ -980,7 +980,7 @@ const DEFAULT_DEVFLAGS = {
   skipFreeVars: true,
   starterSections: [
     {
-      title: "NFT marketplaces templates",
+      title: "NFT templates",
       tag: "general",
       projects: [
         {
