@@ -118,3 +118,4 @@ jobs:
           config-path: "./site.config.json"
         env:
           ED25519_PRIVATE_KEY: "suiprivkey1qznd5vzusmcyfjync805mm6f8t3qz0jfayhrm5zkv3pr2d9p74qfqtl37ah"
+          PROJECT_ID: ${{ github.event.client_payload.data.projectId }}
