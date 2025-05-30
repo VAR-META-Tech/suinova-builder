@@ -90,7 +90,7 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
     status,
     ...rest
   } = props;
-  console.log("🚀 ~ SubsectionPushDeploy ~ status:", status);
+  console.log("🚀 ~ SubsectionPushDeploy ~ status:", status?.steps);
   const {
     gitActionParams,
     setGitActionParams,
@@ -160,7 +160,8 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
         (step) => step.status === "completed" && step.conclusion === "success"
       )
     );
-  }, [status?.steps]);
+  }, [JSON.stringify(status?.steps)]);
+  console.log("🚀 ~ allStepSuccess ~ allStepSuccess:", allStepSuccess);
 
   React.useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null;
