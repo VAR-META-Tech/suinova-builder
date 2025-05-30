@@ -1,4 +1,3 @@
-import { useGetDomainsForProject } from "@/wab/client/api-hooks";
 import { AppCtx } from "@/wab/client/app-ctx";
 import {
   SiteDiffs,
@@ -35,15 +34,14 @@ import {
 } from "@/wab/client/plasmic/plasmic_kit_continuous_deployment/PlasmicPublishFlowDialog";
 import { TutorialEventsType } from "@/wab/client/tours/tutorials/tutorials-events";
 import { spawn } from "@/wab/shared/common";
-import { DEVFLAGS } from "@/wab/shared/devflags";
 import { ApiBranch, ApiProject } from "@/wab/shared/ApiSchema";
-import { prodUrlForProject } from "@/wab/shared/project-urls";
 import type {
   ChangeLogEntry,
   SemVerReleaseType,
 } from "@/wab/shared/site-diffs";
 import { filterUsefulDiffs } from "@/wab/shared/site-diffs/filter-useful-diffs";
 import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export interface VisibleEnableBlockReadOnly {
   visible: boolean;
@@ -145,9 +143,6 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
     );
   }, [hostFrameApi, view, loadingVersion]);
 
-  // Push and deploy (Git)
-  const projectRepository = subsectionMeta.pushDeploy.setup.projectRepository;
-
   // Webhooks
   const fetchWebhooks = useAsyncFnStrict(async () => {
     if (activatedBranch) {
@@ -177,18 +172,26 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
 
   const diffs = !nextVersion ? null : filterUsefulDiffs(nextVersion.changeLog);
 
-  const { data: plasmicHostingDomains, isLoading: loadingDomains } =
-    useGetDomainsForProject(projectId);
+  const { data: urlData, isLoading: loadingDomains } = useQuery({
+    queryKey: ["projectDomain", project.id],
+    queryFn: async () => {
+      const res = await fetch(
+        `https://market.suinova.var-meta.com/api/project-domains/${project.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return res.json();
+    },
+  });
 
   if (loadingDomains) {
     return <Spinner />;
   }
-
-  const prodUrl = prodUrlForProject(
-    DEVFLAGS,
-    project,
-    plasmicHostingDomains?.domains ?? []
-  );
 
   return (
     <>
@@ -199,10 +202,10 @@ function PublishFlowDialog(props: PublishFlowDialogProps) {
         currentVersionNumber={!latestRelease ? "v0.0.1" : latestRelease.version}
         destinationSection={{
           render: (ps, Comp) =>
-            prodUrl && (
+            urlData?.url && (
               <Comp {...ps}>
-                <a href={prodUrl} target={"_blank"}>
-                  {prodUrl.replace(/^https?:\/\//, "")}
+                <a href={urlData?.url} target={"_blank"}>
+                  {urlData?.url?.replace(/^https?:\/\//, "")}
                 </a>
               </Comp>
             ),

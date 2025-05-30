@@ -83,7 +83,9 @@ export const PlasmicSubsectionPushDeploy__VariantProps =
     "result"
   );
 
-export type PlasmicSubsectionPushDeploy__ArgsType = {};
+export type PlasmicSubsectionPushDeploy__ArgsType = {
+  deployedUrl?: string;
+};
 type ArgPropType = keyof PlasmicSubsectionPushDeploy__ArgsType;
 export const PlasmicSubsectionPushDeploy__ArgProps = new Array<ArgPropType>();
 

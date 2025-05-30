@@ -23,6 +23,8 @@ import {
   GitWorkflowJobStep,
 } from "@/wab/shared/ApiSchema";
 import * as React from "react";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export type SetupPushDeploy = {
   gitActionParams: GitActionParams;
@@ -88,6 +90,7 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
     status,
     ...rest
   } = props;
+  console.log("🚀 ~ SubsectionPushDeploy ~ status:", status);
   const {
     gitActionParams,
     setGitActionParams,
@@ -126,9 +129,67 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
     }
   };
 
+  const { data: urlData } = useQuery({
+    queryKey: ["projectDomain", project.id],
+    queryFn: async () => {
+      const res = await fetch(
+        `https://market.suinova.var-meta.com/api/project-domains/${project.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return res.json();
+    },
+  });
+
   const [collapseOptions, setCollapseOptions] = React.useState<boolean>(true);
   const [pushAs, setPushAs] = React.useState<string>("");
   const [branch, setBranch] = React.useState<string>("");
+  const [extraStepStatus, setExtraStepStatus] = React.useState<
+    "unstarted" | "started" | "failed" | "finished"
+  >("started");
+
+  const allStepSuccess = useMemo(() => {
+    return (
+      (status?.steps.length || 0) > 0 &&
+      status?.steps.every(
+        (step) => step.status === "completed" && step.conclusion === "success"
+      )
+    );
+  }, [status?.steps]);
+
+  React.useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+    if (allStepSuccess) {
+      const lastStepSuccessTime =
+        !!status &&
+        (status?.steps.length || 0) > 0 &&
+        !!status?.steps[status?.steps.length - 1].completed_at &&
+        new Date(status.steps[status.steps.length - 1].completed_at!).getTime();
+
+      const now = Date.now();
+
+      const untilNow = now - (lastStepSuccessTime || 0);
+
+      if (!Number.isNaN(lastStepSuccessTime) && untilNow < 10 * 1000) {
+        if (untilNow < 10 * 1000) {
+          timeoutId = setTimeout(() => {
+            setExtraStepStatus("finished");
+          }, untilNow);
+        } else {
+          setExtraStepStatus("finished");
+        }
+      }
+    }
+
+    return () => {
+      timeoutId && clearTimeout(timeoutId);
+    };
+  }, [allStepSuccess]);
 
   if (props.view === "status" && !status?.enabled) {
     return null;
@@ -292,23 +353,39 @@ function SubsectionPushDeploy(props: SubsectionPushDeployProps) {
         }
         steps={{
           children: status?.steps.length ? (
-            status.steps
-              .filter((step) => step.conclusion !== "skipped")
-              .map((step) => (
+            <>
+              {status.steps
+                .filter((step) => step.conclusion !== "skipped")
+                .map((step) => (
+                  <GitJobStep
+                    key={step.number}
+                    status={
+                      step.conclusion === "failure"
+                        ? "failed"
+                        : step.conclusion === "success"
+                        ? "finished"
+                        : step.status === "in_progress"
+                        ? "started"
+                        : "unstarted"
+                    }
+                    description={step.name}
+                  />
+                ))}
+              {allStepSuccess && (
                 <GitJobStep
-                  key={step.number}
-                  status={
-                    step.conclusion === "failure"
-                      ? "failed"
-                      : step.conclusion === "success"
-                      ? "finished"
-                      : step.status === "in_progress"
-                      ? "started"
-                      : "unstarted"
-                  }
-                  description={step.name}
+                  status={extraStepStatus}
+                  description="Prepare website domain"
                 />
-              ))
+              )}
+              {allStepSuccess &&
+                extraStepStatus === "finished" &&
+                !!urlData?.url && (
+                  <GitJobStep
+                    status={"finished"}
+                    description={`Published to ${urlData?.url}`}
+                  />
+                )}
+            </>
           ) : (
             <GitJobStep status="started" description="Set up job" />
           ),
