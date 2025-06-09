@@ -463,7 +463,7 @@ const NFTMintingForm = ({
                 Array.from(new TextEncoder().encode(resData.imageUrl))
               ), // image_url
               tx.pure.u64(royaltyBasisPoints), // royalty_fee
-              tx.pure.bool(resData.hasPresale || true), // has_presale
+              tx.pure.bool(resData.hasPresale || false), // has_presale
               tx.pure.u64(whitelistStartTime), // whitelist_start_time
               tx.pure.u64(whitelistEndTime), // whitelist_end_time
               tx.pure.u64(presaleStartTime), // presale_start_time
@@ -690,7 +690,7 @@ const NFTMintingForm = ({
             maxNFTsPerWallet: 0,
           },
         },
-        hasPublicSale: savedData.hasPublicSale || true,
+        hasPublicSale: savedData.hasPublicSale || false,
         publicSale: savedData.publicSale || {
           price: "0",
           startTime: new Date(),
